@@ -138,22 +138,22 @@ const TFetchOrientation = _enum_TFetchOrientation(Int32(0), Int32(1), Int32(2), 
 
 typealias TTypeEntryPtr Int32
 
-typealias TIdentifier AbstractString
+typealias TIdentifier UTF8String
 
-typealias TPattern AbstractString
+typealias TPattern UTF8String
 
-typealias TPatternOrIdentifier AbstractString
+typealias TPatternOrIdentifier UTF8String
 
 
 type TTypeQualifierValue
   i32Value::Int32
-  stringValue::AbstractString
+  stringValue::UTF8String
   TTypeQualifierValue() = (o=new(); fillunset(o); o)
 end # type TTypeQualifierValue
 meta(t::Type{TTypeQualifierValue}) = meta(t, Symbol[:i32Value,:stringValue], Int[], Dict{Symbol,Any}())
 
 type TTypeQualifiers
-  qualifiers::Dict{AbstractString,TTypeQualifierValue}
+  qualifiers::Dict{UTF8String,TTypeQualifierValue}
   TTypeQualifiers() = (o=new(); fillunset(o); o)
 end # type TTypeQualifiers
 
@@ -176,17 +176,17 @@ type TMapTypeEntry
 end # type TMapTypeEntry
 
 type TStructTypeEntry
-  nameToTypePtr::Dict{AbstractString,TTypeEntryPtr}
+  nameToTypePtr::Dict{UTF8String,TTypeEntryPtr}
   TStructTypeEntry() = (o=new(); fillunset(o); o)
 end # type TStructTypeEntry
 
 type TUnionTypeEntry
-  nameToTypePtr::Dict{AbstractString,TTypeEntryPtr}
+  nameToTypePtr::Dict{UTF8String,TTypeEntryPtr}
   TUnionTypeEntry() = (o=new(); fillunset(o); o)
 end # type TUnionTypeEntry
 
 type TUserDefinedTypeEntry
-  typeClassName::AbstractString
+  typeClassName::UTF8String
   TUserDefinedTypeEntry() = (o=new(); fillunset(o); o)
 end # type TUserDefinedTypeEntry
 
@@ -201,21 +201,21 @@ type TTypeEntry
 end # type TTypeEntry
 
 type TTypeDesc
-  types::Array{TTypeEntry, 1}
+  types::Vector{TTypeEntry}
   TTypeDesc() = (o=new(); fillunset(o); o)
 end # type TTypeDesc
 
 type TColumnDesc
-  columnName::AbstractString
+  columnName::UTF8String
   typeDesc::TTypeDesc
   position::Int32
-  comment::AbstractString
+  comment::UTF8String
   TColumnDesc() = (o=new(); fillunset(o); o)
 end # type TColumnDesc
 meta(t::Type{TColumnDesc}) = meta(t, Symbol[:comment], Int[], Dict{Symbol,Any}())
 
 type TTableSchema
-  columns::Array{TColumnDesc, 1}
+  columns::Vector{TColumnDesc}
   TTableSchema() = (o=new(); fillunset(o); o)
 end # type TTableSchema
 
@@ -256,7 +256,7 @@ end # type TDoubleValue
 meta(t::Type{TDoubleValue}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
 
 type TStringValue
-  value::AbstractString
+  value::UTF8String
   TStringValue() = (o=new(); fillunset(o); o)
 end # type TStringValue
 meta(t::Type{TStringValue}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
@@ -273,55 +273,55 @@ type TColumnValue
 end # type TColumnValue
 
 type TRow
-  colVals::Array{TColumnValue, 1}
+  colVals::Vector{TColumnValue}
   TRow() = (o=new(); fillunset(o); o)
 end # type TRow
 
 type TBoolColumn
-  values::Array{Bool, 1}
-  nulls::AbstractString
+  values::Vector{Bool}
+  nulls::Vector{UInt8}
   TBoolColumn() = (o=new(); fillunset(o); o)
 end # type TBoolColumn
 
 type TByteColumn
-  values::Array{UInt8, 1}
-  nulls::AbstractString
+  values::Vector{UInt8}
+  nulls::Vector{UInt8}
   TByteColumn() = (o=new(); fillunset(o); o)
 end # type TByteColumn
 
 type TI16Column
-  values::Array{Int16, 1}
-  nulls::AbstractString
+  values::Vector{Int16}
+  nulls::Vector{UInt8}
   TI16Column() = (o=new(); fillunset(o); o)
 end # type TI16Column
 
 type TI32Column
-  values::Array{Int32, 1}
-  nulls::AbstractString
+  values::Vector{Int32}
+  nulls::Vector{UInt8}
   TI32Column() = (o=new(); fillunset(o); o)
 end # type TI32Column
 
 type TI64Column
-  values::Array{Int64, 1}
-  nulls::AbstractString
+  values::Vector{Int64}
+  nulls::Vector{UInt8}
   TI64Column() = (o=new(); fillunset(o); o)
 end # type TI64Column
 
 type TDoubleColumn
-  values::Array{Float64, 1}
-  nulls::AbstractString
+  values::Vector{Float64}
+  nulls::Vector{UInt8}
   TDoubleColumn() = (o=new(); fillunset(o); o)
 end # type TDoubleColumn
 
 type TStringColumn
-  values::Array{AbstractString, 1}
-  nulls::AbstractString
+  values::Vector{UTF8String}
+  nulls::Vector{UInt8}
   TStringColumn() = (o=new(); fillunset(o); o)
 end # type TStringColumn
 
 type TBinaryColumn
-  values::Array{AbstractString, 1}
-  nulls::AbstractString
+  values::Vector{Vector{UInt8}}
+  nulls::Vector{UInt8}
   TBinaryColumn() = (o=new(); fillunset(o); o)
 end # type TBinaryColumn
 
@@ -339,25 +339,25 @@ end # type TColumn
 
 type TRowSet
   startRowOffset::Int64
-  rows::Array{TRow, 1}
-  columns::Array{TColumn, 1}
+  rows::Vector{TRow}
+  columns::Vector{TColumn}
   TRowSet() = (o=new(); fillunset(o); o)
 end # type TRowSet
 meta(t::Type{TRowSet}) = meta(t, Symbol[:columns], Int[], Dict{Symbol,Any}())
 
 type TStatus
   statusCode::Int32
-  infoMessages::Array{AbstractString, 1}
-  sqlState::AbstractString
+  infoMessages::Vector{UTF8String}
+  sqlState::UTF8String
   errorCode::Int32
-  errorMessage::AbstractString
+  errorMessage::UTF8String
   TStatus() = (o=new(); fillunset(o); o)
 end # type TStatus
 meta(t::Type{TStatus}) = meta(t, Symbol[:infoMessages,:sqlState,:errorCode,:errorMessage], Int[], Dict{Symbol,Any}())
 
 type THandleIdentifier
-  guid::AbstractString
-  secret::AbstractString
+  guid::Vector{UInt8}
+  secret::Vector{UInt8}
   THandleIdentifier() = (o=new(); fillunset(o); o)
 end # type THandleIdentifier
 
@@ -377,9 +377,9 @@ meta(t::Type{TOperationHandle}) = meta(t, Symbol[:modifiedRowCount], Int[], Dict
 
 type TOpenSessionReq
   client_protocol::Int32
-  username::AbstractString
-  password::AbstractString
-  configuration::Dict{AbstractString,AbstractString}
+  username::UTF8String
+  password::UTF8String
+  configuration::Dict{UTF8String,UTF8String}
   TOpenSessionReq() = (o=new(); fillunset(o); o)
 end # type TOpenSessionReq
 meta(t::Type{TOpenSessionReq}) = meta(t, Symbol[:username,:password,:configuration], Int[], Dict{Symbol,Any}(:client_protocol => Int32(7)))
@@ -388,7 +388,7 @@ type TOpenSessionResp
   status::TStatus
   serverProtocolVersion::Int32
   sessionHandle::TSessionHandle
-  configuration::Dict{AbstractString,AbstractString}
+  configuration::Dict{UTF8String,UTF8String}
   TOpenSessionResp() = (o=new(); fillunset(o); o)
 end # type TOpenSessionResp
 meta(t::Type{TOpenSessionResp}) = meta(t, Symbol[:sessionHandle,:configuration], Int[], Dict{Symbol,Any}(:serverProtocolVersion => Int32(7)))
@@ -404,7 +404,7 @@ type TCloseSessionResp
 end # type TCloseSessionResp
 
 type TGetInfoValue
-  stringValue::AbstractString
+  stringValue::UTF8String
   smallIntValue::Int16
   integerBitmask::Int32
   integerFlag::Int32
@@ -427,8 +427,8 @@ end # type TGetInfoResp
 
 type TExecuteStatementReq
   sessionHandle::TSessionHandle
-  statement::AbstractString
-  confOverlay::Dict{AbstractString,AbstractString}
+  statement::UTF8String
+  confOverlay::Dict{UTF8String,UTF8String}
   runAsync::Bool
   TExecuteStatementReq() = (o=new(); fillunset(o); o)
 end # type TExecuteStatementReq
@@ -485,7 +485,7 @@ type TGetTablesReq
   catalogName::TPatternOrIdentifier
   schemaName::TPatternOrIdentifier
   tableName::TPatternOrIdentifier
-  tableTypes::Array{AbstractString, 1}
+  tableTypes::Vector{UTF8String}
   TGetTablesReq() = (o=new(); fillunset(o); o)
 end # type TGetTablesReq
 meta(t::Type{TGetTablesReq}) = meta(t, Symbol[:catalogName,:schemaName,:tableName,:tableTypes], Int[], Dict{Symbol,Any}())
@@ -550,9 +550,9 @@ end # type TGetOperationStatusReq
 type TGetOperationStatusResp
   status::TStatus
   operationState::Int32
-  sqlState::AbstractString
+  sqlState::UTF8String
   errorCode::Int32
-  errorMessage::AbstractString
+  errorMessage::UTF8String
   TGetOperationStatusResp() = (o=new(); fillunset(o); o)
 end # type TGetOperationStatusResp
 meta(t::Type{TGetOperationStatusResp}) = meta(t, Symbol[:operationState,:sqlState,:errorCode,:errorMessage], Int[], Dict{Symbol,Any}())
@@ -608,21 +608,21 @@ meta(t::Type{TFetchResultsResp}) = meta(t, Symbol[:hasMoreRows,:results], Int[],
 
 type TGetDelegationTokenReq
   sessionHandle::TSessionHandle
-  owner::AbstractString
-  renewer::AbstractString
+  owner::UTF8String
+  renewer::UTF8String
   TGetDelegationTokenReq() = (o=new(); fillunset(o); o)
 end # type TGetDelegationTokenReq
 
 type TGetDelegationTokenResp
   status::TStatus
-  delegationToken::AbstractString
+  delegationToken::UTF8String
   TGetDelegationTokenResp() = (o=new(); fillunset(o); o)
 end # type TGetDelegationTokenResp
 meta(t::Type{TGetDelegationTokenResp}) = meta(t, Symbol[:delegationToken], Int[], Dict{Symbol,Any}())
 
 type TCancelDelegationTokenReq
   sessionHandle::TSessionHandle
-  delegationToken::AbstractString
+  delegationToken::UTF8String
   TCancelDelegationTokenReq() = (o=new(); fillunset(o); o)
 end # type TCancelDelegationTokenReq
 
@@ -633,7 +633,7 @@ end # type TCancelDelegationTokenResp
 
 type TRenewDelegationTokenReq
   sessionHandle::TSessionHandle
-  delegationToken::AbstractString
+  delegationToken::UTF8String
   TRenewDelegationTokenReq() = (o=new(); fillunset(o); o)
 end # type TRenewDelegationTokenReq
 
