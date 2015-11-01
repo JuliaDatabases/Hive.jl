@@ -1,5 +1,3 @@
-using .HS2
-
 ##
 # Authentication mechanisms
 # Only SASL-Plain supported for now
@@ -14,9 +12,18 @@ function HiveAuthSASLPlain(uid::AbstractString, passwd::AbstractString; zid::Abs
     function callback(part::Symbol)
         (part == :authcid) && (return uid)
         (part == :passwd) && (return passwd)
+        (part == :show) && (return uid)
+        (part == :mechanism) && (return "SASL-Plain")
         return zid
     end
     HiveAuth(SASL_MECH_PLAIN, callback)
+end
+
+function show(io::IO, auth::HiveAuth)
+    uid = auth.callback(:show)
+    mech = auth.callback(:mechanism)
+    println(io, "HiveAuth ($mech): $uid")
+    nothing
 end
 
 
@@ -28,12 +35,15 @@ type HiveConn
     protocol::TProtocol
     client::TCLIServiceClient
     handle::TOpenSessionResp
+    connstr::AbstractString
 
     function HiveConn(host::AbstractString, port::Integer, auth::HiveAuth)
         transport = TSASLClientTransport(TSocket(host, port), auth.mechanism, auth.callback)
         protocol = TBinaryProtocol(transport, true)
         client = TCLIServiceClient(protocol)
-        new(transport, protocol, client, connect(transport, client))
+        uid = auth.callback(:show)
+        connstr = "hive2://$(uid)@$(host):$port"
+        new(transport, protocol, client, connect(transport, client), connstr)
     end
 
     function connect(transport::TTransport, client::TCLIServiceClient)
@@ -43,6 +53,11 @@ type HiveConn
         check_status(response.status)
         response
     end
+end
+
+function show(io::IO, conn::HiveConn)
+    println(io, conn.connstr)
+    nothing
 end
 
 function close(conn::HiveConn)
@@ -61,18 +76,11 @@ type HiveSession
     end
 end
 
-close(session::HiveSession) = close(session.conn)
-
-check_status(status::TStatus) = check_status(status.statusCode)
-function check_status(status::Int32)
-    if status == TStatusCode.SUCCESS_STATUS || status == TStatusCode.SUCCESS_WITH_INFO_STATUS
-        return 0
-    end
-    (status == TStatusCode.STILL_EXECUTING_STATUS) && (return 1)
-    (status == TStatusCode.ERROR_STATUS) && error("Hive operation failed")
-    (status == TStatusCode.INVALID_HANDLE_STATUS) && error("Hive handle invalid")
-    error("Unknown status code")
+function show(io::IO, sess::HiveSession)
+    print(io, "HiveServer2 Session: ")
+    show(io, sess.conn)
 end
+close(session::HiveSession) = close(session.conn)
 
 ##
 # Info Type
