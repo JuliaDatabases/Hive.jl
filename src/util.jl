@@ -32,3 +32,12 @@ show(io::IO, sch::TTableSchema) = show(io, dataframe(sch))
 function coltypes(sch::TTableSchema)
     tuple([julia_type(col.typeDesc) for col in sch.columns]...)
 end
+
+const BIT_MASKS = (0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80)
+function bitset_to_bools(data::Vector{UInt8}, L::Integer=(length(data)*8))
+    bools = Array(Bool, L)
+    for idx in 1:L
+        bools[idx] = (data[div(idx, 8)+1] & BIT_MASKS[rem(idx, 8)] > 0x00)
+    end
+    bools
+end

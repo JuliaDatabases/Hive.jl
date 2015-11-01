@@ -141,7 +141,9 @@ function julia_type{T<:Col}(col::T)
     if isempty(col.nulls) || isempty(col.values)
         DataArray(col.values)
     else
-        DataArray(col.values, convert(Array{Bool}, col.nulls))
+        values = col.values
+        nulls = bitset_to_bools(col.nulls, length(values))
+        DataArray(values, nulls)
     end
 end
 

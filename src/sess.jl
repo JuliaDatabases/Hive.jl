@@ -77,7 +77,7 @@ type HiveSession
 end
 
 function show(io::IO, sess::HiveSession)
-    print(io, "HiveServer2 Session: ")
+    print(io, "HiveSession: ")
     show(io, sess.conn)
 end
 close(session::HiveSession) = close(session.conn)

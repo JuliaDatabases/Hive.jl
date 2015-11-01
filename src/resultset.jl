@@ -47,6 +47,8 @@ function result(session::HiveSession, ready::Bool, handle::TOperationHandle)
     return response.modifiedRowCount
 end
 
+eof(r::ResultSet) = r.eof
+
 close(pending::PendingResult) = close(pending.session, pending.handle)
 close(resultset::ResultSet) = close(resultset.session, resultset.handle)
 function close(session::HiveSession, handle::TOperationHandle)

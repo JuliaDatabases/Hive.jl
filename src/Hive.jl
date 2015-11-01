@@ -3,10 +3,11 @@ module Hive
 using Thrift
 using DataFrames
 
-import Base: close, isready, wait, show
+import Base: close, isready, wait, show, eof
 
 export HiveSession, HiveAuth, HiveAuthSASLPlain
-export close, isready, wait, cancel, get_info, catalogs, show
+export eof, close, isready, wait, cancel, get_info, show
+export catalogs, schemas, tables, tabletypes
 export fetchsize, fetchsize!, fetchfirst, fetchnext, dataframe
 
 export InfoType
@@ -26,10 +27,10 @@ end
 # package code goes here
 include("HS2/HS2.jl")
 using .HS2
-include("util.jl")
 include("sess.jl")
 include("types.jl")
 include("resultset.jl")
+include("util.jl")
 include("api.jl")
 
 end # module
