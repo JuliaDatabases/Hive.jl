@@ -3,12 +3,13 @@ module Hive
 using Thrift
 using DataFrames
 
-import Base: close, isready, wait, show, eof
+import Base: close, isready, show, eof, start, next, done
 
 export HiveSession, HiveAuth, HiveAuthSASLPlain
-export eof, close, isready, wait, cancel, get_info, show
-export catalogs, schemas, tables, tabletypes, functions, columns
-export fetchsize, fetchsize!, fetchfirst, fetchnext, dataframe
+export eof, close, isready, cancel, get_info, show
+export catalogs, schemas, tables, tabletypes, functions, columns, execute
+export dataframe, dataframes
+export start, next, done
 
 export InfoType
 

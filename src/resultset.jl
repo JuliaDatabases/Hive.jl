@@ -37,6 +37,7 @@ end
 
 typealias Result Union{ResultSet, RowCount, PendingResult}
 
+result(pending::PendingResult) = isready(pending) ? result(pending.session, true, pending.handle) : pending
 function result(session::HiveSession, ready::Bool, handle::TOperationHandle)
     ready || (return PendingResult(session, handle, Nullable{TGetOperationStatusReq}()))
 
@@ -146,8 +147,34 @@ function fetchnext(rs::ResultSet, nrows::Integer=rs.fetchsize)
     rs
 end
 
-function dataframe(rs::ResultSet)
-    isnull(rs.rowset) && fetchnext(rs)
+##
+# Iterators
+# - records, record iterator: fetches one record at a time as a tuple
+# - dataframes, dataframe iterator: fetches one batch of records at a time, returns a dataframe
+# - dataframe(dataframe iterator): fetches and returns the first batch 
+
+type DataFrameIterator
+    rs::ResultSet
+
+    function DataFrameIterator(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE)
+        fetchsize!(rs, fetchsz)
+        new(rs)
+    end
+end
+
+dataframes(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE) = DataFrameIterator(rs, fetchsz)
+dataframe(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE) = dataframe(dataframes(rs, fetchsz))
+function dataframe(iter::DataFrameIterator)
+    df = reduce(vcat, iter)
+    close(iter.rs)
+    df
+end
+
+start(iter::DataFrameIterator) = iter.rs.eof
+done(iter::DataFrameIterator, state) = state
+function next(iter::DataFrameIterator, state)
+    rs = iter.rs
+    fetchnext(rs)
 
     rowset = get(rs.rowset)
     sch = schema(rs)
@@ -180,5 +207,5 @@ function dataframe(rs::ResultSet)
         @logmsg("$colname: $(colvecs[colidx])")
         df[symbol(colname)] = colvecs[colidx]
     end
-    df
+    df, rs.eof
 end

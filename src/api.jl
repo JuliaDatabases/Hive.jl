@@ -1,10 +1,13 @@
 
 function response_to_dataframe(session::HiveSession, response, fetchsize::Integer; cached_schema::Union{AbstractString,Symbol,Void}=nothing)
-    ready = check_status(response.status)
-    rs = result(session, ready, response.operationHandle)::ResultSet
+    rs = response_to_resultset(session, response)::ResultSet
     schema(rs; cached=cached_schema)
-    fetchsize!(rs, fetchsize)
-    dataframe(rs)
+    dataframe(rs, fetchsize)
+end
+
+function response_to_resultset(session::HiveSession, response)
+    ready = check_status(response.status)
+    result(session, ready, response.operationHandle)
 end
 
 ##
@@ -101,3 +104,24 @@ function functions(session::HiveSession, function_pattern::AbstractString; catal
     response_to_dataframe(session, response, fetchsize; cached_schema=:functions)
 end
 
+##
+# Execute a statement.
+# Statement to be executed can be DML, DDL, SET, etc.
+# Optional `config` parameter can have additional keyword parameters that will be passed as configuration 
+#     properties that are overlayed on top of the the existing session configuration before this statement
+#     is executed. They apply to this statement only and are not permanent.
+# Execution is asynchronous and a PendingResult is returned when async is true.
+# Caller must call `isready` on a PendingResult instance to check for completion.
+# Calling `result` on a PendingResult returns ResultSet if it is ready, else the same PendingResult instance is returned.
+function execute(session::HiveSession, statement::AbstractString; async::Bool=false, config::Dict=Dict())
+    conn = session.conn
+
+    request = thriftbuild(TExecuteStatementReq, Dict(:sessionHandle => conn.handle.sessionHandle, :statement => statement, :runAsync => async))
+    if !isempty(config)
+        cfg = Dict{UTF8String,UTF8String}([string(k)=>string(v) for (k,v) in config]...)
+        set_field!(request, :confOverlay, cfg)
+    end
+
+    response = ExecuteStatement(conn.client, request)
+    response_to_resultset(session, response)
+end
