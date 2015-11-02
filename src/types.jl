@@ -138,7 +138,7 @@ function julia_type(colval::TColumnValue)
 end
 
 function julia_type{T<:Col}(col::T)
-    if isempty(col.nulls) || isempty(col.values)
+    if (length(col.nulls) < 2) || isempty(col.values)
         DataArray(col.values)
     else
         values = col.values

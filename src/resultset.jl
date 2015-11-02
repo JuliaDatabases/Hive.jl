@@ -9,7 +9,9 @@
 # - cancelled
 #
 # results must be closed
-const DEFAULT_FETCH_SIZE = 80
+
+# number of records to fetch with every fetchnext
+const DEFAULT_FETCH_SIZE = 1024
 
 type PendingResult
     session::HiveSession
@@ -96,15 +98,22 @@ function sqlerror(pending::PendingResult)
     utf8("Error. $errormessage ($sqlstate, $errorcode)")
 end
 
-function schema(rs::ResultSet)
+const SCHEMA_CACHE = Dict{Union{AbstractString,Symbol}, TTableSchema}()
+
+function schema(rs::ResultSet; cached::Union{AbstractString,Symbol,Void}=nothing)
     if !isnull(rs.schema)
-        result = get(rs.schema)
+        sch = get(rs.schema)
     else
-        conn = rs.session.conn
-        request = thriftbuild(TGetResultSetMetadataReq, Dict(:operationHandle => rs.handle))
-        response = GetResultSetMetadata(conn.client, request)
-        check_status(response.status)
-        sch = response.schema
+        if (cached !== nothing) && haskey(SCHEMA_CACHE, cached)
+            sch = SCHEMA_CACHE[cached]
+        else
+            conn = rs.session.conn
+            request = thriftbuild(TGetResultSetMetadataReq, Dict(:operationHandle => rs.handle))
+            response = GetResultSetMetadata(conn.client, request)
+            check_status(response.status)
+            sch = response.schema
+            (cached !== nothing) && (SCHEMA_CACHE[cached] = sch)
+        end
         rs.schema = Nullable(sch)
     end
     sch
@@ -147,6 +156,7 @@ function dataframe(rs::ResultSet)
 
     if isfilled(rowset, :columns)
         @logmsg("reading columns")
+        # ref: https://issues.apache.org/jira/browse/HIVE-3746
         for col in rowset.columns
             push!(colvecs, julia_type(col))
         end

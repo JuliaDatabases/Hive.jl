@@ -34,10 +34,11 @@ function coltypes(sch::TTableSchema)
 end
 
 const BIT_MASKS = (0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80)
-function bitset_to_bools(data::Vector{UInt8}, L::Integer=(length(data)*8))
+# the last byte of the bitset is always set to 0x00
+function bitset_to_bools(data::Vector{UInt8}, L::Integer=((length(data)-1)*8))
     bools = Array(Bool, L)
     for idx in 1:L
-        bools[idx] = (data[div(idx, 8)+1] & BIT_MASKS[rem(idx, 8)] > 0x00)
+        bools[idx] = (data[ceil(Int, idx/8)] & BIT_MASKS[rem(idx-1, 8) + 1] > 0x00)
     end
     bools
 end
