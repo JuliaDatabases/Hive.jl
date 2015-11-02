@@ -209,3 +209,33 @@ function next(iter::DataFrameIterator, state)
     end
     df, rs.eof
 end
+
+type RecordIterator
+    dfiter::DataFrameIterator
+    dfpos::Int
+    df::Nullable{DataFrame}
+
+    RecordIterator(rs::ResultSet) = new(DataFrameIterator(rs), 1, Nullable{DataFrame}())
+end
+
+records(rs::ResultSet) = RecordIterator(rs)
+
+start(iter::RecordIterator) = start(iter.dfiter)
+function done(iter::RecordIterator, state)
+    done(iter.dfiter, state) || (return false)
+    isnull(iter.df) && return false
+    df = get(iter.df)
+    iter.dfpos > nrow(df)
+end
+function next(iter::RecordIterator, state)
+    if isnull(iter.df) || (iter.dfpos > nrow(get(iter.df)))
+        df, state = next(iter.dfiter, state)
+        iter.df = Nullable(df)
+        iter.dfpos = 1
+    else
+        df = get(iter.df)
+    end
+    recs = tuple(convert(Array, df[iter.dfpos,:])...)
+    iter.dfpos += 1
+    recs, state
+end

@@ -8,7 +8,7 @@ import Base: close, isready, show, eof, start, next, done
 export HiveSession, HiveAuth, HiveAuthSASLPlain
 export eof, close, isready, cancel, get_info, show
 export catalogs, schemas, tables, tabletypes, functions, columns, execute
-export dataframe, dataframes
+export dataframe, dataframes, records
 export start, next, done
 
 export InfoType
