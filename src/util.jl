@@ -1,11 +1,16 @@
-check_status(status::TStatus) = check_status(status.statusCode)
-function check_status(status::Int32)
+function check_status(status::TStatus)
+    errormsg = isfilled(status, :errorMessage) ? getfield(status, :errorMessage) : utf8("")
+    infomsgs = isfilled(status, :infoMessages) ? getfield(status, :infoMessages) : UTF8String[]
+    check_status(status.statusCode, errormsg, infomsgs)
+end
+function check_status(status::Int32, errormsg::AbstractString="", infomsgs::Array=[])
     if status == TStatusCode.SUCCESS_STATUS || status == TStatusCode.SUCCESS_WITH_INFO_STATUS
+        map((msg)->println("$(msg)\n"), infomsgs)
         return true
     end
     (status == TStatusCode.STILL_EXECUTING_STATUS) && (return false)
-    (status == TStatusCode.ERROR_STATUS) && error("Hive operation failed")
-    (status == TStatusCode.INVALID_HANDLE_STATUS) && error("Hive handle invalid")
+    (status == TStatusCode.ERROR_STATUS) && error("Hive operation failed. $errormsg")
+    (status == TStatusCode.INVALID_HANDLE_STATUS) && error("Hive handle invalid. $errormsg")
     error("Unknown status code")
 end
 
