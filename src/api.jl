@@ -5,8 +5,9 @@ function response_to_dataframe(session::HiveSession, response, fetchsize::Intege
     dataframe(rs, fetchsize)
 end
 
-function response_to_resultset(session::HiveSession, response)
+function response_to_resultset(session::HiveSession, response; force_pending::Bool=false)
     ready = check_status(response.status)
+    force_pending && (ready = false)
     result(session, ready, response.operationHandle)
 end
 
@@ -110,9 +111,10 @@ end
 # Optional `config` parameter can have additional keyword parameters that will be passed as configuration 
 #     properties that are overlayed on top of the the existing session configuration before this statement
 #     is executed. They apply to this statement only and are not permanent.
-# Execution is asynchronous and a PendingResult is returned when async is true.
-# Caller must call `isready` on a PendingResult instance to check for completion.
-# Calling `result` on a PendingResult returns ResultSet if it is ready, else the same PendingResult instance is returned.
+# When async is true, execution is asynchronous and a PendingResult may be returned.
+# If the returned value is a PendingResult:
+#     - Caller must call `isready` on a PendingResult instance to check for completion.
+#     - Once ready, calling `result` on it returns ResultSet (the same PendingResult instance is returned if it is still not ready)
 function execute(session::HiveSession, statement::AbstractString; async::Bool=false, config::Dict=Dict())
     conn = session.conn
 
@@ -123,5 +125,5 @@ function execute(session::HiveSession, statement::AbstractString; async::Bool=fa
     end
 
     response = ExecuteStatement(conn.client, request)
-    response_to_resultset(session, response)
+    response_to_resultset(session, response; force_pending=async)
 end

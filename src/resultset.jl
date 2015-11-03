@@ -16,7 +16,7 @@ const DEFAULT_FETCH_SIZE = 1024
 type PendingResult
     session::HiveSession
     handle::TOperationHandle
-    status::Nullable{TGetOperationStatusReq}
+    status::Nullable{TGetOperationStatusResp}
 end
 
 typealias RowCount Float64
@@ -38,6 +38,7 @@ end
 typealias Result Union{ResultSet, RowCount, PendingResult}
 
 result(pending::PendingResult) = isready(pending) ? result(pending.session, true, pending.handle) : pending
+result(rs::ResultSet) = rs
 function result(session::HiveSession, ready::Bool, handle::TOperationHandle)
     ready || (return PendingResult(session, handle, Nullable{TGetOperationStatusReq}()))
 
@@ -77,8 +78,10 @@ function status(pending::PendingResult)
         conn = pending.session.conn
         request = thriftbuild(TGetOperationStatusReq, Dict(:operationHandle => pending.handle))
         response = GetOperationStatus(conn.client, request)
-        pending.status = Nullable(response)
         check_status(response.status)
+        if response.operationState in READY_STATUS
+            pending.status = Nullable(response)
+        end
     end
     response
 end

@@ -37,9 +37,15 @@ type HiveConn
     handle::TOpenSessionResp
     connstr::AbstractString
 
-    function HiveConn(host::AbstractString, port::Integer, auth::HiveAuth)
+    function HiveConn(host::AbstractString, port::Integer, auth::HiveAuth; tprotocol::Symbol=:binary)
         transport = TSASLClientTransport(TSocket(host, port), auth.mechanism, auth.callback)
-        protocol = TBinaryProtocol(transport, true)
+        if tprotocol === :binary
+            protocol = TBinaryProtocol(transport, true)
+        elseif tprotocol === :compact
+            protocol = TCompactProtocol(transport)
+        else
+            error("Unsupported protocol: $tprotocol")
+        end
         client = TCLIServiceClient(protocol)
         uid = auth.callback(:show)
         connstr = "hive2://$(uid)@$(host):$port"
@@ -71,8 +77,8 @@ end
 type HiveSession
     conn::HiveConn
 
-    function HiveSession(host::AbstractString="localhost", port::Integer=10000, auth::HiveAuth=HiveAuth())
-        new(HiveConn(host, port, auth))
+    function HiveSession(host::AbstractString="localhost", port::Integer=10000, auth::HiveAuth=HiveAuth(); tprotocol::Symbol=:binary)
+        new(HiveConn(host, port, auth; tprotocol=tprotocol))
     end
 end
 
