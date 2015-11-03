@@ -46,12 +46,14 @@ executed. They apply to this statement only and are not permanent.
 
 When `async` is `true`, execution is asynchronous and a `PendingResult` may be returned.
 If the returned value is a `PendingResult`:
-    - `isready` must be called on the `PendingResult` instance to check for completion.
-    - once ready, calling `result` on it returns `ResultSet`
-    - when not ready, calling `result` returns the same `PendingResult` instance
+
+- `isready` must be called on the `PendingResult` instance to check for completion.
+- once ready, calling `result` on it returns `ResultSet`
+- when not ready, calling `result` returns the same `PendingResult` instance
 
 ````
-rs = execute(session, "select * from twitter_small where fromid < 100"; async=true, config=Dict())
+rs = execute(session, "select * from twitter_small where fromid < 100";
+             async=true, config=Dict())
 while !isready(rs)
     println("waiting...") 
     sleep(10)
@@ -61,11 +63,11 @@ rs = result(rs)
 
 ## Working with a Result Set
 
-Result sets can be iterated upon with iterators. Two kinds of iterators are available as of now:
-- record iterator: returns a row at a time as a `Tuple`.
-- dataframe iterator: returns a block of records on each iteration as a `DataFrame` (more efficient)
+Result sets can be iterated upon with iterators and must be closed at the end by calling the `close` method, to release resources.
 
-Result sets must be closed at the end by calling the `close` method, to release resources.
+Two kinds of iterators are available as of now:
+- **record iterator**: returns a row at a time as a `Tuple`.
+- **dataframe iterator**: returns a block of records on each iteration as a `DataFrame` (more efficient)
 
 Calling `records` results in a record iterator:
 
@@ -125,13 +127,15 @@ schemas(session; catalog_pattern="%", schema_pattern="%")
 tables(session)
 
 # table list can be optionally filtered
-tables(session; catalog_pattern="%", schema_pattern="%", table_pattern="%", table_types=[])
+tables(session; catalog_pattern="%", schema_pattern="%",
+       table_pattern="%", table_types=[])
 
 # list columns
 columns(session)
 
 # columns list can be optionally filtered
-columns(session; catalog="", schema_pattern="%", table_pattern="%", column_pattern="%")
+columns(session; catalog="", schema_pattern="%",
+        table_pattern="%", column_pattern="%")
 
 # list functions matching given function name pattern
 functions(session, "%")
