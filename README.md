@@ -3,7 +3,7 @@
 A client for distributed SQL engines that provide a HiveServer2 interface.
 E.g.: [Hive](https://hive.apache.org/), [Spark SQL](http://spark.apache.org/sql/), [Impala](http://impala.io/)
 
-[![Build Status](https://travis-ci.org/tanmaykm/Hive.jl.svg?branch=master)](https://travis-ci.org/tanmaykm/Hive.jl)
+[![Build Status](https://travis-ci.org/JuliaDB/Hive.jl.svg?branch=master)](https://travis-ci.org/tanmaykm/Hive.jl)
 
 ## Connecting
 
