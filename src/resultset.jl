@@ -48,7 +48,7 @@ function result(session::HiveSession, ready::Bool, handle::TOperationHandle)
 
     # modifiedRowCount >= 0 => number of rows affected is known
     # modifiedRowCount < 0 => operation is capable fo modifying rows, but the count is unknown. e.g. LOAD DATA
-    return response.modifiedRowCount
+    return handle.modifiedRowCount
 end
 
 eof(r::ResultSet) = r.eof
@@ -154,7 +154,7 @@ end
 # Iterators
 # - records, record iterator: fetches one record at a time as a tuple
 # - dataframes, dataframe iterator: fetches one batch of records at a time, returns a dataframe
-# - dataframe(dataframe iterator): fetches and returns the first batch 
+# - dataframe(dataframe iterator): fetches and returns the first batch
 
 type DataFrameIterator
     rs::ResultSet
