@@ -1,0 +1,189 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Hive.jl by JuliaDB</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Hive.jl</h1>
+        <p>Hive, Spark SQL, Impala client. Based on Thrift and HiveServer2 protocol.</p>
+
+        <p class="view"><a href="https://github.com/JuliaDB/Hive.jl">View the Project on GitHub <small>JuliaDB/Hive.jl</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/JuliaDB/Hive.jl/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/JuliaDB/Hive.jl/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/JuliaDB/Hive.jl">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="hivejl" class="anchor" href="#hivejl" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hive.jl</h1>
+
+<p>A client for distributed SQL engines that provide a HiveServer2 interface.
+E.g.: <a href="https://hive.apache.org/">Hive</a>, <a href="http://spark.apache.org/sql/">Spark SQL</a>, <a href="http://impala.io/">Impala</a></p>
+
+<p><a href="https://travis-ci.org/JuliaDB/Hive.jl"><img src="https://travis-ci.org/JuliaDB/Hive.jl.svg?branch=master" alt="Build Status"></a></p>
+
+<h2>
+<a id="connecting" class="anchor" href="#connecting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Connecting</h2>
+
+<p>To connect to the server, create an instance of HiveSession.</p>
+
+<pre><code>session = HiveSession()
+</code></pre>
+
+<p>Without any parameters, this attempts to connect to a server running on <code>localhost</code> port <code>10000</code>.
+A remote server can be connected to by specifying the hostname and port number.</p>
+
+<pre><code>session = HiveSession("localhost", 10000)
+</code></pre>
+
+<p>As of now only SASL-Plain authentication is supported, without any <code>qop</code>. The default implementation
+authenticates with the same user-id as that of the login shell. That can be overridden by providing
+an appropriate instance of <code>HiveAuth</code>.</p>
+
+<pre><code>session = HiveSession("localhost", 10000, HiveAuthSASLPlain("uid", "pwd", "zid"))
+</code></pre>
+
+<p>The thrift <code>TBinaryProtocol</code> is used by default, which is also the default for most server setups.
+Other protocols can be used by specifying the optional named parameter <code>tprotocol</code>.
+As of now, <code>:binary</code> and <code>:compact</code> protocols are supported.</p>
+
+<pre><code>session = HiveSession("localhost", 10000; tprotocol=:binary)
+</code></pre>
+
+<h2>
+<a id="executing-queries" class="anchor" href="#executing-queries" aria-hidden="true"><span class="octicon octicon-link"></span></a>Executing Queries</h2>
+
+<p>Statement to be executed can be DML, DDL, SET, etc.</p>
+
+<p>Optional <code>config</code> parameter can have additional keyword parameters that will be passed as configuration 
+properties that are overlayed on top of the the existing session configuration before this statement is
+executed. They apply to this statement only and are not permanent.</p>
+
+<p>When <code>async</code> is <code>true</code>, execution is asynchronous and a <code>PendingResult</code> may be returned.
+If the returned value is a <code>PendingResult</code>:</p>
+
+<ul>
+<li>
+<code>isready</code> must be called on the <code>PendingResult</code> instance to check for completion.</li>
+<li>once ready, calling <code>result</code> on it returns <code>ResultSet</code>
+</li>
+<li>when not ready, calling <code>result</code> returns the same <code>PendingResult</code> instance</li>
+</ul>
+
+<pre><code>rs = execute(session, "select * from twitter_small where fromid &lt; 100";
+             async=true, config=Dict())
+while !isready(rs)
+    println("waiting...") 
+    sleep(10)
+end
+rs = result(rs)
+</code></pre>
+
+<h2>
+<a id="working-with-a-result-set" class="anchor" href="#working-with-a-result-set" aria-hidden="true"><span class="octicon octicon-link"></span></a>Working with a Result Set</h2>
+
+<p>Result sets can be iterated upon with iterators and must be closed at the end by calling the <code>close</code> method, to release resources.</p>
+
+<p>Two kinds of iterators are available as of now:</p>
+
+<ul>
+<li>
+<strong>record iterator</strong>: returns a row at a time as a <code>Tuple</code>.</li>
+<li>
+<strong>dataframe iterator</strong>: returns a block of records on each iteration as a <code>DataFrame</code> (more efficient)</li>
+</ul>
+
+<p>Calling <code>records</code> results in a record iterator:</p>
+
+<pre><code>rs = execute(session, "select * from twitter_small where fromid &lt; 100")
+for rec in records(rs)
+   println(rec)
+end
+close(rs)
+</code></pre>
+
+<p>Calling <code>dataframes</code> results in a dataframe iterator:</p>
+
+<pre><code>rs = execute(session, "select * from twitter_small where fromid &lt; 100")
+for frames in dataframes(rs)
+   println(frames)
+end
+close(rs)
+</code></pre>
+
+<p>All records can be read from a result set by simply calling <code>dataframe</code>. This should only be used when the result is sure to fit in memory.</p>
+
+<pre><code>rs = execute(session, "select * from twitter_small where fromid &lt; 100")
+println(dataframe(rs))
+close(rs)
+</code></pre>
+
+<h2>
+<a id="fetching-servertable-metadata" class="anchor" href="#fetching-servertable-metadata" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fetching Server/Table Metadata</h2>
+
+<p>Server configuration can be fetched by calling <code>get_info</code>.
+Here, <code>info_type</code> is one of the values from the enumeration <code>InfoType</code>, e.g. <code>InfoType.CLI_SERVER_NAME</code>.</p>
+
+<pre><code>info_type = InfoType.CLI_SERVER_NAME
+info = get_info(session, info_type)
+</code></pre>
+
+<p>Catalogs, Schemas, TableTypes, Functions, Tables, Columns defined on the server can be listed by calling the appropriate API listed below.
+The results are returned as a DataFrame.</p>
+
+<pre><code># list all catalogs
+catalogs(session)
+
+# list all table types configured
+tabletypes(session)
+
+# list all schemas
+schemas(session)
+
+# schema list can be optionally filtered with catalog and schema name
+schemas(session; catalog_pattern="%", schema_pattern="%")
+
+# list all tables
+tables(session)
+
+# table list can be optionally filtered
+tables(session; catalog_pattern="%", schema_pattern="%",
+       table_pattern="%", table_types=[])
+
+# list columns
+columns(session)
+
+# columns list can be optionally filtered
+columns(session; catalog="", schema_pattern="%",
+        table_pattern="%", column_pattern="%")
+
+# list functions matching given function name pattern
+functions(session, "%")
+
+# functions list can be optionally filtered
+functions(session, "%"; catalog="", schema_pattern="%")
+</code></pre>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/JuliaDB">JuliaDB</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
