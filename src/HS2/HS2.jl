@@ -6,6 +6,7 @@
 
 module HS2
 
+using Compat
 using Thrift
 import Thrift.process, Thrift.meta, Thrift.distribute
 
@@ -21,9 +22,9 @@ export TOperationType # enum
 export TGetInfoType # enum
 export TFetchOrientation # enum
 export TTypeEntryPtr # typealias for Int32
-export TIdentifier # typealias for UTF8String
-export TPattern # typealias for UTF8String
-export TPatternOrIdentifier # typealias for UTF8String
+export TIdentifier # typealias for Compat.UTF8String
+export TPattern # typealias for Compat.UTF8String
+export TPatternOrIdentifier # typealias for Compat.UTF8String
 export TTypeQualifierValue # struct
 export TTypeQualifiers # struct
 export TPrimitiveTypeEntry # struct
