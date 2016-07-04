@@ -54,7 +54,7 @@ function tables(session::HiveSession; catalog_pattern::AbstractString="", schema
     isempty(catalog_pattern) || set_field!(request, :catalogName, catalog_pattern)
     isempty(schema_pattern) || set_field!(request, :schemaName, schema_pattern)
     isempty(table_pattern) || set_field!(request, :tableName, table_pattern)
-    isempty(table_types) || set_field!(request, :tableTypes, convert(Array{UTF8String,1}, table_types))
+    isempty(table_types) || set_field!(request, :tableTypes, convert(Array{Compat.UTF8String,1}, table_types))
 
     response = GetTables(conn.client, request)
     response_to_dataframe(session, response, fetchsize; cached_schema=:tables)
@@ -120,7 +120,10 @@ function execute(session::HiveSession, statement::AbstractString; async::Bool=fa
 
     request = thriftbuild(TExecuteStatementReq, Dict(:sessionHandle => conn.handle.sessionHandle, :statement => statement, :runAsync => async))
     if !isempty(config)
-        cfg = Dict{UTF8String,UTF8String}([string(k)=>string(v) for (k,v) in config]...)
+        cfg = Dict{Compat.UTF8String,Compat.UTF8String}()
+        for (k,v) in config
+            cfg[string(k)] = string(v)
+        end
         set_field!(request, :confOverlay, cfg)
     end
 

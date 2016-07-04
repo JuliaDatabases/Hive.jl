@@ -208,7 +208,7 @@ function next(iter::DataFrameIterator, state)
     for colidx in 1:ncols
         colname = sch.columns[colidx].columnName
         @logmsg("$colname: $(colvecs[colidx])")
-        df[symbol(colname)] = colvecs[colidx]
+        df[Symbol(colname)] = colvecs[colidx]
     end
     df, rs.eof
 end
