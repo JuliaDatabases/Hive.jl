@@ -2,27 +2,27 @@
 # All Hive types (complex types) are not supported yet
 
 const JTYPES = Dict(
-  Int32(0) => Bool,         # BOOLEAN
-  Int32(1) => Int8,         # TINYINT
-  Int32(2) => Int16,        # SMALLINT
-  Int32(3) => Int32,        # INT
-  Int32(4) => Int64,        # BIGINT
-  Int32(5) => Float64,      # FLOAT
-  Int32(6) => Float64,      # DOUBLE
-  Int32(7) => UTF8String,   # STRING
-  Int32(8) => Int64,        # TIMESTAMP
-  Int32(9) => UTF8String,   # BINARY
-  Int32(10) => UTF8String,  # ARRAY
-  Int32(11) => UTF8String,  # MAP
-  Int32(12) => UTF8String,  # STRUCT
-  Int32(13) => UTF8String,  # UNIONTYPE
-  Int32(15) => UTF8String,  # DECIMAL
-  Int32(16) => UTF8String,  # NULL
-  Int32(17) => UTF8String,  # DATE
-  Int32(18) => UTF8String,  # VARCHAR
-  Int32(19) => UTF8String,  # CHAR
-  Int32(20) => UTF8String,  # INTERVAL_YEAR_MONTH
-  Int32(21) => UTF8String   # INTERVAL_DAY_TIME
+  Int32(0) => Bool,                 # BOOLEAN
+  Int32(1) => Int8,                 # TINYINT
+  Int32(2) => Int16,                # SMALLINT
+  Int32(3) => Int32,                # INT
+  Int32(4) => Int64,                # BIGINT
+  Int32(5) => Float64,              # FLOAT
+  Int32(6) => Float64,              # DOUBLE
+  Int32(7) => Compat.UTF8String,    # STRING
+  Int32(8) => Int64,                # TIMESTAMP
+  Int32(9) => Compat.UTF8String,    # BINARY
+  Int32(10) => Compat.UTF8String,   # ARRAY
+  Int32(11) => Compat.UTF8String,   # MAP
+  Int32(12) => Compat.UTF8String,   # STRUCT
+  Int32(13) => Compat.UTF8String,   # UNIONTYPE
+  Int32(15) => Compat.UTF8String,   # DECIMAL
+  Int32(16) => Compat.UTF8String,   # NULL
+  Int32(17) => Compat.UTF8String,   # DATE
+  Int32(18) => Compat.UTF8String,   # VARCHAR
+  Int32(19) => Compat.UTF8String,   # CHAR
+  Int32(20) => Compat.UTF8String,   # INTERVAL_YEAR_MONTH
+  Int32(21) => Compat.UTF8String    # INTERVAL_DAY_TIME
 )
 
 ##

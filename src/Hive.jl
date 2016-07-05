@@ -1,5 +1,6 @@
 module Hive
 
+using Compat
 using Thrift
 using DataFrames
 

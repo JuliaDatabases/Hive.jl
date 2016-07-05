@@ -1,6 +1,6 @@
 function check_status(status::TStatus)
-    errormsg = isfilled(status, :errorMessage) ? getfield(status, :errorMessage) : utf8("")
-    infomsgs = isfilled(status, :infoMessages) ? getfield(status, :infoMessages) : UTF8String[]
+    errormsg = isfilled(status, :errorMessage) ? getfield(status, :errorMessage) : Compat.UTF8String("")
+    infomsgs = isfilled(status, :infoMessages) ? getfield(status, :infoMessages) : Compat.UTF8String[]
     check_status(status.statusCode, errormsg, infomsgs)
 end
 function check_status(status::Int32, errormsg::AbstractString="", infomsgs::Array=[])
@@ -20,9 +20,9 @@ end
 function dataframe(sch::TTableSchema)
     df = DataFrame()
     df[:position] = positions = DataArray(Int32[])
-    df[:name] = names = DataArray(UTF8String[])
+    df[:name] = names = DataArray(Compat.UTF8String[])
     df[:type] = types = DataArray(Type[])
-    df[:comment] = comments = DataArray(UTF8String[])
+    df[:comment] = comments = DataArray(Compat.UTF8String[])
     for col in sch.columns
         push!(comments, isfilled(col, :comment) ? getfield(col, :comment) : NA)
         push!(types, julia_type(col.typeDesc))
