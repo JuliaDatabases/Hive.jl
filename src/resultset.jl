@@ -93,13 +93,13 @@ isready(::RowCount) = true
 isready(pending::PendingResult) = status(pending).operationState in READY_STATUS
 hasresult(pending::PendingResult) = status(pending).operationState in RESULT_STATUS
 function sqlerror(pending::PendingResult)
-    isready(pending) || (return utf8(""))
-    hasresult(pending) && (return utf8(""))
+    isready(pending) || (return "")
+    hasresult(pending) && (return "")
     response = get(pending.status)
-    sqlstate = isfilled(response, :sqlState) ? getfield(response, :sqlState) : utf8("")
-    errormessage = isfilled(response, :errorMessage) ? getfield(response, :errorMessage) : utf8("")
+    sqlstate = isfilled(response, :sqlState) ? getfield(response, :sqlState) : ""
+    errormessage = isfilled(response, :errorMessage) ? getfield(response, :errorMessage) : ""
     errorcode = isfilled(response, :errorCode) ? getfield(response, :errorCode) : Int32(0)
-    utf8("Error. $errormessage ($sqlstate, $errorcode)")
+    "Error. $errormessage ($sqlstate, $errorcode)"
 end
 
 const SCHEMA_CACHE = Dict{Union{AbstractString,Symbol}, TTableSchema}()
