@@ -19,7 +19,7 @@ type PendingResult
     status::Nullable{TGetOperationStatusResp}
 end
 
-typealias RowCount Float64
+const RowCount = Float64
 
 type ResultSet
     session::HiveSession
@@ -35,7 +35,7 @@ type ResultSet
     end
 end
 
-typealias Result Union{ResultSet, RowCount, PendingResult}
+const Result = Union{ResultSet, RowCount, PendingResult}
 
 result(pending::PendingResult) = isready(pending) ? result(pending.session, true, pending.handle) : pending
 result(rs::ResultSet) = rs
