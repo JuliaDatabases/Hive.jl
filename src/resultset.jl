@@ -10,7 +10,7 @@
 #
 # results must be closed
 
-# number of records to fetch with every fetchnext
+"""number of records to fetch with every fetchnext"""
 const DEFAULT_FETCH_SIZE = 1024
 
 type PendingResult
