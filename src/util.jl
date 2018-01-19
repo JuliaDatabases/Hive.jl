@@ -1,6 +1,6 @@
 function check_status(status::TStatus)
-    errormsg = isfilled(status, :errorMessage) ? getfield(status, :errorMessage) : Compat.UTF8String("")
-    infomsgs = isfilled(status, :infoMessages) ? getfield(status, :infoMessages) : Compat.UTF8String[]
+    errormsg = isfilled(status, :errorMessage) ? getfield(status, :errorMessage) : String("")
+    infomsgs = isfilled(status, :infoMessages) ? getfield(status, :infoMessages) : String[]
     check_status(status.statusCode, errormsg, infomsgs)
 end
 function check_status(status::Int32, errormsg::AbstractString="", infomsgs::Array=[])
@@ -20,9 +20,9 @@ end
 function dataframe(sch::TTableSchema)
     df = DataFrame()
     df[:position] = positions = DataArray(Int32[])
-    df[:name] = names = DataArray(Compat.UTF8String[])
+    df[:name] = names = DataArray(String[])
     df[:type] = types = DataArray(Type[])
-    df[:comment] = comments = DataArray(Compat.UTF8String[])
+    df[:comment] = comments = DataArray(String[])
     for col in sch.columns
         push!(comments, isfilled(col, :comment) ? getfield(col, :comment) : NA)
         push!(types, julia_type(col.typeDesc))
@@ -41,7 +41,7 @@ end
 const BIT_MASKS = (0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80)
 # the last byte of the bitset is always set to 0x00
 function bitset_to_bools(data::Vector{UInt8}, L::Integer=((length(data)-1)*8))
-    bools = Array(Bool, L)
+    bools = Array{Bool}(L)
     for idx in 1:L
         bools[idx] = (data[ceil(Int, idx/8)] & BIT_MASKS[rem(idx-1, 8) + 1] > 0x00)
     end

@@ -9,20 +9,20 @@ const JTYPES = Dict(
   Int32(4) => Int64,                # BIGINT
   Int32(5) => Float64,              # FLOAT
   Int32(6) => Float64,              # DOUBLE
-  Int32(7) => Compat.UTF8String,    # STRING
+  Int32(7) => String,               # STRING
   Int32(8) => Int64,                # TIMESTAMP
-  Int32(9) => Compat.UTF8String,    # BINARY
-  Int32(10) => Compat.UTF8String,   # ARRAY
-  Int32(11) => Compat.UTF8String,   # MAP
-  Int32(12) => Compat.UTF8String,   # STRUCT
-  Int32(13) => Compat.UTF8String,   # UNIONTYPE
-  Int32(15) => Compat.UTF8String,   # DECIMAL
-  Int32(16) => Compat.UTF8String,   # NULL
-  Int32(17) => Compat.UTF8String,   # DATE
-  Int32(18) => Compat.UTF8String,   # VARCHAR
-  Int32(19) => Compat.UTF8String,   # CHAR
-  Int32(20) => Compat.UTF8String,   # INTERVAL_YEAR_MONTH
-  Int32(21) => Compat.UTF8String    # INTERVAL_DAY_TIME
+  Int32(9) => String,               # BINARY
+  Int32(10) => String,              # ARRAY
+  Int32(11) => String,              # MAP
+  Int32(12) => String,              # STRUCT
+  Int32(13) => String,              # UNIONTYPE
+  Int32(15) => String,              # DECIMAL
+  Int32(16) => String,              # NULL
+  Int32(17) => String,              # DATE
+  Int32(18) => String,              # VARCHAR
+  Int32(19) => String,              # CHAR
+  Int32(20) => String,              # INTERVAL_YEAR_MONTH
+  Int32(21) => String               # INTERVAL_DAY_TIME
 )
 
 ##
@@ -122,8 +122,8 @@ end
 ##
 # map column values to Julia types
 # map columns into DataVectors
-typealias ColValue Union{TBoolValue, TByteValue, TI16Value, TI32Value, TI64Value, TDoubleValue, TStringValue}
-typealias Col  Union{TBoolColumn, TByteColumn, TI16Column, TI32Column, TI64Column, TDoubleColumn, TStringColumn, TBinaryColumn}
+const ColValue = Union{TBoolValue, TByteValue, TI16Value, TI32Value, TI64Value, TDoubleValue, TStringValue}
+const Col = Union{TBoolColumn, TByteColumn, TI16Column, TI32Column, TI64Column, TDoubleColumn, TStringColumn, TBinaryColumn}
 
 function julia_type{T<:ColValue}(colval::T)
     isfilled(colval, :value) ? getfield(colval, :value) : NA

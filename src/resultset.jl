@@ -10,7 +10,7 @@
 #
 # results must be closed
 
-# number of records to fetch with every fetchnext
+"""number of records to fetch with every fetchnext"""
 const DEFAULT_FETCH_SIZE = 1024
 
 type PendingResult
@@ -19,7 +19,7 @@ type PendingResult
     status::Nullable{TGetOperationStatusResp}
 end
 
-typealias RowCount Float64
+const RowCount = Float64
 
 type ResultSet
     session::HiveSession
@@ -35,7 +35,7 @@ type ResultSet
     end
 end
 
-typealias Result Union{ResultSet, RowCount, PendingResult}
+const Result = Union{ResultSet, RowCount, PendingResult}
 
 result(pending::PendingResult) = isready(pending) ? result(pending.session, true, pending.handle) : pending
 result(rs::ResultSet) = rs
@@ -93,13 +93,13 @@ isready(::RowCount) = true
 isready(pending::PendingResult) = status(pending).operationState in READY_STATUS
 hasresult(pending::PendingResult) = status(pending).operationState in RESULT_STATUS
 function sqlerror(pending::PendingResult)
-    isready(pending) || (return utf8(""))
-    hasresult(pending) && (return utf8(""))
+    isready(pending) || (return "")
+    hasresult(pending) && (return "")
     response = get(pending.status)
-    sqlstate = isfilled(response, :sqlState) ? getfield(response, :sqlState) : utf8("")
-    errormessage = isfilled(response, :errorMessage) ? getfield(response, :errorMessage) : utf8("")
+    sqlstate = isfilled(response, :sqlState) ? getfield(response, :sqlState) : ""
+    errormessage = isfilled(response, :errorMessage) ? getfield(response, :errorMessage) : ""
     errorcode = isfilled(response, :errorCode) ? getfield(response, :errorCode) : Int32(0)
-    utf8("Error. $errormessage ($sqlstate, $errorcode)")
+    "Error. $errormessage ($sqlstate, $errorcode)"
 end
 
 const SCHEMA_CACHE = Dict{Union{AbstractString,Symbol}, TTableSchema}()

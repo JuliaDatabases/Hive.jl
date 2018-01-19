@@ -1,6 +1,7 @@
-##
-# Authentication mechanisms
-# Only SASL-Plain supported for now
+"""
+Authentication mechanisms
+Only SASL-Plain supported for now
+"""
 type HiveAuth
     mechanism::AbstractString
     callback::Function
@@ -27,9 +28,10 @@ function show(io::IO, auth::HiveAuth)
 end
 
 
-##
-# HiveConn holds the thrift connection and protocol objects.
-# It also holds the hive session handle for this connection.
+"""
+HiveConn holds the thrift connection and protocol objects.
+It also holds the hive session handle for this connection.
+"""
 type HiveConn
     transport::TTransport
     protocol::TProtocol
@@ -72,8 +74,9 @@ function close(conn::HiveConn)
     check_status(response.status)
 end
 
-#
-# HiveSession holds a connection and session status
+"""
+HiveSession holds a connection and session status
+"""
 type HiveSession
     conn::HiveConn
 
@@ -88,8 +91,9 @@ function show(io::IO, sess::HiveSession)
 end
 close(session::HiveSession) = close(session.conn)
 
-##
-# Info Type
+"""
+Info Type
+"""
 const InfoType = TGetInfoType
 function get_info(session::HiveSession, info_type::Int32)
     conn = session.conn
