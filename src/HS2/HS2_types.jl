@@ -3,7 +3,7 @@
 #
 # DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
 
-type _enum_TProtocolVersion
+struct _enum_TProtocolVersion
   HIVE_CLI_SERVICE_PROTOCOL_V1::Int32
   HIVE_CLI_SERVICE_PROTOCOL_V2::Int32
   HIVE_CLI_SERVICE_PROTOCOL_V3::Int32
@@ -15,7 +15,7 @@ type _enum_TProtocolVersion
 end
 const TProtocolVersion = _enum_TProtocolVersion(Int32(0), Int32(1), Int32(2), Int32(3), Int32(4), Int32(5), Int32(6), Int32(7))
 
-type _enum_TTypeId
+struct _enum_TTypeId
   BOOLEAN_TYPE::Int32
   TINYINT_TYPE::Int32
   SMALLINT_TYPE::Int32
@@ -41,7 +41,7 @@ type _enum_TTypeId
 end
 const TTypeId = _enum_TTypeId(Int32(0), Int32(1), Int32(2), Int32(3), Int32(4), Int32(5), Int32(6), Int32(7), Int32(8), Int32(9), Int32(10), Int32(11), Int32(12), Int32(13), Int32(14), Int32(15), Int32(16), Int32(17), Int32(18), Int32(19), Int32(20), Int32(21))
 
-type _enum_TStatusCode
+struct _enum_TStatusCode
   SUCCESS_STATUS::Int32
   SUCCESS_WITH_INFO_STATUS::Int32
   STILL_EXECUTING_STATUS::Int32
@@ -50,7 +50,7 @@ type _enum_TStatusCode
 end
 const TStatusCode = _enum_TStatusCode(Int32(0), Int32(1), Int32(2), Int32(3), Int32(4))
 
-type _enum_TOperationState
+struct _enum_TOperationState
   INITIALIZED_STATE::Int32
   RUNNING_STATE::Int32
   FINISHED_STATE::Int32
@@ -62,7 +62,7 @@ type _enum_TOperationState
 end
 const TOperationState = _enum_TOperationState(Int32(0), Int32(1), Int32(2), Int32(3), Int32(4), Int32(5), Int32(6), Int32(7))
 
-type _enum_TOperationType
+struct _enum_TOperationType
   EXECUTE_STATEMENT::Int32
   GET_TYPE_INFO::Int32
   GET_CATALOGS::Int32
@@ -75,7 +75,7 @@ type _enum_TOperationType
 end
 const TOperationType = _enum_TOperationType(Int32(0), Int32(1), Int32(2), Int32(3), Int32(4), Int32(5), Int32(6), Int32(7), Int32(8))
 
-type _enum_TGetInfoType
+struct _enum_TGetInfoType
   CLI_MAX_DRIVER_CONNECTIONS::Int32
   CLI_MAX_CONCURRENT_ACTIVITIES::Int32
   CLI_DATA_SOURCE_NAME::Int32
@@ -126,7 +126,7 @@ type _enum_TGetInfoType
 end
 const TGetInfoType = _enum_TGetInfoType(Int32(0), Int32(1), Int32(2), Int32(8), Int32(13), Int32(14), Int32(17), Int32(18), Int32(19), Int32(20), Int32(23), Int32(25), Int32(26), Int32(28), Int32(29), Int32(30), Int32(31), Int32(32), Int32(34), Int32(35), Int32(43), Int32(46), Int32(47), Int32(72), Int32(73), Int32(81), Int32(85), Int32(86), Int32(90), Int32(94), Int32(97), Int32(98), Int32(99), Int32(100), Int32(101), Int32(102), Int32(104), Int32(105), Int32(106), Int32(107), Int32(115), Int32(10000), Int32(10001), Int32(10002), Int32(10003), Int32(10004), Int32(10005))
 
-type _enum_TFetchOrientation
+struct _enum_TFetchOrientation
   FETCH_NEXT::Int32
   FETCH_PRIOR::Int32
   FETCH_RELATIVE::Int32
@@ -145,52 +145,52 @@ const TPattern = String
 const TPatternOrIdentifier = String
 
 
-type TTypeQualifierValue
+mutable struct TTypeQualifierValue <: Thrift.TMsg
   i32Value::Int32
   stringValue::String
   TTypeQualifierValue() = (o=new(); fillunset(o); o)
-end # type TTypeQualifierValue
+end # mutable struct TTypeQualifierValue
 meta(t::Type{TTypeQualifierValue}) = meta(t, Symbol[:i32Value,:stringValue], Int[], Dict{Symbol,Any}())
 
-type TTypeQualifiers
+mutable struct TTypeQualifiers <: Thrift.TMsg
   qualifiers::Dict{String,TTypeQualifierValue}
   TTypeQualifiers() = (o=new(); fillunset(o); o)
-end # type TTypeQualifiers
+end # mutable struct TTypeQualifiers
 
-type TPrimitiveTypeEntry
+mutable struct TPrimitiveTypeEntry <: Thrift.TMsg
   _type::Int32
   typeQualifiers::TTypeQualifiers
   TPrimitiveTypeEntry() = (o=new(); fillunset(o); o)
-end # type TPrimitiveTypeEntry
+end # mutable struct TPrimitiveTypeEntry
 meta(t::Type{TPrimitiveTypeEntry}) = meta(t, Symbol[:typeQualifiers], Int[], Dict{Symbol,Any}())
 
-type TArrayTypeEntry
+mutable struct TArrayTypeEntry <: Thrift.TMsg
   objectTypePtr::TTypeEntryPtr
   TArrayTypeEntry() = (o=new(); fillunset(o); o)
-end # type TArrayTypeEntry
+end # mutable struct TArrayTypeEntry
 
-type TMapTypeEntry
+mutable struct TMapTypeEntry <: Thrift.TMsg
   keyTypePtr::TTypeEntryPtr
   valueTypePtr::TTypeEntryPtr
   TMapTypeEntry() = (o=new(); fillunset(o); o)
-end # type TMapTypeEntry
+end # mutable struct TMapTypeEntry
 
-type TStructTypeEntry
+mutable struct TStructTypeEntry <: Thrift.TMsg
   nameToTypePtr::Dict{String,TTypeEntryPtr}
   TStructTypeEntry() = (o=new(); fillunset(o); o)
-end # type TStructTypeEntry
+end # mutable struct TStructTypeEntry
 
-type TUnionTypeEntry
+mutable struct TUnionTypeEntry <: Thrift.TMsg
   nameToTypePtr::Dict{String,TTypeEntryPtr}
   TUnionTypeEntry() = (o=new(); fillunset(o); o)
-end # type TUnionTypeEntry
+end # mutable struct TUnionTypeEntry
 
-type TUserDefinedTypeEntry
+mutable struct TUserDefinedTypeEntry <: Thrift.TMsg
   typeClassName::String
   TUserDefinedTypeEntry() = (o=new(); fillunset(o); o)
-end # type TUserDefinedTypeEntry
+end # mutable struct TUserDefinedTypeEntry
 
-type TTypeEntry
+mutable struct TTypeEntry <: Thrift.TMsg
   primitiveEntry::TPrimitiveTypeEntry
   arrayEntry::TArrayTypeEntry
   mapEntry::TMapTypeEntry
@@ -198,71 +198,71 @@ type TTypeEntry
   unionEntry::TUnionTypeEntry
   userDefinedTypeEntry::TUserDefinedTypeEntry
   TTypeEntry() = (o=new(); fillunset(o); o)
-end # type TTypeEntry
+end # mutable struct TTypeEntry
 meta(t::Type{TTypeEntry}) = meta(t, Symbol[:primitiveEntry,:arrayEntry,:mapEntry,:structEntry,:unionEntry,:userDefinedTypeEntry], Int[], Dict{Symbol,Any}())
 
-type TTypeDesc
+mutable struct TTypeDesc <: Thrift.TMsg
   types::Vector{TTypeEntry}
   TTypeDesc() = (o=new(); fillunset(o); o)
-end # type TTypeDesc
+end # mutable struct TTypeDesc
 
-type TColumnDesc
+mutable struct TColumnDesc <: Thrift.TMsg
   columnName::String
   typeDesc::TTypeDesc
   position::Int32
   comment::String
   TColumnDesc() = (o=new(); fillunset(o); o)
-end # type TColumnDesc
+end # mutable struct TColumnDesc
 meta(t::Type{TColumnDesc}) = meta(t, Symbol[:comment], Int[], Dict{Symbol,Any}())
 
-type TTableSchema
+mutable struct TTableSchema <: Thrift.TMsg
   columns::Vector{TColumnDesc}
   TTableSchema() = (o=new(); fillunset(o); o)
-end # type TTableSchema
+end # mutable struct TTableSchema
 
-type TBoolValue
+mutable struct TBoolValue <: Thrift.TMsg
   value::Bool
   TBoolValue() = (o=new(); fillunset(o); o)
-end # type TBoolValue
+end # mutable struct TBoolValue
 meta(t::Type{TBoolValue}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
 
-type TByteValue
+mutable struct TByteValue <: Thrift.TMsg
   value::UInt8
   TByteValue() = (o=new(); fillunset(o); o)
-end # type TByteValue
+end # mutable struct TByteValue
 meta(t::Type{TByteValue}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
 
-type TI16Value
+mutable struct TI16Value <: Thrift.TMsg
   value::Int16
   TI16Value() = (o=new(); fillunset(o); o)
-end # type TI16Value
+end # mutable struct TI16Value
 meta(t::Type{TI16Value}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
 
-type TI32Value
+mutable struct TI32Value <: Thrift.TMsg
   value::Int32
   TI32Value() = (o=new(); fillunset(o); o)
-end # type TI32Value
+end # mutable struct TI32Value
 meta(t::Type{TI32Value}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
 
-type TI64Value
+mutable struct TI64Value <: Thrift.TMsg
   value::Int64
   TI64Value() = (o=new(); fillunset(o); o)
-end # type TI64Value
+end # mutable struct TI64Value
 meta(t::Type{TI64Value}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
 
-type TDoubleValue
+mutable struct TDoubleValue <: Thrift.TMsg
   value::Float64
   TDoubleValue() = (o=new(); fillunset(o); o)
-end # type TDoubleValue
+end # mutable struct TDoubleValue
 meta(t::Type{TDoubleValue}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
 
-type TStringValue
+mutable struct TStringValue <: Thrift.TMsg
   value::String
   TStringValue() = (o=new(); fillunset(o); o)
-end # type TStringValue
+end # mutable struct TStringValue
 meta(t::Type{TStringValue}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
 
-type TColumnValue
+mutable struct TColumnValue <: Thrift.TMsg
   boolVal::TBoolValue
   byteVal::TByteValue
   i16Val::TI16Value
@@ -271,63 +271,63 @@ type TColumnValue
   doubleVal::TDoubleValue
   stringVal::TStringValue
   TColumnValue() = (o=new(); fillunset(o); o)
-end # type TColumnValue
+end # mutable struct TColumnValue
 meta(t::Type{TColumnValue}) = meta(t, Symbol[:boolVal,:byteVal,:i16Val,:i32Val,:i64Val,:doubleVal,:stringVal], Int[], Dict{Symbol,Any}())
 
-type TRow
+mutable struct TRow <: Thrift.TMsg
   colVals::Vector{TColumnValue}
   TRow() = (o=new(); fillunset(o); o)
-end # type TRow
+end # mutable struct TRow
 
-type TBoolColumn
+mutable struct TBoolColumn <: Thrift.TMsg
   values::Vector{Bool}
   nulls::Vector{UInt8}
   TBoolColumn() = (o=new(); fillunset(o); o)
-end # type TBoolColumn
+end # mutable struct TBoolColumn
 
-type TByteColumn
+mutable struct TByteColumn <: Thrift.TMsg
   values::Vector{UInt8}
   nulls::Vector{UInt8}
   TByteColumn() = (o=new(); fillunset(o); o)
-end # type TByteColumn
+end # mutable struct TByteColumn
 
-type TI16Column
+mutable struct TI16Column <: Thrift.TMsg
   values::Vector{Int16}
   nulls::Vector{UInt8}
   TI16Column() = (o=new(); fillunset(o); o)
-end # type TI16Column
+end # mutable struct TI16Column
 
-type TI32Column
+mutable struct TI32Column <: Thrift.TMsg
   values::Vector{Int32}
   nulls::Vector{UInt8}
   TI32Column() = (o=new(); fillunset(o); o)
-end # type TI32Column
+end # mutable struct TI32Column
 
-type TI64Column
+mutable struct TI64Column <: Thrift.TMsg
   values::Vector{Int64}
   nulls::Vector{UInt8}
   TI64Column() = (o=new(); fillunset(o); o)
-end # type TI64Column
+end # mutable struct TI64Column
 
-type TDoubleColumn
+mutable struct TDoubleColumn <: Thrift.TMsg
   values::Vector{Float64}
   nulls::Vector{UInt8}
   TDoubleColumn() = (o=new(); fillunset(o); o)
-end # type TDoubleColumn
+end # mutable struct TDoubleColumn
 
-type TStringColumn
+mutable struct TStringColumn <: Thrift.TMsg
   values::Vector{String}
   nulls::Vector{UInt8}
   TStringColumn() = (o=new(); fillunset(o); o)
-end # type TStringColumn
+end # mutable struct TStringColumn
 
-type TBinaryColumn
+mutable struct TBinaryColumn <: Thrift.TMsg
   values::Vector{Vector{UInt8}}
   nulls::Vector{UInt8}
   TBinaryColumn() = (o=new(); fillunset(o); o)
-end # type TBinaryColumn
+end # mutable struct TBinaryColumn
 
-type TColumn
+mutable struct TColumn <: Thrift.TMsg
   boolVal::TBoolColumn
   byteVal::TByteColumn
   i16Val::TI16Column
@@ -337,76 +337,76 @@ type TColumn
   stringVal::TStringColumn
   binaryVal::TBinaryColumn
   TColumn() = (o=new(); fillunset(o); o)
-end # type TColumn
+end # mutable struct TColumn
 meta(t::Type{TColumn}) = meta(t, Symbol[:boolVal,:byteVal,:i16Val,:i32Val,:i64Val,:doubleVal,:stringVal,:binaryVal], Int[], Dict{Symbol,Any}())
 
-type TRowSet
+mutable struct TRowSet <: Thrift.TMsg
   startRowOffset::Int64
   rows::Vector{TRow}
   columns::Vector{TColumn}
   TRowSet() = (o=new(); fillunset(o); o)
-end # type TRowSet
+end # mutable struct TRowSet
 meta(t::Type{TRowSet}) = meta(t, Symbol[:columns], Int[], Dict{Symbol,Any}())
 
-type TStatus
+mutable struct TStatus <: Thrift.TMsg
   statusCode::Int32
   infoMessages::Vector{String}
   sqlState::String
   errorCode::Int32
   errorMessage::String
   TStatus() = (o=new(); fillunset(o); o)
-end # type TStatus
+end # mutable struct TStatus
 meta(t::Type{TStatus}) = meta(t, Symbol[:infoMessages,:sqlState,:errorCode,:errorMessage], Int[], Dict{Symbol,Any}())
 
-type THandleIdentifier
+mutable struct THandleIdentifier <: Thrift.TMsg
   guid::Vector{UInt8}
   secret::Vector{UInt8}
   THandleIdentifier() = (o=new(); fillunset(o); o)
-end # type THandleIdentifier
+end # mutable struct THandleIdentifier
 
-type TSessionHandle
+mutable struct TSessionHandle <: Thrift.TMsg
   sessionId::THandleIdentifier
   TSessionHandle() = (o=new(); fillunset(o); o)
-end # type TSessionHandle
+end # mutable struct TSessionHandle
 
-type TOperationHandle
+mutable struct TOperationHandle <: Thrift.TMsg
   operationId::THandleIdentifier
   operationType::Int32
   hasResultSet::Bool
   modifiedRowCount::Float64
   TOperationHandle() = (o=new(); fillunset(o); o)
-end # type TOperationHandle
+end # mutable struct TOperationHandle
 meta(t::Type{TOperationHandle}) = meta(t, Symbol[:modifiedRowCount], Int[], Dict{Symbol,Any}())
 
-type TOpenSessionReq
+mutable struct TOpenSessionReq <: Thrift.TMsg
   client_protocol::Int32
   username::String
   password::String
   configuration::Dict{String,String}
   TOpenSessionReq() = (o=new(); fillunset(o); o)
-end # type TOpenSessionReq
+end # mutable struct TOpenSessionReq
 meta(t::Type{TOpenSessionReq}) = meta(t, Symbol[:username,:password,:configuration], Int[], Dict{Symbol,Any}(:client_protocol => Int32(7)))
 
-type TOpenSessionResp
+mutable struct TOpenSessionResp <: Thrift.TMsg
   status::TStatus
   serverProtocolVersion::Int32
   sessionHandle::TSessionHandle
   configuration::Dict{String,String}
   TOpenSessionResp() = (o=new(); fillunset(o); o)
-end # type TOpenSessionResp
+end # mutable struct TOpenSessionResp
 meta(t::Type{TOpenSessionResp}) = meta(t, Symbol[:sessionHandle,:configuration], Int[], Dict{Symbol,Any}(:serverProtocolVersion => Int32(7)))
 
-type TCloseSessionReq
+mutable struct TCloseSessionReq <: Thrift.TMsg
   sessionHandle::TSessionHandle
   TCloseSessionReq() = (o=new(); fillunset(o); o)
-end # type TCloseSessionReq
+end # mutable struct TCloseSessionReq
 
-type TCloseSessionResp
+mutable struct TCloseSessionResp <: Thrift.TMsg
   status::TStatus
   TCloseSessionResp() = (o=new(); fillunset(o); o)
-end # type TCloseSessionResp
+end # mutable struct TCloseSessionResp
 
-type TGetInfoValue
+mutable struct TGetInfoValue <: Thrift.TMsg
   stringValue::String
   smallIntValue::Int16
   integerBitmask::Int32
@@ -414,236 +414,236 @@ type TGetInfoValue
   binaryValue::Int32
   lenValue::Int64
   TGetInfoValue() = (o=new(); fillunset(o); o)
-end # type TGetInfoValue
+end # mutable struct TGetInfoValue
 meta(t::Type{TGetInfoValue}) = meta(t, Symbol[:stringValue,:smallIntValue,:integerBitmask,:integerFlag,:binaryValue,:lenValue], Int[], Dict{Symbol,Any}())
 
-type TGetInfoReq
+mutable struct TGetInfoReq <: Thrift.TMsg
   sessionHandle::TSessionHandle
   infoType::Int32
   TGetInfoReq() = (o=new(); fillunset(o); o)
-end # type TGetInfoReq
+end # mutable struct TGetInfoReq
 
-type TGetInfoResp
+mutable struct TGetInfoResp <: Thrift.TMsg
   status::TStatus
   infoValue::TGetInfoValue
   TGetInfoResp() = (o=new(); fillunset(o); o)
-end # type TGetInfoResp
+end # mutable struct TGetInfoResp
 
-type TExecuteStatementReq
+mutable struct TExecuteStatementReq <: Thrift.TMsg
   sessionHandle::TSessionHandle
   statement::String
   confOverlay::Dict{String,String}
   runAsync::Bool
   TExecuteStatementReq() = (o=new(); fillunset(o); o)
-end # type TExecuteStatementReq
+end # mutable struct TExecuteStatementReq
 meta(t::Type{TExecuteStatementReq}) = meta(t, Symbol[:confOverlay,:runAsync], Int[], Dict{Symbol,Any}(:runAsync => false))
 
-type TExecuteStatementResp
+mutable struct TExecuteStatementResp <: Thrift.TMsg
   status::TStatus
   operationHandle::TOperationHandle
   TExecuteStatementResp() = (o=new(); fillunset(o); o)
-end # type TExecuteStatementResp
+end # mutable struct TExecuteStatementResp
 meta(t::Type{TExecuteStatementResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
 
-type TGetTypeInfoReq
+mutable struct TGetTypeInfoReq <: Thrift.TMsg
   sessionHandle::TSessionHandle
   TGetTypeInfoReq() = (o=new(); fillunset(o); o)
-end # type TGetTypeInfoReq
+end # mutable struct TGetTypeInfoReq
 
-type TGetTypeInfoResp
+mutable struct TGetTypeInfoResp <: Thrift.TMsg
   status::TStatus
   operationHandle::TOperationHandle
   TGetTypeInfoResp() = (o=new(); fillunset(o); o)
-end # type TGetTypeInfoResp
+end # mutable struct TGetTypeInfoResp
 meta(t::Type{TGetTypeInfoResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
 
-type TGetCatalogsReq
+mutable struct TGetCatalogsReq <: Thrift.TMsg
   sessionHandle::TSessionHandle
   TGetCatalogsReq() = (o=new(); fillunset(o); o)
-end # type TGetCatalogsReq
+end # mutable struct TGetCatalogsReq
 
-type TGetCatalogsResp
+mutable struct TGetCatalogsResp <: Thrift.TMsg
   status::TStatus
   operationHandle::TOperationHandle
   TGetCatalogsResp() = (o=new(); fillunset(o); o)
-end # type TGetCatalogsResp
+end # mutable struct TGetCatalogsResp
 meta(t::Type{TGetCatalogsResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
 
-type TGetSchemasReq
+mutable struct TGetSchemasReq <: Thrift.TMsg
   sessionHandle::TSessionHandle
   catalogName::TIdentifier
   schemaName::TPatternOrIdentifier
   TGetSchemasReq() = (o=new(); fillunset(o); o)
-end # type TGetSchemasReq
+end # mutable struct TGetSchemasReq
 meta(t::Type{TGetSchemasReq}) = meta(t, Symbol[:catalogName,:schemaName], Int[], Dict{Symbol,Any}())
 
-type TGetSchemasResp
+mutable struct TGetSchemasResp <: Thrift.TMsg
   status::TStatus
   operationHandle::TOperationHandle
   TGetSchemasResp() = (o=new(); fillunset(o); o)
-end # type TGetSchemasResp
+end # mutable struct TGetSchemasResp
 meta(t::Type{TGetSchemasResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
 
-type TGetTablesReq
+mutable struct TGetTablesReq <: Thrift.TMsg
   sessionHandle::TSessionHandle
   catalogName::TPatternOrIdentifier
   schemaName::TPatternOrIdentifier
   tableName::TPatternOrIdentifier
   tableTypes::Vector{String}
   TGetTablesReq() = (o=new(); fillunset(o); o)
-end # type TGetTablesReq
+end # mutable struct TGetTablesReq
 meta(t::Type{TGetTablesReq}) = meta(t, Symbol[:catalogName,:schemaName,:tableName,:tableTypes], Int[], Dict{Symbol,Any}())
 
-type TGetTablesResp
+mutable struct TGetTablesResp <: Thrift.TMsg
   status::TStatus
   operationHandle::TOperationHandle
   TGetTablesResp() = (o=new(); fillunset(o); o)
-end # type TGetTablesResp
+end # mutable struct TGetTablesResp
 meta(t::Type{TGetTablesResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
 
-type TGetTableTypesReq
+mutable struct TGetTableTypesReq <: Thrift.TMsg
   sessionHandle::TSessionHandle
   TGetTableTypesReq() = (o=new(); fillunset(o); o)
-end # type TGetTableTypesReq
+end # mutable struct TGetTableTypesReq
 
-type TGetTableTypesResp
+mutable struct TGetTableTypesResp <: Thrift.TMsg
   status::TStatus
   operationHandle::TOperationHandle
   TGetTableTypesResp() = (o=new(); fillunset(o); o)
-end # type TGetTableTypesResp
+end # mutable struct TGetTableTypesResp
 meta(t::Type{TGetTableTypesResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
 
-type TGetColumnsReq
+mutable struct TGetColumnsReq <: Thrift.TMsg
   sessionHandle::TSessionHandle
   catalogName::TIdentifier
   schemaName::TPatternOrIdentifier
   tableName::TPatternOrIdentifier
   columnName::TPatternOrIdentifier
   TGetColumnsReq() = (o=new(); fillunset(o); o)
-end # type TGetColumnsReq
+end # mutable struct TGetColumnsReq
 meta(t::Type{TGetColumnsReq}) = meta(t, Symbol[:catalogName,:schemaName,:tableName,:columnName], Int[], Dict{Symbol,Any}())
 
-type TGetColumnsResp
+mutable struct TGetColumnsResp <: Thrift.TMsg
   status::TStatus
   operationHandle::TOperationHandle
   TGetColumnsResp() = (o=new(); fillunset(o); o)
-end # type TGetColumnsResp
+end # mutable struct TGetColumnsResp
 meta(t::Type{TGetColumnsResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
 
-type TGetFunctionsReq
+mutable struct TGetFunctionsReq <: Thrift.TMsg
   sessionHandle::TSessionHandle
   catalogName::TIdentifier
   schemaName::TPatternOrIdentifier
   functionName::TPatternOrIdentifier
   TGetFunctionsReq() = (o=new(); fillunset(o); o)
-end # type TGetFunctionsReq
+end # mutable struct TGetFunctionsReq
 meta(t::Type{TGetFunctionsReq}) = meta(t, Symbol[:catalogName,:schemaName], Int[], Dict{Symbol,Any}())
 
-type TGetFunctionsResp
+mutable struct TGetFunctionsResp <: Thrift.TMsg
   status::TStatus
   operationHandle::TOperationHandle
   TGetFunctionsResp() = (o=new(); fillunset(o); o)
-end # type TGetFunctionsResp
+end # mutable struct TGetFunctionsResp
 meta(t::Type{TGetFunctionsResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
 
-type TGetOperationStatusReq
+mutable struct TGetOperationStatusReq <: Thrift.TMsg
   operationHandle::TOperationHandle
   TGetOperationStatusReq() = (o=new(); fillunset(o); o)
-end # type TGetOperationStatusReq
+end # mutable struct TGetOperationStatusReq
 
-type TGetOperationStatusResp
+mutable struct TGetOperationStatusResp <: Thrift.TMsg
   status::TStatus
   operationState::Int32
   sqlState::String
   errorCode::Int32
   errorMessage::String
   TGetOperationStatusResp() = (o=new(); fillunset(o); o)
-end # type TGetOperationStatusResp
+end # mutable struct TGetOperationStatusResp
 meta(t::Type{TGetOperationStatusResp}) = meta(t, Symbol[:operationState,:sqlState,:errorCode,:errorMessage], Int[], Dict{Symbol,Any}())
 
-type TCancelOperationReq
+mutable struct TCancelOperationReq <: Thrift.TMsg
   operationHandle::TOperationHandle
   TCancelOperationReq() = (o=new(); fillunset(o); o)
-end # type TCancelOperationReq
+end # mutable struct TCancelOperationReq
 
-type TCancelOperationResp
+mutable struct TCancelOperationResp <: Thrift.TMsg
   status::TStatus
   TCancelOperationResp() = (o=new(); fillunset(o); o)
-end # type TCancelOperationResp
+end # mutable struct TCancelOperationResp
 
-type TCloseOperationReq
+mutable struct TCloseOperationReq <: Thrift.TMsg
   operationHandle::TOperationHandle
   TCloseOperationReq() = (o=new(); fillunset(o); o)
-end # type TCloseOperationReq
+end # mutable struct TCloseOperationReq
 
-type TCloseOperationResp
+mutable struct TCloseOperationResp <: Thrift.TMsg
   status::TStatus
   TCloseOperationResp() = (o=new(); fillunset(o); o)
-end # type TCloseOperationResp
+end # mutable struct TCloseOperationResp
 
-type TGetResultSetMetadataReq
+mutable struct TGetResultSetMetadataReq <: Thrift.TMsg
   operationHandle::TOperationHandle
   TGetResultSetMetadataReq() = (o=new(); fillunset(o); o)
-end # type TGetResultSetMetadataReq
+end # mutable struct TGetResultSetMetadataReq
 
-type TGetResultSetMetadataResp
+mutable struct TGetResultSetMetadataResp <: Thrift.TMsg
   status::TStatus
   schema::TTableSchema
   TGetResultSetMetadataResp() = (o=new(); fillunset(o); o)
-end # type TGetResultSetMetadataResp
+end # mutable struct TGetResultSetMetadataResp
 meta(t::Type{TGetResultSetMetadataResp}) = meta(t, Symbol[:schema], Int[], Dict{Symbol,Any}())
 
-type TFetchResultsReq
+mutable struct TFetchResultsReq <: Thrift.TMsg
   operationHandle::TOperationHandle
   orientation::Int32
   maxRows::Int64
   fetchType::Int16
   TFetchResultsReq() = (o=new(); fillunset(o); o)
-end # type TFetchResultsReq
+end # mutable struct TFetchResultsReq
 meta(t::Type{TFetchResultsReq}) = meta(t, Symbol[:fetchType], Int[], Dict{Symbol,Any}(:orientation => Int32(0), :fetchType => Int16(0)))
 
-type TFetchResultsResp
+mutable struct TFetchResultsResp <: Thrift.TMsg
   status::TStatus
   hasMoreRows::Bool
   results::TRowSet
   TFetchResultsResp() = (o=new(); fillunset(o); o)
-end # type TFetchResultsResp
+end # mutable struct TFetchResultsResp
 meta(t::Type{TFetchResultsResp}) = meta(t, Symbol[:hasMoreRows,:results], Int[], Dict{Symbol,Any}())
 
-type TGetDelegationTokenReq
+mutable struct TGetDelegationTokenReq <: Thrift.TMsg
   sessionHandle::TSessionHandle
   owner::String
   renewer::String
   TGetDelegationTokenReq() = (o=new(); fillunset(o); o)
-end # type TGetDelegationTokenReq
+end # mutable struct TGetDelegationTokenReq
 
-type TGetDelegationTokenResp
+mutable struct TGetDelegationTokenResp <: Thrift.TMsg
   status::TStatus
   delegationToken::String
   TGetDelegationTokenResp() = (o=new(); fillunset(o); o)
-end # type TGetDelegationTokenResp
+end # mutable struct TGetDelegationTokenResp
 meta(t::Type{TGetDelegationTokenResp}) = meta(t, Symbol[:delegationToken], Int[], Dict{Symbol,Any}())
 
-type TCancelDelegationTokenReq
+mutable struct TCancelDelegationTokenReq <: Thrift.TMsg
   sessionHandle::TSessionHandle
   delegationToken::String
   TCancelDelegationTokenReq() = (o=new(); fillunset(o); o)
-end # type TCancelDelegationTokenReq
+end # mutable struct TCancelDelegationTokenReq
 
-type TCancelDelegationTokenResp
+mutable struct TCancelDelegationTokenResp <: Thrift.TMsg
   status::TStatus
   TCancelDelegationTokenResp() = (o=new(); fillunset(o); o)
-end # type TCancelDelegationTokenResp
+end # mutable struct TCancelDelegationTokenResp
 
-type TRenewDelegationTokenReq
+mutable struct TRenewDelegationTokenReq <: Thrift.TMsg
   sessionHandle::TSessionHandle
   delegationToken::String
   TRenewDelegationTokenReq() = (o=new(); fillunset(o); o)
-end # type TRenewDelegationTokenReq
+end # mutable struct TRenewDelegationTokenReq
 
-type TRenewDelegationTokenResp
+mutable struct TRenewDelegationTokenResp <: Thrift.TMsg
   status::TStatus
   TRenewDelegationTokenResp() = (o=new(); fillunset(o); o)
-end # type TRenewDelegationTokenResp
+end # mutable struct TRenewDelegationTokenResp
 
-@compat abstract type TCLIServiceClientBase end
+abstract type TCLIServiceClientBase end

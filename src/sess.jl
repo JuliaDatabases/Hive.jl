@@ -2,7 +2,7 @@
 Authentication mechanisms
 Only SASL-Plain supported for now
 """
-type HiveAuth
+mutable struct HiveAuth
     mechanism::AbstractString
     callback::Function
 
@@ -32,7 +32,7 @@ end
 HiveConn holds the thrift connection and protocol objects.
 It also holds the hive session handle for this connection.
 """
-type HiveConn
+mutable struct HiveConn
     transport::TTransport
     protocol::TProtocol
     client::TCLIServiceClient
@@ -77,7 +77,7 @@ end
 """
 HiveSession holds a connection and session status
 """
-type HiveSession
+mutable struct HiveSession
     conn::HiveConn
 
     function HiveSession(host::AbstractString="localhost", port::Integer=10000, auth::HiveAuth=HiveAuth(); tprotocol::Symbol=:binary)

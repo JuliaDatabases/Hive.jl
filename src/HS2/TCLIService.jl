@@ -7,274 +7,274 @@
 
 # types encapsulating arguments and return values of method OpenSession
 
-type OpenSession_args
+mutable struct OpenSession_args <: Thrift.TMsg
   req::TOpenSessionReq
   OpenSession_args() = (o=new(); fillunset(o); o)
-end # type OpenSession_args
+end # mutable struct OpenSession_args
 
-type OpenSession_result
+mutable struct OpenSession_result
   success::TOpenSessionResp
   OpenSession_result() = (o=new(); fillunset(o); o)
   OpenSession_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type OpenSession_result
+end # mutable struct OpenSession_result
 meta(t::Type{OpenSession_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method CloseSession
 
-type CloseSession_args
+mutable struct CloseSession_args <: Thrift.TMsg
   req::TCloseSessionReq
   CloseSession_args() = (o=new(); fillunset(o); o)
-end # type CloseSession_args
+end # mutable struct CloseSession_args
 
-type CloseSession_result
+mutable struct CloseSession_result
   success::TCloseSessionResp
   CloseSession_result() = (o=new(); fillunset(o); o)
   CloseSession_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type CloseSession_result
+end # mutable struct CloseSession_result
 meta(t::Type{CloseSession_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method GetInfo
 
-type GetInfo_args
+mutable struct GetInfo_args <: Thrift.TMsg
   req::TGetInfoReq
   GetInfo_args() = (o=new(); fillunset(o); o)
-end # type GetInfo_args
+end # mutable struct GetInfo_args
 
-type GetInfo_result
+mutable struct GetInfo_result
   success::TGetInfoResp
   GetInfo_result() = (o=new(); fillunset(o); o)
   GetInfo_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type GetInfo_result
+end # mutable struct GetInfo_result
 meta(t::Type{GetInfo_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method ExecuteStatement
 
-type ExecuteStatement_args
+mutable struct ExecuteStatement_args <: Thrift.TMsg
   req::TExecuteStatementReq
   ExecuteStatement_args() = (o=new(); fillunset(o); o)
-end # type ExecuteStatement_args
+end # mutable struct ExecuteStatement_args
 
-type ExecuteStatement_result
+mutable struct ExecuteStatement_result
   success::TExecuteStatementResp
   ExecuteStatement_result() = (o=new(); fillunset(o); o)
   ExecuteStatement_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type ExecuteStatement_result
+end # mutable struct ExecuteStatement_result
 meta(t::Type{ExecuteStatement_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method GetTypeInfo
 
-type GetTypeInfo_args
+mutable struct GetTypeInfo_args <: Thrift.TMsg
   req::TGetTypeInfoReq
   GetTypeInfo_args() = (o=new(); fillunset(o); o)
-end # type GetTypeInfo_args
+end # mutable struct GetTypeInfo_args
 
-type GetTypeInfo_result
+mutable struct GetTypeInfo_result
   success::TGetTypeInfoResp
   GetTypeInfo_result() = (o=new(); fillunset(o); o)
   GetTypeInfo_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type GetTypeInfo_result
+end # mutable struct GetTypeInfo_result
 meta(t::Type{GetTypeInfo_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method GetCatalogs
 
-type GetCatalogs_args
+mutable struct GetCatalogs_args <: Thrift.TMsg
   req::TGetCatalogsReq
   GetCatalogs_args() = (o=new(); fillunset(o); o)
-end # type GetCatalogs_args
+end # mutable struct GetCatalogs_args
 
-type GetCatalogs_result
+mutable struct GetCatalogs_result
   success::TGetCatalogsResp
   GetCatalogs_result() = (o=new(); fillunset(o); o)
   GetCatalogs_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type GetCatalogs_result
+end # mutable struct GetCatalogs_result
 meta(t::Type{GetCatalogs_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method GetSchemas
 
-type GetSchemas_args
+mutable struct GetSchemas_args <: Thrift.TMsg
   req::TGetSchemasReq
   GetSchemas_args() = (o=new(); fillunset(o); o)
-end # type GetSchemas_args
+end # mutable struct GetSchemas_args
 
-type GetSchemas_result
+mutable struct GetSchemas_result
   success::TGetSchemasResp
   GetSchemas_result() = (o=new(); fillunset(o); o)
   GetSchemas_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type GetSchemas_result
+end # mutable struct GetSchemas_result
 meta(t::Type{GetSchemas_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method GetTables
 
-type GetTables_args
+mutable struct GetTables_args <: Thrift.TMsg
   req::TGetTablesReq
   GetTables_args() = (o=new(); fillunset(o); o)
-end # type GetTables_args
+end # mutable struct GetTables_args
 
-type GetTables_result
+mutable struct GetTables_result
   success::TGetTablesResp
   GetTables_result() = (o=new(); fillunset(o); o)
   GetTables_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type GetTables_result
+end # mutable struct GetTables_result
 meta(t::Type{GetTables_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method GetTableTypes
 
-type GetTableTypes_args
+mutable struct GetTableTypes_args <: Thrift.TMsg
   req::TGetTableTypesReq
   GetTableTypes_args() = (o=new(); fillunset(o); o)
-end # type GetTableTypes_args
+end # mutable struct GetTableTypes_args
 
-type GetTableTypes_result
+mutable struct GetTableTypes_result
   success::TGetTableTypesResp
   GetTableTypes_result() = (o=new(); fillunset(o); o)
   GetTableTypes_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type GetTableTypes_result
+end # mutable struct GetTableTypes_result
 meta(t::Type{GetTableTypes_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method GetColumns
 
-type GetColumns_args
+mutable struct GetColumns_args <: Thrift.TMsg
   req::TGetColumnsReq
   GetColumns_args() = (o=new(); fillunset(o); o)
-end # type GetColumns_args
+end # mutable struct GetColumns_args
 
-type GetColumns_result
+mutable struct GetColumns_result
   success::TGetColumnsResp
   GetColumns_result() = (o=new(); fillunset(o); o)
   GetColumns_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type GetColumns_result
+end # mutable struct GetColumns_result
 meta(t::Type{GetColumns_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method GetFunctions
 
-type GetFunctions_args
+mutable struct GetFunctions_args <: Thrift.TMsg
   req::TGetFunctionsReq
   GetFunctions_args() = (o=new(); fillunset(o); o)
-end # type GetFunctions_args
+end # mutable struct GetFunctions_args
 
-type GetFunctions_result
+mutable struct GetFunctions_result
   success::TGetFunctionsResp
   GetFunctions_result() = (o=new(); fillunset(o); o)
   GetFunctions_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type GetFunctions_result
+end # mutable struct GetFunctions_result
 meta(t::Type{GetFunctions_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method GetOperationStatus
 
-type GetOperationStatus_args
+mutable struct GetOperationStatus_args <: Thrift.TMsg
   req::TGetOperationStatusReq
   GetOperationStatus_args() = (o=new(); fillunset(o); o)
-end # type GetOperationStatus_args
+end # mutable struct GetOperationStatus_args
 
-type GetOperationStatus_result
+mutable struct GetOperationStatus_result
   success::TGetOperationStatusResp
   GetOperationStatus_result() = (o=new(); fillunset(o); o)
   GetOperationStatus_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type GetOperationStatus_result
+end # mutable struct GetOperationStatus_result
 meta(t::Type{GetOperationStatus_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method CancelOperation
 
-type CancelOperation_args
+mutable struct CancelOperation_args <: Thrift.TMsg
   req::TCancelOperationReq
   CancelOperation_args() = (o=new(); fillunset(o); o)
-end # type CancelOperation_args
+end # mutable struct CancelOperation_args
 
-type CancelOperation_result
+mutable struct CancelOperation_result
   success::TCancelOperationResp
   CancelOperation_result() = (o=new(); fillunset(o); o)
   CancelOperation_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type CancelOperation_result
+end # mutable struct CancelOperation_result
 meta(t::Type{CancelOperation_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method CloseOperation
 
-type CloseOperation_args
+mutable struct CloseOperation_args <: Thrift.TMsg
   req::TCloseOperationReq
   CloseOperation_args() = (o=new(); fillunset(o); o)
-end # type CloseOperation_args
+end # mutable struct CloseOperation_args
 
-type CloseOperation_result
+mutable struct CloseOperation_result
   success::TCloseOperationResp
   CloseOperation_result() = (o=new(); fillunset(o); o)
   CloseOperation_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type CloseOperation_result
+end # mutable struct CloseOperation_result
 meta(t::Type{CloseOperation_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method GetResultSetMetadata
 
-type GetResultSetMetadata_args
+mutable struct GetResultSetMetadata_args <: Thrift.TMsg
   req::TGetResultSetMetadataReq
   GetResultSetMetadata_args() = (o=new(); fillunset(o); o)
-end # type GetResultSetMetadata_args
+end # mutable struct GetResultSetMetadata_args
 
-type GetResultSetMetadata_result
+mutable struct GetResultSetMetadata_result
   success::TGetResultSetMetadataResp
   GetResultSetMetadata_result() = (o=new(); fillunset(o); o)
   GetResultSetMetadata_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type GetResultSetMetadata_result
+end # mutable struct GetResultSetMetadata_result
 meta(t::Type{GetResultSetMetadata_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method FetchResults
 
-type FetchResults_args
+mutable struct FetchResults_args <: Thrift.TMsg
   req::TFetchResultsReq
   FetchResults_args() = (o=new(); fillunset(o); o)
-end # type FetchResults_args
+end # mutable struct FetchResults_args
 
-type FetchResults_result
+mutable struct FetchResults_result
   success::TFetchResultsResp
   FetchResults_result() = (o=new(); fillunset(o); o)
   FetchResults_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type FetchResults_result
+end # mutable struct FetchResults_result
 meta(t::Type{FetchResults_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method GetDelegationToken
 
-type GetDelegationToken_args
+mutable struct GetDelegationToken_args <: Thrift.TMsg
   req::TGetDelegationTokenReq
   GetDelegationToken_args() = (o=new(); fillunset(o); o)
-end # type GetDelegationToken_args
+end # mutable struct GetDelegationToken_args
 
-type GetDelegationToken_result
+mutable struct GetDelegationToken_result
   success::TGetDelegationTokenResp
   GetDelegationToken_result() = (o=new(); fillunset(o); o)
   GetDelegationToken_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type GetDelegationToken_result
+end # mutable struct GetDelegationToken_result
 meta(t::Type{GetDelegationToken_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method CancelDelegationToken
 
-type CancelDelegationToken_args
+mutable struct CancelDelegationToken_args <: Thrift.TMsg
   req::TCancelDelegationTokenReq
   CancelDelegationToken_args() = (o=new(); fillunset(o); o)
-end # type CancelDelegationToken_args
+end # mutable struct CancelDelegationToken_args
 
-type CancelDelegationToken_result
+mutable struct CancelDelegationToken_result
   success::TCancelDelegationTokenResp
   CancelDelegationToken_result() = (o=new(); fillunset(o); o)
   CancelDelegationToken_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type CancelDelegationToken_result
+end # mutable struct CancelDelegationToken_result
 meta(t::Type{CancelDelegationToken_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 # types encapsulating arguments and return values of method RenewDelegationToken
 
-type RenewDelegationToken_args
+mutable struct RenewDelegationToken_args <: Thrift.TMsg
   req::TRenewDelegationTokenReq
   RenewDelegationToken_args() = (o=new(); fillunset(o); o)
-end # type RenewDelegationToken_args
+end # mutable struct RenewDelegationToken_args
 
-type RenewDelegationToken_result
+mutable struct RenewDelegationToken_result
   success::TRenewDelegationTokenResp
   RenewDelegationToken_result() = (o=new(); fillunset(o); o)
   RenewDelegationToken_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
-end # type RenewDelegationToken_result
+end # mutable struct RenewDelegationToken_result
 meta(t::Type{RenewDelegationToken_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
 
 
 # Processor for TCLIService service (to be used in server implementation)
-type TCLIServiceProcessor <: TProcessor
+mutable struct TCLIServiceProcessor <: TProcessor
   tp::ThriftProcessor
   function TCLIServiceProcessor()
     p = new(ThriftProcessor())
@@ -318,7 +318,7 @@ type TCLIServiceProcessor <: TProcessor
   _GetDelegationToken(inp::GetDelegationToken_args) = GetDelegationToken_result(GetDelegationToken(inp.req))
   _CancelDelegationToken(inp::CancelDelegationToken_args) = CancelDelegationToken_result(CancelDelegationToken(inp.req))
   _RenewDelegationToken(inp::RenewDelegationToken_args) = RenewDelegationToken_result(RenewDelegationToken(inp.req))
-end # type TCLIServiceProcessor
+end # mutable struct TCLIServiceProcessor
 process(p::TCLIServiceProcessor, inp::TProtocol, outp::TProtocol) = process(p.tp, inp, outp)
 distribute(p::TCLIServiceProcessor) = distribute(p.tp)
 
@@ -365,11 +365,11 @@ distribute(p::TCLIServiceProcessor) = distribute(p.tp)
 
 
 # Client implementation for TCLIService service
-type TCLIServiceClient <: TCLIServiceClientBase
+mutable struct TCLIServiceClient <: TCLIServiceClientBase
   p::TProtocol
   seqid::Int32
   TCLIServiceClient(p::TProtocol) = new(p, 0)
-end # type TCLIServiceClient
+end # mutable struct TCLIServiceClient
 
 # Client callable method for OpenSession
 function OpenSession(c::TCLIServiceClientBase, req::TOpenSessionReq)
