@@ -3,6 +3,7 @@ module Hive
 using Compat
 using Thrift
 using DataFrames
+using DataArrays
 
 import Base: close, isready, show, eof, start, next, done
 
