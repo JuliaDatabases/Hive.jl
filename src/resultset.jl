@@ -13,7 +13,7 @@
 """number of records to fetch with every fetchnext"""
 const DEFAULT_FETCH_SIZE = 1024
 
-type PendingResult
+mutable struct PendingResult
     session::HiveSession
     handle::TOperationHandle
     status::Nullable{TGetOperationStatusResp}
@@ -21,7 +21,7 @@ end
 
 const RowCount = Float64
 
-type ResultSet
+mutable struct ResultSet
     session::HiveSession
     handle::TOperationHandle
     schema::Nullable{TTableSchema}
@@ -156,7 +156,7 @@ end
 # - dataframes, dataframe iterator: fetches one batch of records at a time, returns a dataframe
 # - dataframe(dataframe iterator): fetches and returns the first batch
 
-type DataFrameIterator
+mutable struct DataFrameIterator
     rs::ResultSet
 
     function DataFrameIterator(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE)
@@ -213,7 +213,7 @@ function next(iter::DataFrameIterator, state)
     df, rs.eof
 end
 
-type RecordIterator
+mutable struct RecordIterator
     dfiter::DataFrameIterator
     dfpos::Int
     df::Nullable{DataFrame}

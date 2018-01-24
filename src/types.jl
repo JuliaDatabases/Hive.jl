@@ -125,7 +125,7 @@ end
 const ColValue = Union{TBoolValue, TByteValue, TI16Value, TI32Value, TI64Value, TDoubleValue, TStringValue}
 const Col = Union{TBoolColumn, TByteColumn, TI16Column, TI32Column, TI64Column, TDoubleColumn, TStringColumn, TBinaryColumn}
 
-function julia_type{T<:ColValue}(colval::T)
+function julia_type(colval::T) where T<:ColValue
     isfilled(colval, :value) ? getfield(colval, :value) : NA
 end
 
@@ -137,7 +137,7 @@ function julia_type(colval::TColumnValue)
     NA
 end
 
-function julia_type{T<:Col}(col::T)
+function julia_type(col::T) where T<:Col
     if (length(col.nulls) < 2) || isempty(col.values)
         DataArray(col.values)
     else
