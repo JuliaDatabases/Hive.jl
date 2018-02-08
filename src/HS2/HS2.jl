@@ -21,6 +21,7 @@ export TOperationState # enum
 export TOperationType # enum
 export TGetInfoType # enum
 export TFetchOrientation # enum
+export TJobExecutionStatus # enum
 export TTypeEntryPtr # typealias for Int32
 export TIdentifier # typealias for String
 export TPattern # typealias for String
@@ -62,6 +63,8 @@ export TSessionHandle # struct
 export TOperationHandle # struct
 export TOpenSessionReq # struct
 export TOpenSessionResp # struct
+export TSetClientInfoReq # struct
+export TSetClientInfoResp # struct
 export TCloseSessionReq # struct
 export TCloseSessionResp # struct
 export TGetInfoValue # struct
@@ -83,6 +86,10 @@ export TGetColumnsReq # struct
 export TGetColumnsResp # struct
 export TGetFunctionsReq # struct
 export TGetFunctionsResp # struct
+export TGetPrimaryKeysReq # struct
+export TGetPrimaryKeysResp # struct
+export TGetCrossReferenceReq # struct
+export TGetCrossReferenceResp # struct
 export TGetOperationStatusReq # struct
 export TGetOperationStatusResp # struct
 export TCancelOperationReq # struct
@@ -99,6 +106,9 @@ export TCancelDelegationTokenReq # struct
 export TCancelDelegationTokenResp # struct
 export TRenewDelegationTokenReq # struct
 export TRenewDelegationTokenResp # struct
+export TProgressUpdateResp # struct
+export TGetQueryIdReq # struct
+export TGetQueryIdResp # struct
 export PRIMITIVE_TYPES # const
 export COMPLEX_TYPES # const
 export COLLECTION_TYPES # const
@@ -106,7 +116,7 @@ export TYPE_NAMES # const
 export CHARACTER_MAXIMUM_LENGTH # const
 export PRECISION # const
 export SCALE # const
-export TCLIServiceProcessor, TCLIServiceClient, TCLIServiceClientBase, OpenSession, CloseSession, GetInfo, ExecuteStatement, GetTypeInfo, GetCatalogs, GetSchemas, GetTables, GetTableTypes, GetColumns, GetFunctions, GetOperationStatus, CancelOperation, CloseOperation, GetResultSetMetadata, FetchResults, GetDelegationToken, CancelDelegationToken, RenewDelegationToken # service TCLIService
+export TCLIServiceProcessor, TCLIServiceClient, TCLIServiceClientBase, OpenSession, CloseSession, GetInfo, ExecuteStatement, GetTypeInfo, GetCatalogs, GetSchemas, GetTables, GetTableTypes, GetColumns, GetFunctions, GetPrimaryKeys, GetCrossReference, GetOperationStatus, CancelOperation, CloseOperation, GetResultSetMetadata, FetchResults, GetDelegationToken, CancelDelegationToken, RenewDelegationToken, GetQueryId, SetClientInfo # service TCLIService
 
 include("HS2_constants.jl")
 include("HS2_types.jl")
