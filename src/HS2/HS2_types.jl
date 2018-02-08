@@ -12,8 +12,11 @@ struct _enum_TProtocolVersion
   HIVE_CLI_SERVICE_PROTOCOL_V6::Int32
   HIVE_CLI_SERVICE_PROTOCOL_V7::Int32
   HIVE_CLI_SERVICE_PROTOCOL_V8::Int32
+  HIVE_CLI_SERVICE_PROTOCOL_V9::Int32
+  HIVE_CLI_SERVICE_PROTOCOL_V10::Int32
+  HIVE_CLI_SERVICE_PROTOCOL_V11::Int32
 end
-const TProtocolVersion = _enum_TProtocolVersion(Int32(0), Int32(1), Int32(2), Int32(3), Int32(4), Int32(5), Int32(6), Int32(7))
+const TProtocolVersion = _enum_TProtocolVersion(Int32(0), Int32(1), Int32(2), Int32(3), Int32(4), Int32(5), Int32(6), Int32(7), Int32(8), Int32(9), Int32(10))
 
 struct _enum_TTypeId
   BOOLEAN_TYPE::Int32
@@ -38,8 +41,9 @@ struct _enum_TTypeId
   CHAR_TYPE::Int32
   INTERVAL_YEAR_MONTH_TYPE::Int32
   INTERVAL_DAY_TIME_TYPE::Int32
+  TIMESTAMPLOCALTZ_TYPE::Int32
 end
-const TTypeId = _enum_TTypeId(Int32(0), Int32(1), Int32(2), Int32(3), Int32(4), Int32(5), Int32(6), Int32(7), Int32(8), Int32(9), Int32(10), Int32(11), Int32(12), Int32(13), Int32(14), Int32(15), Int32(16), Int32(17), Int32(18), Int32(19), Int32(20), Int32(21))
+const TTypeId = _enum_TTypeId(Int32(0), Int32(1), Int32(2), Int32(3), Int32(4), Int32(5), Int32(6), Int32(7), Int32(8), Int32(9), Int32(10), Int32(11), Int32(12), Int32(13), Int32(14), Int32(15), Int32(16), Int32(17), Int32(18), Int32(19), Int32(20), Int32(21), Int32(22))
 
 struct _enum_TStatusCode
   SUCCESS_STATUS::Int32
@@ -59,8 +63,9 @@ struct _enum_TOperationState
   ERROR_STATE::Int32
   UKNOWN_STATE::Int32
   PENDING_STATE::Int32
+  TIMEDOUT_STATE::Int32
 end
-const TOperationState = _enum_TOperationState(Int32(0), Int32(1), Int32(2), Int32(3), Int32(4), Int32(5), Int32(6), Int32(7))
+const TOperationState = _enum_TOperationState(Int32(0), Int32(1), Int32(2), Int32(3), Int32(4), Int32(5), Int32(6), Int32(7), Int32(8))
 
 struct _enum_TOperationType
   EXECUTE_STATEMENT::Int32
@@ -123,8 +128,9 @@ struct _enum_TGetInfoType
   CLI_CATALOG_NAME::Int32
   CLI_COLLATION_SEQ::Int32
   CLI_MAX_IDENTIFIER_LEN::Int32
+  CLI_ODBC_KEYWORDS::Int32
 end
-const TGetInfoType = _enum_TGetInfoType(Int32(0), Int32(1), Int32(2), Int32(8), Int32(13), Int32(14), Int32(17), Int32(18), Int32(19), Int32(20), Int32(23), Int32(25), Int32(26), Int32(28), Int32(29), Int32(30), Int32(31), Int32(32), Int32(34), Int32(35), Int32(43), Int32(46), Int32(47), Int32(72), Int32(73), Int32(81), Int32(85), Int32(86), Int32(90), Int32(94), Int32(97), Int32(98), Int32(99), Int32(100), Int32(101), Int32(102), Int32(104), Int32(105), Int32(106), Int32(107), Int32(115), Int32(10000), Int32(10001), Int32(10002), Int32(10003), Int32(10004), Int32(10005))
+const TGetInfoType = _enum_TGetInfoType(Int32(0), Int32(1), Int32(2), Int32(8), Int32(13), Int32(14), Int32(17), Int32(18), Int32(19), Int32(20), Int32(23), Int32(25), Int32(26), Int32(28), Int32(29), Int32(30), Int32(31), Int32(32), Int32(34), Int32(35), Int32(43), Int32(46), Int32(47), Int32(72), Int32(73), Int32(81), Int32(85), Int32(86), Int32(90), Int32(94), Int32(97), Int32(98), Int32(99), Int32(100), Int32(101), Int32(102), Int32(104), Int32(105), Int32(106), Int32(107), Int32(115), Int32(10000), Int32(10001), Int32(10002), Int32(10003), Int32(10004), Int32(10005), Int32(10006))
 
 struct _enum_TFetchOrientation
   FETCH_NEXT::Int32
@@ -135,6 +141,13 @@ struct _enum_TFetchOrientation
   FETCH_LAST::Int32
 end
 const TFetchOrientation = _enum_TFetchOrientation(Int32(0), Int32(1), Int32(2), Int32(3), Int32(4), Int32(5))
+
+struct _enum_TJobExecutionStatus
+  IN_PROGRESS::Int32
+  COMPLETE::Int32
+  NOT_AVAILABLE::Int32
+end
+const TJobExecutionStatus = _enum_TJobExecutionStatus(Int32(0), Int32(1), Int32(2))
 
 const TTypeEntryPtr = Int32
 
@@ -344,9 +357,11 @@ mutable struct TRowSet <: Thrift.TMsg
   startRowOffset::Int64
   rows::Vector{TRow}
   columns::Vector{TColumn}
+  binaryColumns::Vector{UInt8}
+  columnCount::Int32
   TRowSet() = (o=new(); fillunset(o); o)
 end # mutable struct TRowSet
-meta(t::Type{TRowSet}) = meta(t, Symbol[:columns], Int[], Dict{Symbol,Any}())
+meta(t::Type{TRowSet}) = meta(t, Symbol[:columns,:binaryColumns,:columnCount], Int[], Dict{Symbol,Any}())
 
 mutable struct TStatus <: Thrift.TMsg
   statusCode::Int32
@@ -385,7 +400,7 @@ mutable struct TOpenSessionReq <: Thrift.TMsg
   configuration::Dict{String,String}
   TOpenSessionReq() = (o=new(); fillunset(o); o)
 end # mutable struct TOpenSessionReq
-meta(t::Type{TOpenSessionReq}) = meta(t, Symbol[:username,:password,:configuration], Int[], Dict{Symbol,Any}(:client_protocol => Int32(7)))
+meta(t::Type{TOpenSessionReq}) = meta(t, Symbol[:username,:password,:configuration], Int[], Dict{Symbol,Any}(:client_protocol => Int32(9)))
 
 mutable struct TOpenSessionResp <: Thrift.TMsg
   status::TStatus
@@ -394,7 +409,19 @@ mutable struct TOpenSessionResp <: Thrift.TMsg
   configuration::Dict{String,String}
   TOpenSessionResp() = (o=new(); fillunset(o); o)
 end # mutable struct TOpenSessionResp
-meta(t::Type{TOpenSessionResp}) = meta(t, Symbol[:sessionHandle,:configuration], Int[], Dict{Symbol,Any}(:serverProtocolVersion => Int32(7)))
+meta(t::Type{TOpenSessionResp}) = meta(t, Symbol[:sessionHandle,:configuration], Int[], Dict{Symbol,Any}(:serverProtocolVersion => Int32(9)))
+
+mutable struct TSetClientInfoReq <: Thrift.TMsg
+  sessionHandle::TSessionHandle
+  configuration::Dict{String,String}
+  TSetClientInfoReq() = (o=new(); fillunset(o); o)
+end # mutable struct TSetClientInfoReq
+meta(t::Type{TSetClientInfoReq}) = meta(t, Symbol[:configuration], Int[], Dict{Symbol,Any}())
+
+mutable struct TSetClientInfoResp <: Thrift.TMsg
+  status::TStatus
+  TSetClientInfoResp() = (o=new(); fillunset(o); o)
+end # mutable struct TSetClientInfoResp
 
 mutable struct TCloseSessionReq <: Thrift.TMsg
   sessionHandle::TSessionHandle
@@ -434,9 +461,10 @@ mutable struct TExecuteStatementReq <: Thrift.TMsg
   statement::String
   confOverlay::Dict{String,String}
   runAsync::Bool
+  queryTimeout::Int64
   TExecuteStatementReq() = (o=new(); fillunset(o); o)
 end # mutable struct TExecuteStatementReq
-meta(t::Type{TExecuteStatementReq}) = meta(t, Symbol[:confOverlay,:runAsync], Int[], Dict{Symbol,Any}(:runAsync => false))
+meta(t::Type{TExecuteStatementReq}) = meta(t, Symbol[:confOverlay,:runAsync,:queryTimeout], Int[], Dict{Symbol,Any}(:runAsync => false, :queryTimeout => Int64(0)))
 
 mutable struct TExecuteStatementResp <: Thrift.TMsg
   status::TStatus
@@ -546,10 +574,57 @@ mutable struct TGetFunctionsResp <: Thrift.TMsg
 end # mutable struct TGetFunctionsResp
 meta(t::Type{TGetFunctionsResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
 
+mutable struct TGetPrimaryKeysReq <: Thrift.TMsg
+  sessionHandle::TSessionHandle
+  catalogName::TIdentifier
+  schemaName::TIdentifier
+  tableName::TIdentifier
+  TGetPrimaryKeysReq() = (o=new(); fillunset(o); o)
+end # mutable struct TGetPrimaryKeysReq
+meta(t::Type{TGetPrimaryKeysReq}) = meta(t, Symbol[:catalogName,:schemaName,:tableName], Int[], Dict{Symbol,Any}())
+
+mutable struct TGetPrimaryKeysResp <: Thrift.TMsg
+  status::TStatus
+  operationHandle::TOperationHandle
+  TGetPrimaryKeysResp() = (o=new(); fillunset(o); o)
+end # mutable struct TGetPrimaryKeysResp
+meta(t::Type{TGetPrimaryKeysResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
+
+mutable struct TGetCrossReferenceReq <: Thrift.TMsg
+  sessionHandle::TSessionHandle
+  parentCatalogName::TIdentifier
+  parentSchemaName::TIdentifier
+  parentTableName::TIdentifier
+  foreignCatalogName::TIdentifier
+  foreignSchemaName::TIdentifier
+  foreignTableName::TIdentifier
+  TGetCrossReferenceReq() = (o=new(); fillunset(o); o)
+end # mutable struct TGetCrossReferenceReq
+meta(t::Type{TGetCrossReferenceReq}) = meta(t, Symbol[:parentCatalogName,:parentSchemaName,:parentTableName,:foreignCatalogName,:foreignSchemaName,:foreignTableName], Int[], Dict{Symbol,Any}())
+
+mutable struct TGetCrossReferenceResp <: Thrift.TMsg
+  status::TStatus
+  operationHandle::TOperationHandle
+  TGetCrossReferenceResp() = (o=new(); fillunset(o); o)
+end # mutable struct TGetCrossReferenceResp
+meta(t::Type{TGetCrossReferenceResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
+
 mutable struct TGetOperationStatusReq <: Thrift.TMsg
   operationHandle::TOperationHandle
+  getProgressUpdate::Bool
   TGetOperationStatusReq() = (o=new(); fillunset(o); o)
 end # mutable struct TGetOperationStatusReq
+meta(t::Type{TGetOperationStatusReq}) = meta(t, Symbol[:getProgressUpdate], Int[], Dict{Symbol,Any}())
+
+mutable struct TProgressUpdateResp <: Thrift.TMsg
+  headerNames::Vector{String}
+  rows::Vector{Vector{String}}
+  progressedPercentage::Float64
+  status::Int32
+  footerSummary::String
+  startTime::Int64
+  TProgressUpdateResp() = (o=new(); fillunset(o); o)
+end # mutable struct TProgressUpdateResp
 
 mutable struct TGetOperationStatusResp <: Thrift.TMsg
   status::TStatus
@@ -557,9 +632,14 @@ mutable struct TGetOperationStatusResp <: Thrift.TMsg
   sqlState::String
   errorCode::Int32
   errorMessage::String
+  taskStatus::String
+  operationStarted::Int64
+  operationCompleted::Int64
+  hasResultSet::Bool
+  progressUpdateResponse::TProgressUpdateResp
   TGetOperationStatusResp() = (o=new(); fillunset(o); o)
 end # mutable struct TGetOperationStatusResp
-meta(t::Type{TGetOperationStatusResp}) = meta(t, Symbol[:operationState,:sqlState,:errorCode,:errorMessage], Int[], Dict{Symbol,Any}())
+meta(t::Type{TGetOperationStatusResp}) = meta(t, Symbol[:operationState,:sqlState,:errorCode,:errorMessage,:taskStatus,:operationStarted,:operationCompleted,:hasResultSet,:progressUpdateResponse], Int[], Dict{Symbol,Any}())
 
 mutable struct TCancelOperationReq <: Thrift.TMsg
   operationHandle::TOperationHandle
@@ -645,5 +725,15 @@ mutable struct TRenewDelegationTokenResp <: Thrift.TMsg
   status::TStatus
   TRenewDelegationTokenResp() = (o=new(); fillunset(o); o)
 end # mutable struct TRenewDelegationTokenResp
+
+mutable struct TGetQueryIdReq <: Thrift.TMsg
+  operationHandle::TOperationHandle
+  TGetQueryIdReq() = (o=new(); fillunset(o); o)
+end # mutable struct TGetQueryIdReq
+
+mutable struct TGetQueryIdResp <: Thrift.TMsg
+  queryId::String
+  TGetQueryIdResp() = (o=new(); fillunset(o); o)
+end # mutable struct TGetQueryIdResp
 
 abstract type TCLIServiceClientBase end

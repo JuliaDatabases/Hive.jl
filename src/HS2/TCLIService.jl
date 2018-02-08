@@ -159,6 +159,34 @@ mutable struct GetFunctions_result
 end # mutable struct GetFunctions_result
 meta(t::Type{GetFunctions_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
+# types encapsulating arguments and return values of method GetPrimaryKeys
+
+mutable struct GetPrimaryKeys_args <: Thrift.TMsg
+  req::TGetPrimaryKeysReq
+  GetPrimaryKeys_args() = (o=new(); fillunset(o); o)
+end # mutable struct GetPrimaryKeys_args
+
+mutable struct GetPrimaryKeys_result
+  success::TGetPrimaryKeysResp
+  GetPrimaryKeys_result() = (o=new(); fillunset(o); o)
+  GetPrimaryKeys_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+end # mutable struct GetPrimaryKeys_result
+meta(t::Type{GetPrimaryKeys_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+# types encapsulating arguments and return values of method GetCrossReference
+
+mutable struct GetCrossReference_args <: Thrift.TMsg
+  req::TGetCrossReferenceReq
+  GetCrossReference_args() = (o=new(); fillunset(o); o)
+end # mutable struct GetCrossReference_args
+
+mutable struct GetCrossReference_result
+  success::TGetCrossReferenceResp
+  GetCrossReference_result() = (o=new(); fillunset(o); o)
+  GetCrossReference_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+end # mutable struct GetCrossReference_result
+meta(t::Type{GetCrossReference_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
 # types encapsulating arguments and return values of method GetOperationStatus
 
 mutable struct GetOperationStatus_args <: Thrift.TMsg
@@ -271,6 +299,34 @@ mutable struct RenewDelegationToken_result
 end # mutable struct RenewDelegationToken_result
 meta(t::Type{RenewDelegationToken_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
 
+# types encapsulating arguments and return values of method GetQueryId
+
+mutable struct GetQueryId_args <: Thrift.TMsg
+  req::TGetQueryIdReq
+  GetQueryId_args() = (o=new(); fillunset(o); o)
+end # mutable struct GetQueryId_args
+
+mutable struct GetQueryId_result
+  success::TGetQueryIdResp
+  GetQueryId_result() = (o=new(); fillunset(o); o)
+  GetQueryId_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+end # mutable struct GetQueryId_result
+meta(t::Type{GetQueryId_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+# types encapsulating arguments and return values of method SetClientInfo
+
+mutable struct SetClientInfo_args <: Thrift.TMsg
+  req::TSetClientInfoReq
+  SetClientInfo_args() = (o=new(); fillunset(o); o)
+end # mutable struct SetClientInfo_args
+
+mutable struct SetClientInfo_result
+  success::TSetClientInfoResp
+  SetClientInfo_result() = (o=new(); fillunset(o); o)
+  SetClientInfo_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+end # mutable struct SetClientInfo_result
+meta(t::Type{SetClientInfo_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
 
 
 # Processor for TCLIService service (to be used in server implementation)
@@ -289,6 +345,8 @@ mutable struct TCLIServiceProcessor <: TProcessor
     handle(p.tp, ThriftHandler("GetTableTypes", _GetTableTypes, GetTableTypes_args, GetTableTypes_result))
     handle(p.tp, ThriftHandler("GetColumns", _GetColumns, GetColumns_args, GetColumns_result))
     handle(p.tp, ThriftHandler("GetFunctions", _GetFunctions, GetFunctions_args, GetFunctions_result))
+    handle(p.tp, ThriftHandler("GetPrimaryKeys", _GetPrimaryKeys, GetPrimaryKeys_args, GetPrimaryKeys_result))
+    handle(p.tp, ThriftHandler("GetCrossReference", _GetCrossReference, GetCrossReference_args, GetCrossReference_result))
     handle(p.tp, ThriftHandler("GetOperationStatus", _GetOperationStatus, GetOperationStatus_args, GetOperationStatus_result))
     handle(p.tp, ThriftHandler("CancelOperation", _CancelOperation, CancelOperation_args, CancelOperation_result))
     handle(p.tp, ThriftHandler("CloseOperation", _CloseOperation, CloseOperation_args, CloseOperation_result))
@@ -297,6 +355,8 @@ mutable struct TCLIServiceProcessor <: TProcessor
     handle(p.tp, ThriftHandler("GetDelegationToken", _GetDelegationToken, GetDelegationToken_args, GetDelegationToken_result))
     handle(p.tp, ThriftHandler("CancelDelegationToken", _CancelDelegationToken, CancelDelegationToken_args, CancelDelegationToken_result))
     handle(p.tp, ThriftHandler("RenewDelegationToken", _RenewDelegationToken, RenewDelegationToken_args, RenewDelegationToken_result))
+    handle(p.tp, ThriftHandler("GetQueryId", _GetQueryId, GetQueryId_args, GetQueryId_result))
+    handle(p.tp, ThriftHandler("SetClientInfo", _SetClientInfo, SetClientInfo_args, SetClientInfo_result))
     p
   end
   _OpenSession(inp::OpenSession_args) = OpenSession_result(OpenSession(inp.req))
@@ -310,6 +370,8 @@ mutable struct TCLIServiceProcessor <: TProcessor
   _GetTableTypes(inp::GetTableTypes_args) = GetTableTypes_result(GetTableTypes(inp.req))
   _GetColumns(inp::GetColumns_args) = GetColumns_result(GetColumns(inp.req))
   _GetFunctions(inp::GetFunctions_args) = GetFunctions_result(GetFunctions(inp.req))
+  _GetPrimaryKeys(inp::GetPrimaryKeys_args) = GetPrimaryKeys_result(GetPrimaryKeys(inp.req))
+  _GetCrossReference(inp::GetCrossReference_args) = GetCrossReference_result(GetCrossReference(inp.req))
   _GetOperationStatus(inp::GetOperationStatus_args) = GetOperationStatus_result(GetOperationStatus(inp.req))
   _CancelOperation(inp::CancelOperation_args) = CancelOperation_result(CancelOperation(inp.req))
   _CloseOperation(inp::CloseOperation_args) = CloseOperation_result(CloseOperation(inp.req))
@@ -318,6 +380,8 @@ mutable struct TCLIServiceProcessor <: TProcessor
   _GetDelegationToken(inp::GetDelegationToken_args) = GetDelegationToken_result(GetDelegationToken(inp.req))
   _CancelDelegationToken(inp::CancelDelegationToken_args) = CancelDelegationToken_result(CancelDelegationToken(inp.req))
   _RenewDelegationToken(inp::RenewDelegationToken_args) = RenewDelegationToken_result(RenewDelegationToken(inp.req))
+  _GetQueryId(inp::GetQueryId_args) = GetQueryId_result(GetQueryId(inp.req))
+  _SetClientInfo(inp::SetClientInfo_args) = SetClientInfo_result(SetClientInfo(inp.req))
 end # mutable struct TCLIServiceProcessor
 process(p::TCLIServiceProcessor, inp::TProtocol, outp::TProtocol) = process(p.tp, inp, outp)
 distribute(p::TCLIServiceProcessor) = distribute(p.tp)
@@ -346,6 +410,10 @@ distribute(p::TCLIServiceProcessor) = distribute(p.tp)
 #     # returns TGetColumnsResp
 # function GetFunctions(req::TGetFunctionsReq)
 #     # returns TGetFunctionsResp
+# function GetPrimaryKeys(req::TGetPrimaryKeysReq)
+#     # returns TGetPrimaryKeysResp
+# function GetCrossReference(req::TGetCrossReferenceReq)
+#     # returns TGetCrossReferenceResp
 # function GetOperationStatus(req::TGetOperationStatusReq)
 #     # returns TGetOperationStatusResp
 # function CancelOperation(req::TCancelOperationReq)
@@ -362,6 +430,10 @@ distribute(p::TCLIServiceProcessor) = distribute(p.tp)
 #     # returns TCancelDelegationTokenResp
 # function RenewDelegationToken(req::TRenewDelegationTokenReq)
 #     # returns TRenewDelegationTokenResp
+# function GetQueryId(req::TGetQueryIdReq)
+#     # returns TGetQueryIdResp
+# function SetClientInfo(req::TSetClientInfoReq)
+#     # returns TSetClientInfoResp
 
 
 # Client implementation for TCLIService service
@@ -591,6 +663,46 @@ function GetFunctions(c::TCLIServiceClientBase, req::TGetFunctionsReq)
   throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
 end # function GetFunctions
 
+# Client callable method for GetPrimaryKeys
+function GetPrimaryKeys(c::TCLIServiceClientBase, req::TGetPrimaryKeysReq)
+  p = c.p
+  c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
+  Thrift.writeMessageBegin(p, "GetPrimaryKeys", Thrift.MessageType.CALL, c.seqid)
+  inp = GetPrimaryKeys_args()
+  Thrift.set_field!(inp, :req, req)
+  Thrift.write(p, inp)
+  Thrift.writeMessageEnd(p)
+  Thrift.flush(p.t)
+  
+  (fname, mtype, rseqid) = Thrift.readMessageBegin(p)
+  (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
+  outp = Thrift.read(p, GetPrimaryKeys_result())
+  Thrift.readMessageEnd(p)
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
+  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
+  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+end # function GetPrimaryKeys
+
+# Client callable method for GetCrossReference
+function GetCrossReference(c::TCLIServiceClientBase, req::TGetCrossReferenceReq)
+  p = c.p
+  c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
+  Thrift.writeMessageBegin(p, "GetCrossReference", Thrift.MessageType.CALL, c.seqid)
+  inp = GetCrossReference_args()
+  Thrift.set_field!(inp, :req, req)
+  Thrift.write(p, inp)
+  Thrift.writeMessageEnd(p)
+  Thrift.flush(p.t)
+  
+  (fname, mtype, rseqid) = Thrift.readMessageBegin(p)
+  (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
+  outp = Thrift.read(p, GetCrossReference_result())
+  Thrift.readMessageEnd(p)
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
+  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
+  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+end # function GetCrossReference
+
 # Client callable method for GetOperationStatus
 function GetOperationStatus(c::TCLIServiceClientBase, req::TGetOperationStatusReq)
   p = c.p
@@ -750,4 +862,44 @@ function RenewDelegationToken(c::TCLIServiceClientBase, req::TRenewDelegationTok
   Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
   throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
 end # function RenewDelegationToken
+
+# Client callable method for GetQueryId
+function GetQueryId(c::TCLIServiceClientBase, req::TGetQueryIdReq)
+  p = c.p
+  c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
+  Thrift.writeMessageBegin(p, "GetQueryId", Thrift.MessageType.CALL, c.seqid)
+  inp = GetQueryId_args()
+  Thrift.set_field!(inp, :req, req)
+  Thrift.write(p, inp)
+  Thrift.writeMessageEnd(p)
+  Thrift.flush(p.t)
+  
+  (fname, mtype, rseqid) = Thrift.readMessageBegin(p)
+  (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
+  outp = Thrift.read(p, GetQueryId_result())
+  Thrift.readMessageEnd(p)
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
+  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
+  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+end # function GetQueryId
+
+# Client callable method for SetClientInfo
+function SetClientInfo(c::TCLIServiceClientBase, req::TSetClientInfoReq)
+  p = c.p
+  c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
+  Thrift.writeMessageBegin(p, "SetClientInfo", Thrift.MessageType.CALL, c.seqid)
+  inp = SetClientInfo_args()
+  Thrift.set_field!(inp, :req, req)
+  Thrift.write(p, inp)
+  Thrift.writeMessageEnd(p)
+  Thrift.flush(p.t)
+  
+  (fname, mtype, rseqid) = Thrift.readMessageBegin(p)
+  (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
+  outp = Thrift.read(p, SetClientInfo_result())
+  Thrift.readMessageEnd(p)
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
+  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
+  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+end # function SetClientInfo
 
