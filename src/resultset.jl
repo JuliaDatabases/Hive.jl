@@ -35,6 +35,10 @@ mutable struct ResultSet
     end
 end
 
+function show(io::IO, rs::ResultSet)
+    print(io, "ResultSet(eof=$(rs.eof), position=$(rs.position), fetchsize=$(rs.fetchsize))")
+end
+
 const Result = Union{ResultSet, RowCount, PendingResult}
 
 result(pending::PendingResult) = isready(pending) ? result(pending.session, true, pending.handle) : pending
