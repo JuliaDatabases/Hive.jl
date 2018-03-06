@@ -90,7 +90,7 @@ function fetch_records(session)
     rs = execute(session, "select * from twitter_small where fromid <= $maxval limit $lim")
     cnt = 0
     for rec in records(rs)
-       println(rec)
+        println(rec)
         cnt += 1
     end
     close(rs)
@@ -100,8 +100,21 @@ function fetch_records(session)
     rs = execute(session, "select * from twitter_small where fromid <= $maxval limit $lim")
     cnt = 0
     for frames in dataframes(rs)
-       println(frames)
+        println(frames)
         cnt += size(frames, 1)
+    end
+    close(rs)
+    @test cnt <= lim
+ 
+    println("Execute, column chunk iterator:")
+    rs = execute(session, "select * from twitter_small where fromid <= $maxval limit $lim")
+    cnt = 0
+    for colframe in columnchunks(rs)
+        for cols in colframe
+            println("name  : ", cols[1])
+            println("values: ", cols[2])
+        end
+        cnt += size(colframe, 1)
     end
     close(rs)
     @test cnt <= lim
@@ -116,6 +129,16 @@ function fetch_records(session)
     df = dataframe(rs)
     @test size(df, 1) <= lim
     println(df)
+
+    rs = execute(session, "select * from twitter_small where fromid <= $maxval limit $lim"; async=true)
+    while !isready(rs)
+        println("waiting...")
+        sleep(10)
+    end
+    rs = result(rs)
+    cc = columnchunk(rs)
+    @test size(cc[1][2], 1) <= lim
+    println(cc)
     nothing
 end
 

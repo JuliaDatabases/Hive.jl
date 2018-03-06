@@ -68,6 +68,7 @@ Result sets can be iterated upon with iterators and must be closed at the end by
 Two kinds of iterators are available as of now:
 - **record iterator**: returns a row at a time as a `Tuple`.
 - **dataframe iterator**: returns a block of records on each iteration as a `DataFrame` (more efficient)
+- **column chunk iterator**: returns a list of column name and column data pairs for a block of records
 
 Calling `records` results in a record iterator:
 
@@ -79,17 +80,30 @@ end
 close(rs)
 ````
 
+Calling `columnchunks` results in a column chunk iterator:
+
+```
+rs = execute(session, "select * from twitter_small where fromid < 100")
+for colframe in columnchunks(rs)
+    for cols in colframe
+        println("name  : ", cols[1])
+        println("values: ", cols[2])
+    end
+end
+close(rs)
+````
+
 Calling `dataframes` results in a dataframe iterator:
 
 ````
 rs = execute(session, "select * from twitter_small where fromid < 100")
 for frames in dataframes(rs)
-   println(frames)
+    println(frames)
 end
 close(rs)
 ````
 
-All records can be read from a result set by simply calling `dataframe`. This should only be used when the result is sure to fit in memory.
+All records can be read from a result set by simply calling `dataframe` or `columnchunk`. This should only be used when the result is sure to fit in memory.
 
 ````
 rs = execute(session, "select * from twitter_small where fromid < 100")
