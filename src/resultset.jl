@@ -11,7 +11,7 @@
 # results must be closed
 
 """number of records to fetch with every fetchnext"""
-const DEFAULT_FETCH_SIZE = 1024
+const DEFAULT_FETCH_SIZE = 1024 * 1024
 
 mutable struct PendingResult
     session::HiveSession
@@ -158,28 +158,36 @@ end
 # Iterators
 # - records, record iterator: fetches one record at a time as a tuple
 # - dataframes, dataframe iterator: fetches one batch of records at a time, returns a dataframe
-# - dataframe(dataframe iterator): fetches and returns the first batch
+# - dataframe(dataframe iterator): fetches and returns all data as one dataframe
+# - columnchunks, columnchunks iterator: fetched one batch of records at a time, returns a vector of pairs of column names and data
+# - columnchunk(columnchunks iterator): fetched and returns all data as one column chunk
 
-mutable struct DataFrameIterator
+struct ColumnChunksIterator
     rs::ResultSet
 
-    function DataFrameIterator(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE)
+    function ColumnChunksIterator(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE)
         fetchsize!(rs, fetchsz)
         new(rs)
     end
 end
 
-dataframes(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE) = DataFrameIterator(rs, fetchsz)
-dataframe(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE) = dataframe(dataframes(rs, fetchsz))
-function dataframe(iter::DataFrameIterator)
-    df = reduce(vcat, iter)
-    close(iter.rs)
-    df
+
+columnchunks(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE) = ColumnChunksIterator(rs, fetchsz)
+columnchunk(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE) = columnchunk(ColumnChunksIterator(rs, fetchsz))
+function columnchunk(iter::ColumnChunksIterator)
+    state = start(iter)
+    v0, state = next(iter, state)
+
+    while !done(iter, state)
+        v1, state = next(iter, state)
+        v0 = [v0[idx][1]=>vcat(v0[idx][2], v1[idx][2]) for idx in 1:length(v0)]
+    end
+    v0
 end
 
-start(iter::DataFrameIterator) = iter.rs.eof
-done(iter::DataFrameIterator, state) = state
-function next(iter::DataFrameIterator, state)
+start(iter::ColumnChunksIterator) = iter.rs.eof
+done(iter::ColumnChunksIterator, state) = state
+function next(iter::ColumnChunksIterator, state)
     rs = iter.rs
     fetchnext(rs)
 
@@ -208,13 +216,40 @@ function next(iter::DataFrameIterator, state)
         end
     end
 
-    df = DataFrame()
+    df = Vector{Pair{Symbol,DataArray}}()
     for colidx in 1:ncols
         colname = sch.columns[colidx].columnName
         @logmsg("$colname: $(colvecs[colidx])")
-        df[Symbol(colname)] = colvecs[colidx]
+        push!(df, Symbol(colname) => colvecs[colidx])
     end
     df, rs.eof
+end
+
+struct DataFrameIterator
+    cc::ColumnChunksIterator
+
+    function DataFrameIterator(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE)
+        new(ColumnChunksIterator(rs, fetchsz))
+    end
+end
+
+dataframes(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE) = DataFrameIterator(rs, fetchsz)
+dataframe(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE) = dataframe(dataframes(rs, fetchsz))
+function dataframe(iter::DataFrameIterator)
+    df = reduce(vcat, iter)
+    close(iter.cc.rs)
+    df
+end
+
+start(iter::DataFrameIterator) = start(iter.cc)
+done(iter::DataFrameIterator, state) = state
+function next(iter::DataFrameIterator, state)
+    df = DataFrame()
+    cols,eof = next(iter.cc, state)
+    for (colname,colvec) in cols
+        df[Symbol(colname)] = colvec
+    end
+    df, eof
 end
 
 mutable struct RecordIterator
