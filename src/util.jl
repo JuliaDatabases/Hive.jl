@@ -19,10 +19,10 @@ end
 # Table schema methods
 function dataframe(sch::TTableSchema)
     df = DataFrame()
-    df[:position] = positions = DataArray(Int32[])
-    df[:name] = names = DataArray(String[])
-    df[:type] = types = DataArray(Type[])
-    df[:comment] = comments = DataArray(String[])
+    df[:position] = positions = Vector{Int32}()
+    df[:name] = names = Vector{String}()
+    df[:type] = types = Vector{Type}()
+    df[:comment] = comments = DataArray(Vector{String}())
     for col in sch.columns
         push!(comments, isfilled(col, :comment) ? getfield(col, :comment) : NA)
         push!(types, julia_type(col.typeDesc))

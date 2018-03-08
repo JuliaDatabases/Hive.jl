@@ -113,6 +113,7 @@ function fetch_records(session)
         for cols in colframe
             println("name  : ", cols[1])
             println("values: ", cols[2])
+            @test typeof(cols[2]) == Vector{Int32}
         end
         cnt += size(colframe, 1)
     end
@@ -138,6 +139,8 @@ function fetch_records(session)
     rs = result(rs)
     cc = columnchunk(rs)
     @test size(cc[1][2], 1) <= lim
+    @test typeof(cc[1][2]) == Vector{Int32}
+    @test typeof(cc[2][2]) == Vector{Int32}
     println(cc)
     nothing
 end

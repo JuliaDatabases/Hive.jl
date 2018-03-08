@@ -194,18 +194,13 @@ function next(iter::ColumnChunksIterator, state)
     rowset = get(rs.rowset)
     sch = schema(rs)
     ncols = length(sch.columns)
-    colvecs = DataArray[]
 
     if isfilled(rowset, :columns)
         @logmsg("reading columns")
         # ref: https://issues.apache.org/jira/browse/HIVE-3746
-        for col in rowset.columns
-            push!(colvecs, julia_type(col))
-        end
+        colvecs = [julia_type(col) for col in rowset.columns]
     else
-        for T in coltypes(sch)
-            push!(colvecs, DataArray(T[]))
-        end
+        colvecs = [DataArray(T[]) for T in coltypes(sch)]
         @logmsg("reading rows for coltypes: $(coltypes(sch))")
         for row in rowset.rows
             colidx = 1
@@ -216,12 +211,7 @@ function next(iter::ColumnChunksIterator, state)
         end
     end
 
-    df = Vector{Pair{Symbol,DataArray}}()
-    for colidx in 1:ncols
-        colname = sch.columns[colidx].columnName
-        @logmsg("$colname: $(colvecs[colidx])")
-        push!(df, Symbol(colname) => colvecs[colidx])
-    end
+    df = [Symbol(sch.columns[colidx].columnName)=>colvecs[colidx] for colidx in 1:ncols]
     df, rs.eof
 end
 
