@@ -139,7 +139,7 @@ end
 
 function julia_type(col::T) where T<:Col
     if (length(col.nulls) < 2) || isempty(col.values)
-        DataArray(col.values)
+        col.values
     else
         values = col.values
         nulls = bitset_to_bools(col.nulls, length(values))
