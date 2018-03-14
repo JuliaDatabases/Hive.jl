@@ -52,7 +52,7 @@ function fetch_server_metadata(session)
     nothing
 end
 
-function create_table(session)
+function create_table_twitter_small(session)
     rs = execute(session, "show tables like 'twitter_small'")
     table_exists = prod(size(dataframe(rs))) > 0
 
@@ -76,6 +76,50 @@ function create_table(session)
             writedlm(io, convert(Array{Int}, rand(UInt16, rowcount, 2)), ',')
         end
         result = execute(session, "load data local inpath '$filename' into table twitter_small")
+        @test round(Int, result) == 0.0
+    end
+end
+
+function create_table_datatype_test(session)
+    rs = execute(session, "show tables like 'datatype_test'")
+    table_exists = prod(size(dataframe(rs))) > 0
+    cols = (
+            ("tbool"    , "boolean"     , ()->rand(Bool)),
+            ("tint8"    , "tinyint"     , ()->rand(Int8)),
+            ("tint16"   , "smallint"    , ()->rand(Int16)),
+            ("tint32"   , "int"         , ()->rand(Int32)),
+            ("tint64"   , "bigint"      , ()->rand(Int64)),
+            ("tfloat32" , "float"       , ()->rand(Float32)),
+            ("tfloat64" , "double"      , ()->rand(Float64)),
+            ("tstr"     , "string"      , ()->randstring()),
+            ("tdatetime", "timestamp"   , ()->replace(string(now() - Dates.Day(rand(UInt8))), "T", " ")),
+            ("tbigfloat", "decimal"     , ()->rand(Float64)),
+            ("tdate"    , "date"        , ()->Date(now() - Dates.Day(rand(UInt8)))),
+            ("tchar"    , "char(1)"     , ()->('A' + rand(1:20)))
+    )
+
+    if table_exists
+        println("Use existing table: datatype_test")
+    else
+        println("Create table: datatype_test")
+        ct = join(["$(x[1]) $(x[2])" for x in cols], ", ")
+        result = execute(session, "create table datatype_test ($ct) row format delimited fields terminated by ',' lines terminated by '\n' stored as textfile")
+        @test round(Int, result) == 0.0
+    end
+
+    rs = execute(session, "select count(*) from datatype_test")
+    rowcount = dataframe(rs)[1,1]
+    if rowcount > 0
+        println("Use existing data: $rowcount rows")
+    else
+        rowcount = 10^4
+        println("Insert data: $rowcount rows")
+        filename = "/tmp/datatype_test"
+        colvals = hcat([Any[fn() for idx in 1:rowcount] for fn in [x[3] for x in cols]]...)
+        open(filename, "w") do io
+            writedlm(io, colvals, ',')
+        end
+        result = execute(session, "load data local inpath '$filename' into table datatype_test")
         @test round(Int, result) == 0.0
     end
 end
@@ -142,11 +186,25 @@ function fetch_records(session)
     @test typeof(cc[1][2]) == Vector{Int32}
     @test typeof(cc[2][2]) == Vector{Int32}
     println(cc)
+
+    println("Execute, datatypes:")
+    rs = execute(session, "select * from datatype_test limit 10")
+    cols = columnchunk(rs)
+    coltypes = [Bool, Int8, Int16, Int32, Int64, Float32, Float64, String, DateTime, BigFloat, Date, String]
+    for ((cn,cv),ct) in zip(cols, coltypes)
+        println("name  : ", cn)
+        println("values: ", cv)
+        @test typeof(cv) == Vector{ct}
+        @test length(cv) <= 10
+    end
+    close(rs)
+
     nothing
 end
 
 open_database() do session
-    create_table(session)
+    create_table_twitter_small(session)
+    create_table_datatype_test(session)
     fetch_server_metadata(session)
     fetch_records(session)
 end

@@ -34,9 +34,8 @@ end
 
 show(io::IO, sch::TTableSchema) = show(io, dataframe(sch))
 
-function coltypes(sch::TTableSchema)
-    tuple([julia_type(col.typeDesc) for col in sch.columns]...)
-end
+coltypes(sch::TTableSchema) = [julia_type(col.typeDesc) for col in sch.columns]
+colconvfns(sch::TTableSchema) = [julia_conv(col.typeDesc) for col in sch.columns]
 
 const BIT_MASKS = (0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80)
 # the last byte of the bitset is always set to 0x00
