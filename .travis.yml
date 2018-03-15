@@ -14,7 +14,7 @@ notifications:
   email: false
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - git clone -b 'v0.0.2' --single-branch https://github.com/JuliaCI/PkgEvalHadoopEnv.git ./test/test_setup
+  - git clone -b 'v0.0.4' --single-branch https://github.com/JuliaCI/PkgEvalHadoopEnv.git ./test/test_setup
   - ./test/test_setup/hadoop/setup_hdfs.sh
   - ./test/test_setup/hive/setup_hive.sh
   - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("Hive"); Pkg.test("Hive"; coverage=true)'
