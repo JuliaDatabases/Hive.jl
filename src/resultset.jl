@@ -147,10 +147,27 @@ function fetchnext(rs::ResultSet, nrows::Integer=rs.fetchsize)
     response = FetchResults(conn.client, request)
     check_status(response.status)
 
-    rs.eof = !response.hasMoreRows
     rowset = response.results
     rs.rowset = Nullable(rowset)
-    rs.position = rowset.startRowOffset + length(rowset.rows)
+    nfetched = 0
+    if isfilled(rowset, :columns)
+        onecol = rowset.columns[1]
+        for fld in fieldnames(TColumn)
+            if isfilled(onecol, fld)
+                val = getfield(onecol, fld)
+                nfetched = length(val.values)
+            end
+        end
+    else
+        nfetched = length(rowset.rows)
+    end
+
+    if nfetched > 0
+        rs.position += nfetched
+    else
+        rs.eof = !response.hasMoreRows
+    end
+
     rs
 end
 

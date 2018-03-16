@@ -159,7 +159,7 @@ function fetch_records(session)
             println("values: ", cols[2])
             @test typeof(cols[2]) == Vector{Int32}
         end
-        cnt += size(colframe, 1)
+        cnt += length(colframe[1][2])
     end
     close(rs)
     @test cnt <= lim
@@ -188,14 +188,14 @@ function fetch_records(session)
     println(cc)
 
     println("Execute, datatypes:")
-    rs = execute(session, "select * from datatype_test limit 10")
-    cols = columnchunk(rs)
+    rs = execute(session, "select * from datatype_test")
+    cols = columnchunk(rs, 100)
     coltypes = [Bool, Int8, Int16, Int32, Int64, Float32, Float64, String, DateTime, BigFloat, Date, String]
     for ((cn,cv),ct) in zip(cols, coltypes)
         println("name  : ", cn)
         println("values: ", cv)
         @test typeof(cv) == Vector{ct}
-        @test length(cv) <= 10
+        @test length(cv) == 10^4
     end
     close(rs)
 
