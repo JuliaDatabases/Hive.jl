@@ -230,8 +230,8 @@ function next(iter::ColumnChunksIterator, state)
         end
     end
 
-    df = [Symbol(sch.columns[colidx].columnName)=>colvecs[colidx] for colidx in 1:ncols]
-    df, rs.eof
+    cc = [Symbol(sch.columns[colidx].columnName)=>colvecs[colidx] for colidx in 1:ncols]
+    cc, rs.eof
 end
 
 struct DataFrameIterator
@@ -262,31 +262,30 @@ function next(iter::DataFrameIterator, state)
 end
 
 mutable struct RecordIterator
-    dfiter::DataFrameIterator
-    dfpos::Int
-    df::Nullable{DataFrame}
+    cciter::ColumnChunksIterator
+    ccpos::Int
+    cc::Union{Void,Vector{Pair{Symbol,Vector}}}
 
-    RecordIterator(rs::ResultSet) = new(DataFrameIterator(rs), 1, Nullable{DataFrame}())
+    RecordIterator(rs::ResultSet) = new(ColumnChunksIterator(rs), 1, nothing)
 end
 
 records(rs::ResultSet) = RecordIterator(rs)
 
-start(iter::RecordIterator) = start(iter.dfiter)
+start(iter::RecordIterator) = start(iter.cciter)
 function done(iter::RecordIterator, state)
-    done(iter.dfiter, state) || (return false)
-    isnull(iter.df) && return false
-    df = get(iter.df)
-    iter.dfpos > nrow(df)
+    done(iter.cciter, state) || (return false)
+    (nothing === iter.cc) && (return false)
+    iter.ccpos > length(iter.cc[1][2])
 end
 function next(iter::RecordIterator, state)
-    if isnull(iter.df) || (iter.dfpos > nrow(get(iter.df)))
-        df, state = next(iter.dfiter, state)
-        iter.df = Nullable(df)
-        iter.dfpos = 1
+    if (nothing === iter.cc) || (iter.ccpos > length(iter.cc[1][2]))
+        cc, state = next(iter.cciter, state)
+        iter.cc = cc
+        iter.ccpos = 1
     else
-        df = get(iter.df)
+        cc = iter.cc
     end
-    recs = tuple(convert(Array, df[iter.dfpos,:])...)
-    iter.dfpos += 1
+    recs = (iter.ccpos > length(cc[1][2])) ? nothing : tuple([col[2][iter.ccpos] for col in cc]...)
+    iter.ccpos += 1
     recs, state
 end

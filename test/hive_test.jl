@@ -134,8 +134,10 @@ function fetch_records(session)
     rs = execute(session, "select * from twitter_small where fromid <= $maxval limit $lim")
     cnt = 0
     for rec in records(rs)
-        println(rec)
-        cnt += 1
+        if rec !== nothing
+            println(rec)
+            cnt += 1
+        end
     end
     close(rs)
     @test cnt <= lim
@@ -190,7 +192,7 @@ function fetch_records(session)
     println("Execute, datatypes:")
     rs = execute(session, "select * from datatype_test")
     cols = columnchunk(rs, 100)
-    coltypes = [Bool, Int8, Int16, Int32, Int64, Float32, Float64, String, DateTime, BigFloat, Date, String]
+    coltypes = [Bool, Int8, Int16, Int32, Int64, Float32, Float64, String, Union{NAtype,DateTime}, Union{NAtype,BigFloat}, Union{NAtype,Date}, String]
     for ((cn,cv),ct) in zip(cols, coltypes)
         println("name  : ", cn)
         println("values: ", cv)
