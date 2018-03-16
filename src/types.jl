@@ -25,22 +25,26 @@ const JTYPES = Dict(
   Int32(21) => String               # INTERVAL_DAY_TIME
 )
 
+#=
 function with_null_check(fn, str::String)
     str = strip(str)
     isempty(str) ? NA : fn(str)
 end
+=#
 
 tochar(str::String) = isempty(str) ? Char(0) : first(str)
-tobigfloat(str::String) = with_null_check(BigFloat, str)
-todate(str::String) = with_null_check(Date, str)
+tobigfloat(str::String) = BigFloat(strip(str))
+todate(str::String) = Date(strip(str))
 toint8(val::UInt8) = reinterpret(Int8, val)
 todatetime(ftime) = Dates.unix2datetime(ftime)
+toint32(str::String) = parse(Int32, str)
+toint64(str::String) = parse(Int64, str)
+tofloat32(str::String) = parse(Float32, str)
+tofloat64(str::String) = parse(Float64, str)
 function todatetime(str::String)
-    with_null_check(str) do str
-        contains(str, "-") ? DateTime(replace(str, " ", "T")) : Dates.unix2datetime(parse(Int, str))
-    end
+    str = strip(str)
+    contains(str, "-") ? DateTime(replace(str, " ", "T")) : Dates.unix2datetime(parse(Int, str))
 end
-
 
 const JCONV = Dict(
   Int32(0)  => nothing,             # BOOLEAN
@@ -70,7 +74,19 @@ const JCONV = Dict(
 # map column types to Julia types
 function julia_type(hs2type::TTypeDesc, typeentry::TPrimitiveTypeEntry)
     if (typeentry._type == 19) && isfilled(typeentry, :typeQualifiers) && isfilled(typeentry.typeQualifiers, :qualifiers)
-        ("characterMaximumLength" in keys(typeentry.typeQualifiers.qualifiers)) && (typeentry.typeQualifiers.qualifiers["characterMaximumLength"].i32Value == 1) && (return Char)
+        qual = typeentry.typeQualifiers.qualifiers
+        ("characterMaximumLength" in keys(qual)) && (qual["characterMaximumLength"].i32Value == 1) && (return Char)
+    elseif typeentry._type == 15 && isfilled(typeentry, :typeQualifiers) && isfilled(typeentry.typeQualifiers, :qualifiers)
+        qual = typeentry.typeQualifiers.qualifiers
+        precision = ("precision" in keys(qual)) ? qual["precision"].i32Value : Int32(10)
+        scale = ("scale" in keys(qual)) ? qual["scale"].i32Value : Int32(0)
+        if scale == 0
+            (precision <= 10) && (return Int32)
+            (precision <= 19) && (return Int64)
+        else
+            ((precision+scale) <= 8) && (return Float32)
+            ((precision+scale) <= 17) && (return Float64)
+        end
     end
     JTYPES[typeentry._type]
 end
@@ -78,6 +94,17 @@ end
 function julia_conv(hs2type::TTypeDesc, typeentry::TPrimitiveTypeEntry)
     if (typeentry._type == 19) && isfilled(typeentry, :typeQualifiers) && isfilled(typeentry.typeQualifiers, :qualifiers)
         ("characterMaximumLength" in keys(typeentry.typeQualifiers.qualifiers)) && (typeentry.typeQualifiers.qualifiers["characterMaximumLength"].i32Value == 1) && (return tochar)
+    elseif typeentry._type == 15 && isfilled(typeentry, :typeQualifiers) && isfilled(typeentry.typeQualifiers, :qualifiers)
+        qual = typeentry.typeQualifiers.qualifiers
+        precision = ("precision" in keys(qual)) ? qual["precision"].i32Value : Int32(10)
+        scale = ("scale" in keys(qual)) ? qual["scale"].i32Value : Int32(0)
+        if scale == 0
+            (precision <= 10) && (return toint32)
+            (precision <= 19) && (return toint64)
+        else
+            (precision <= 7) && (return tofloat32)
+            (precision <= 16) && (return tofloat64)
+        end
     end
     JCONV[typeentry._type]
 end
