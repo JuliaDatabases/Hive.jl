@@ -30,6 +30,7 @@ function with_null_check(fn, str::String)
     isempty(str) ? NA : fn(str)
 end
 
+tochar(str::String) = isempty(str) ? Char(0) : first(str)
 tobigfloat(str::String) = with_null_check(BigFloat, str)
 todate(str::String) = with_null_check(Date, str)
 toint8(val::UInt8) = reinterpret(Int8, val)
@@ -67,8 +68,19 @@ const JCONV = Dict(
 
 ##
 # map column types to Julia types
-julia_type(hs2type::TTypeDesc, typeentry::TPrimitiveTypeEntry) = JTYPES[typeentry._type]
-julia_conv(hs2type::TTypeDesc, typeentry::TPrimitiveTypeEntry) = JCONV[typeentry._type]
+function julia_type(hs2type::TTypeDesc, typeentry::TPrimitiveTypeEntry)
+    if (typeentry._type == 19) && isfilled(typeentry, :typeQualifiers) && isfilled(typeentry.typeQualifiers, :qualifiers)
+        ("characterMaximumLength" in keys(typeentry.typeQualifiers.qualifiers)) && (typeentry.typeQualifiers.qualifiers["characterMaximumLength"].i32Value == 1) && (return Char)
+    end
+    JTYPES[typeentry._type]
+end
+
+function julia_conv(hs2type::TTypeDesc, typeentry::TPrimitiveTypeEntry)
+    if (typeentry._type == 19) && isfilled(typeentry, :typeQualifiers) && isfilled(typeentry.typeQualifiers, :qualifiers)
+        ("characterMaximumLength" in keys(typeentry.typeQualifiers.qualifiers)) && (typeentry.typeQualifiers.qualifiers["characterMaximumLength"].i32Value == 1) && (return tochar)
+    end
+    JCONV[typeentry._type]
+end
 
 function julia_type(hs2type::TTypeDesc, typeentry::TArrayTypeEntry)
     typeptr = typeentry.objectTypePtr

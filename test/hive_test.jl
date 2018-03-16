@@ -95,7 +95,8 @@ function create_table_datatype_test(session)
             ("tdatetime", "timestamp"   , ()->replace(string(now() - Dates.Day(rand(UInt8))), "T", " ")),
             ("tbigfloat", "decimal"     , ()->rand(Float64)),
             ("tdate"    , "date"        , ()->Date(now() - Dates.Day(rand(UInt8)))),
-            ("tchar"    , "char(1)"     , ()->('A' + rand(1:20)))
+            ("tchar"    , "char(1)"     , ()->('A' + rand(1:20))),
+            ("tchar2"   , "char(2)"     , ()->randstring(2))
     )
 
     if table_exists
@@ -193,7 +194,7 @@ function fetch_records(session)
     println("Execute, datatypes:")
     rs = execute(session, "select * from datatype_test")
     cols = columnchunk(rs, 100)
-    coltypes = [Bool, Int8, Int16, Int32, Int64, Float32, Float64, String, Union{NAtype,DateTime}, Union{NAtype,BigFloat}, Union{NAtype,Date}, String]
+    coltypes = [Bool, Int8, Int16, Int32, Int64, Float32, Float64, String, Union{DataArrays.NAtype,DateTime}, Union{DataArrays.NAtype,BigFloat}, Union{DataArrays.NAtype,Date}, Char, String]
     for ((cn,cv),ct) in zip(cols, coltypes)
         println(cn, " => ", cv[1:min(length(cv),10)])
         @test typeof(cv) == Vector{ct}
