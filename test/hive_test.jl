@@ -84,19 +84,23 @@ function create_table_datatype_test(session)
     rs = execute(session, "show tables like 'datatype_test'")
     table_exists = prod(size(dataframe(rs))) > 0
     cols = (
-            ("tbool"    , "boolean"     , ()->rand(Bool)),
-            ("tint8"    , "tinyint"     , ()->rand(Int8)),
-            ("tint16"   , "smallint"    , ()->rand(Int16)),
-            ("tint32"   , "int"         , ()->rand(Int32)),
-            ("tint64"   , "bigint"      , ()->rand(Int64)),
-            ("tfloat32" , "float"       , ()->rand(Float32)),
-            ("tfloat64" , "double"      , ()->rand(Float64)),
-            ("tstr"     , "string"      , ()->randstring()),
-            ("tdatetime", "timestamp"   , ()->replace(string(now() - Dates.Day(rand(UInt8))), "T", " ")),
-            ("tbigfloat", "decimal"     , ()->rand(Float64)),
-            ("tdate"    , "date"        , ()->Date(now() - Dates.Day(rand(UInt8)))),
-            ("tchar"    , "char(1)"     , ()->('A' + rand(1:20))),
-            ("tchar2"   , "char(2)"     , ()->randstring(2))
+            ("tbool"        , "boolean"         , ()->rand(Bool)),
+            ("tint8"        , "tinyint"         , ()->rand(Int8)),
+            ("tint16"       , "smallint"        , ()->rand(Int16)),
+            ("tint32"       , "int"             , ()->rand(Int32)),
+            ("tint64"       , "bigint"          , ()->rand(Int64)),
+            ("tfloat32"     , "float"           , ()->rand(Float32)),
+            ("tfloat64"     , "double"          , ()->rand(Float64)),
+            ("tstr"         , "string"          , ()->randstring()),
+            ("tdatetime"    , "timestamp"       , ()->replace(string(now() - Dates.Day(rand(UInt8))), "T", " ")),
+            ("tdecint32"    , "decimal(10,0)"   , ()->rand(UInt16)),
+            ("tdecint64"    , "decimal(19,0)"   , ()->rand(UInt16)),
+            ("tdecfloat32"  , "decimal(7,6)"    , ()->rand(Float32)),
+            ("tdecfloat64"  , "decimal(16,15)"  , ()->rand(Float64)),
+            ("tdecimal"     , "decimal(32,31)"  , ()->(string(rand()) * string(rand(UInt16)))),
+            ("tdate"        , "date"            , ()->Date(now() - Dates.Day(rand(UInt8)))),
+            ("tchar"        , "char(1)"         , ()->('A' + rand(1:20))),
+            ("tchar2"       , "char(2)"         , ()->randstring(2))
     )
 
     if table_exists
@@ -194,7 +198,7 @@ function fetch_records(session)
     println("Execute, datatypes:")
     rs = execute(session, "select * from datatype_test")
     cols = columnchunk(rs, 100)
-    coltypes = [Bool, Int8, Int16, Int32, Int64, Float32, Float64, String, Union{DataArrays.NAtype,DateTime}, Union{DataArrays.NAtype,BigFloat}, Union{DataArrays.NAtype,Date}, Char, String]
+    coltypes = [Bool, Int8, Int16, Int32, Int64, Float32, Float64, String, DateTime, Int32, Int64, Float32, Float64, BigFloat, Date, Char, String]
     for ((cn,cv),ct) in zip(cols, coltypes)
         println(cn, " => ", cv[1:min(length(cv),10)])
         @test typeof(cv) == Vector{ct}
