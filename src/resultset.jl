@@ -202,6 +202,7 @@ function columnchunk(iter::ColumnChunksIterator)
     v0
 end
 
+iteratorsize(::Type{ColumnChunksIterator}) = Base.SizeUnknown()
 start(iter::ColumnChunksIterator) = iter.rs.eof
 done(iter::ColumnChunksIterator, state) = state
 function next(iter::ColumnChunksIterator, state)
@@ -250,6 +251,7 @@ function dataframe(iter::DataFrameIterator)
     df
 end
 
+iteratorsize(::Type{DataFrameIterator}) = Base.SizeUnknown()
 start(iter::DataFrameIterator) = start(iter.cc)
 done(iter::DataFrameIterator, state) = state
 function next(iter::DataFrameIterator, state)
@@ -271,6 +273,7 @@ end
 
 records(rs::ResultSet) = RecordIterator(rs)
 
+iteratorsize(::Type{RecordIterator}) = Base.SizeUnknown()
 start(iter::RecordIterator) = start(iter.cciter)
 function done(iter::RecordIterator, state)
     done(iter.cciter, state) || (return false)

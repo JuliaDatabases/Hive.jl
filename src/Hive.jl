@@ -12,7 +12,7 @@ export HiveSession, HiveAuth, HiveAuthSASLPlain
 export eof, close, isready, result, cancel, get_info, show
 export catalogs, schemas, tables, tabletypes, functions, columns, execute
 export dataframe, dataframes, records, columnchunks, columnchunk
-export start, next, done
+export start, next, done, iteratorsize
 
 export InfoType
 
