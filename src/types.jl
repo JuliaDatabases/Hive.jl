@@ -81,8 +81,8 @@ function julia_type(hs2type::TTypeDesc, typeentry::TPrimitiveTypeEntry)
         precision = ("precision" in keys(qual)) ? qual["precision"].i32Value : Int32(10)
         scale = ("scale" in keys(qual)) ? qual["scale"].i32Value : Int32(0)
         if scale == 0
-            (precision <= 10) && (return Int32)
-            (precision <= 19) && (return Int64)
+            (precision <= 9) && (return Int32)
+            (precision <= 18) && (return Int64)
         else
             ((precision+scale) <= 8) && (return Float32)
             ((precision+scale) <= 17) && (return Float64)
@@ -99,8 +99,8 @@ function julia_conv(hs2type::TTypeDesc, typeentry::TPrimitiveTypeEntry)
         precision = ("precision" in keys(qual)) ? qual["precision"].i32Value : Int32(10)
         scale = ("scale" in keys(qual)) ? qual["scale"].i32Value : Int32(0)
         if scale == 0
-            (precision <= 10) && (return toint32)
-            (precision <= 19) && (return toint64)
+            (precision <= 9) && (return toint32)
+            (precision <= 18) && (return toint64)
         else
             (precision <= 7) && (return tofloat32)
             (precision <= 16) && (return tofloat64)
