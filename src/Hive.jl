@@ -3,15 +3,15 @@ module Hive
 
 using Compat
 using Thrift
-using DataFrames
-using DataArrays
+using Compat.Markdown
+import Compat.Markdown.with_output_format
 
-import Base: close, isready, show, eof, start, next, done
+import Base: close, isready, show, eof, start, next, done, vcat
 
-export HiveSession, HiveAuth, HiveAuthSASLPlain
+export HiveSession, HiveAuth, HiveAuthSASLPlain, Tabular
 export eof, close, isready, result, cancel, get_info, show
 export catalogs, schemas, tables, tabletypes, functions, columns, execute
-export dataframe, dataframes, records, columnchunks, columnchunk
+export tabular, tabulars, records, columnchunks, columnchunk
 export start, next, done, iteratorsize
 
 export InfoType

@@ -1,8 +1,8 @@
 
-function response_to_dataframe(session::HiveSession, response, fetchsize::Integer; cached_schema::Union{AbstractString,Symbol,Void}=nothing)
+function response_to_tabular(session::HiveSession, response, fetchsize::Integer; cached_schema::Union{AbstractString,Symbol,Void}=nothing)
     rs = response_to_resultset(session, response)::ResultSet
     schema(rs; cached=cached_schema)
-    dataframe(rs, fetchsize)
+    tabular(rs, fetchsize; compact_if_too_wide=false)
 end
 
 function response_to_resultset(session::HiveSession, response; force_pending::Bool=false)
@@ -29,7 +29,7 @@ function catalogs(session::HiveSession; fetchsize::Integer=DEFAULT_FETCH_SIZE)
     conn = session.conn
     request = thriftbuild(TGetCatalogsReq, Dict(:sessionHandle => conn.handle.sessionHandle))
     response = GetCatalogs(conn.client, request)
-    response_to_dataframe(session, response, fetchsize; cached_schema=:catalogs)
+    response_to_tabular(session, response, fetchsize; cached_schema=:catalogs)
 end
 
 """
@@ -44,7 +44,7 @@ function schemas(session::HiveSession; catalog_pattern::Pattern="", schema_patte
     isempty(schema_pattern) || set_field!(request, :schemaName, schema_pattern)
 
     response = GetSchemas(conn.client, request)
-    response_to_dataframe(session, response, fetchsize; cached_schema=:schemas)
+    response_to_tabular(session, response, fetchsize; cached_schema=:schemas)
 end
 
 """
@@ -61,7 +61,7 @@ function tables(session::HiveSession; catalog_pattern::Pattern="", schema_patter
     isempty(table_types) || set_field!(request, :tableTypes, convert(Array{String,1}, table_types))
 
     response = GetTables(conn.client, request)
-    response_to_dataframe(session, response, fetchsize; cached_schema=:tables)
+    response_to_tabular(session, response, fetchsize; cached_schema=:tables)
 end
 
 """
@@ -72,7 +72,7 @@ function tabletypes(session::HiveSession; fetchsize::Integer=DEFAULT_FETCH_SIZE)
     conn = session.conn
     request = thriftbuild(TGetTableTypesReq, Dict(:sessionHandle => conn.handle.sessionHandle))
     response = GetTableTypes(conn.client, request)
-    response_to_dataframe(session, response, fetchsize; cached_schema=:tabletypes)
+    response_to_tabular(session, response, fetchsize; cached_schema=:tabletypes)
 end
 
 """
@@ -91,7 +91,7 @@ function columns(session::HiveSession; catalog::AbstractString="", schema_patter
     isempty(column_pattern) || set_field!(request, :columnName, column_pattern)
 
     response = GetColumns(conn.client, request)
-    response_to_dataframe(session, response, fetchsize; cached_schema=:columns)
+    response_to_tabular(session, response, fetchsize; cached_schema=:columns)
 end
 
 """
@@ -109,7 +109,7 @@ function functions(session::HiveSession, function_pattern::Pattern; catalog::Abs
     isempty(schema_pattern) || set_field!(request, :schemaName, schema_pattern)
 
     response = GetFunctions(conn.client, request)
-    response_to_dataframe(session, response, fetchsize; cached_schema=:functions)
+    response_to_tabular(session, response, fetchsize; cached_schema=:functions)
 end
 
 """

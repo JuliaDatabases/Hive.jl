@@ -67,7 +67,6 @@ Result sets can be iterated upon with iterators and must be closed at the end by
 
 Two kinds of iterators are available as of now:
 - **record iterator**: returns a row at a time as a `Tuple`.
-- **dataframe iterator**: returns a block of records on each iteration as a `DataFrame` (more efficient)
 - **column chunk iterator**: returns a list of column name and column data pairs for a block of records
 
 Calling `records` results in a record iterator:
@@ -93,23 +92,33 @@ end
 close(rs)
 ````
 
-Calling `dataframes` results in a dataframe iterator:
+All records can be read from a result set by simply calling `columnchunk`. This should only be used when the result is sure to fit in memory.
 
 ````
 rs = execute(session, "select * from twitter_small where fromid < 100")
-for frames in dataframes(rs)
-    println(frames)
+println(columnchunk(rs))
+close(rs)
+````
+
+## Pretty Printing Data
+
+An exported type named `Tabular` can be used to display column chunks in a tabular format. Optional display parameters can be passed:
+- `full`: whether to display all rows (default is `false`, i.e. to skip data from the middle to fit display height)
+- `compact_if_too_wide`: whether to display only column summary if display width is not enough to fit data (default is `true`)
+
+```
+rs = execute(session, "select * from twitter_small where fromid < 100")
+Tabular(columnchunk(rs); full=false, compact_if_too_wide=true)
+```
+
+A convenience iterator that produces `Tabular` types is also provided:
+
+```
+rs = execute(session, "select * from twitter_small where fromid < 100")
+for tab in tabulars(rs)
+    println(tab)
 end
-close(rs)
-````
-
-All records can be read from a result set by simply calling `dataframe` or `columnchunk`. This should only be used when the result is sure to fit in memory.
-
-````
-rs = execute(session, "select * from twitter_small where fromid < 100")
-println(dataframe(rs))
-close(rs)
-````
+```
 
 ## Fetching Server/Table Metadata
 

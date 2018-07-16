@@ -174,8 +174,8 @@ end
 ##
 # Iterators
 # - records, record iterator: fetches one record at a time as a tuple
-# - dataframes, dataframe iterator: fetches one batch of records at a time, returns a dataframe
-# - dataframe(dataframe iterator): fetches and returns all data as one dataframe
+# - tabulars, tabular iterator: fetches one batch of records at a time, returns a Tabular
+# - tabular(tabular iterator): fetches and returns all data as one Tabular
 # - columnchunks, columnchunks iterator: fetched one batch of records at a time, returns a vector of pairs of column names and data
 # - columnchunk(columnchunks iterator): fetched and returns all data as one column chunk
 
@@ -220,7 +220,7 @@ function next(iter::ColumnChunksIterator, state)
         colvecs = [julia_type(col, colconv) for (col,colconv) in zip(rowset.columns,cconvs)]
     else
         ctypes = coltypes(sch)
-        colvecs = [DataArray(T[]) for T in ctypes]
+        colvecs = [data_with_missings(T[]) for T in ctypes]
         @logmsg("reading rows for coltypes: $(coltypes(sch))")
         for row in rowset.rows
             colidx = 1
@@ -235,32 +235,29 @@ function next(iter::ColumnChunksIterator, state)
     cc, rs.eof
 end
 
-struct DataFrameIterator
+struct TabularIterator
     cc::ColumnChunksIterator
+    dispargs::Vector{Any}
 
-    function DataFrameIterator(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE)
-        new(ColumnChunksIterator(rs, fetchsz))
+    function TabularIterator(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE; kwargs...)
+        new(ColumnChunksIterator(rs, fetchsz), kwargs)
     end
 end
 
-dataframes(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE) = DataFrameIterator(rs, fetchsz)
-dataframe(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE) = dataframe(dataframes(rs, fetchsz))
-function dataframe(iter::DataFrameIterator)
-    df = reduce(vcat, iter)
+tabulars(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE; kwargs...) = TabularIterator(rs, fetchsz; kwargs...)
+tabular(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE; kwargs...) = tabular(tabulars(rs, fetchsz; kwargs...))
+function tabular(iter::TabularIterator)
+    t = reduce(vcat, iter)
     close(iter.cc.rs)
-    df
+    t
 end
 
-iteratorsize(::Type{DataFrameIterator}) = Base.SizeUnknown()
-start(iter::DataFrameIterator) = start(iter.cc)
-done(iter::DataFrameIterator, state) = state
-function next(iter::DataFrameIterator, state)
-    df = DataFrame()
+iteratorsize(::Type{TabularIterator}) = Base.SizeUnknown()
+start(iter::TabularIterator) = start(iter.cc)
+done(iter::TabularIterator, state) = state
+function next(iter::TabularIterator, state)
     cols,eof = next(iter.cc, state)
-    for (colname,colvec) in cols
-        df[Symbol(colname)] = colvec
-    end
-    df, eof
+    Tabular(cols; iter.dispargs...), eof
 end
 
 mutable struct RecordIterator

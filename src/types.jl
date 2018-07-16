@@ -28,7 +28,7 @@ const JTYPES = Dict(
 #=
 function with_null_check(fn, str::String)
     str = strip(str)
-    isempty(str) ? NA : fn(str)
+    isempty(str) ? nothing : fn(str)
 end
 =#
 
@@ -197,14 +197,14 @@ end
 const ColValue = Union{TBoolValue, TByteValue, TI16Value, TI32Value, TI64Value, TDoubleValue, TStringValue}
 const Col = Union{TBoolColumn, TByteColumn, TI16Column, TI32Column, TI64Column, TDoubleColumn, TStringColumn, TBinaryColumn}
 
-julia_type(colval::T, convfn::Void) where T<:ColValue = isfilled(colval, :value) ? getfield(colval, :value) : NA
-julia_type(colval::T, convfn) where T<:ColValue = isfilled(colval, :value) ? convfn(getfield(colval, :value)) : NA
+julia_type(colval::T, convfn::Void) where T<:ColValue = isfilled(colval, :value) ? getfield(colval, :value) : nothing
+julia_type(colval::T, convfn) where T<:ColValue = isfilled(colval, :value) ? convfn(getfield(colval, :value)) : nothing
 
 function julia_type(colval::TColumnValue, convfn)
     for fld in fieldnames(TColumnValue)
         isfilled(colval, fld) && (return julia_type(getfield(colval, fld), convfn))
     end
-    NA
+    nothing
 end
 
 function julia_type(col::T, convfn) where T<:Col
@@ -212,7 +212,7 @@ function julia_type(col::T, convfn) where T<:Col
         map(convfn, col.values)
     else
         nulls = bitset_to_bools(col.nulls, length(col.values))
-        DataArray(map(convfn, col.values), nulls)
+        data_with_missings(map(convfn, col.values), nulls)
     end
 end
 
@@ -221,7 +221,7 @@ function julia_type(col::T, convfn::Void) where T<:Col
         col.values
     else
         nulls = bitset_to_bools(col.nulls, length(col.values))
-        DataArray(col.values, nulls)
+        data_with_missings(col.values, nulls)
     end
 end
 
@@ -229,5 +229,5 @@ function julia_type(col::TColumn, convfn)
     for fld in fieldnames(TColumn)
         isfilled(col, fld) && (return julia_type(getfield(col, fld), convfn))
     end
-    NA
+    nothing
 end
