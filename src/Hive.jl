@@ -4,7 +4,8 @@ module Hive
 using Compat
 using Thrift
 using Compat.Markdown
-import Compat.Markdown.with_output_format
+using Compat.Dates
+using Compat.Unicode
 
 import Base: close, isready, show, eof, start, next, done, vcat
 

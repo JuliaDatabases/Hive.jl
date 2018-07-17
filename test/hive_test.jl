@@ -1,5 +1,13 @@
 using Hive
-using Base.Test
+using Compat
+using Compat.Test
+using Compat.DelimitedFiles
+using Compat.Dates
+using Compat.Random
+
+if VERSION >= v"0.7.0-DEV.4064"
+    using Statistics
+end
 
 function open_database(f::Function)
     session = HiveSession()
@@ -97,7 +105,7 @@ function create_table_datatype_test(session)
             ("tfloat32"     , "float"           , ()->rand(Float32)),
             ("tfloat64"     , "double"          , ()->rand(Float64)),
             ("tstr"         , "string"          , ()->randstring()),
-            ("tdatetime"    , "timestamp"       , ()->replace(string(now() - Dates.Day(rand(UInt8))), "T", " ")),
+            ("tdatetime"    , "timestamp"       , ()->replace(string(now() - Dates.Day(rand(UInt8))), "T"=>" ")),
             ("tdecint32"    , "decimal(9,0)"    , ()->rand(UInt16)),
             ("tdecint64"    , "decimal(18,0)"   , ()->rand(UInt16)),
             ("tdecfloat32"  , "decimal(7,6)"    , ()->rand(Float32)),

@@ -17,7 +17,7 @@ end
 const BIT_MASKS = (0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80)
 # the last byte of the bitset is always set to 0x00
 function bitset_to_bools(data::Vector{UInt8}, L::Integer=((length(data)-1)*8))
-    bools = Array{Bool}(L)
+    bools = Array{Bool}(undef, L)
     LD = length(data)
     for idx in 1:L
         didx = ceil(Int, idx/8)
@@ -26,7 +26,7 @@ function bitset_to_bools(data::Vector{UInt8}, L::Integer=((length(data)-1)*8))
     bools
 end
 
-function data_with_missings{T}(data::Vector{T}, mpos::Vector{Bool}=Bool[])
+function data_with_missings(data::Vector{T}, mpos::Vector{Bool}=Bool[]) where T
     LD = length(data)
     LM = length(mpos)
     result = Vector{Union{T,Nothing}}(undef, LD)
@@ -38,6 +38,8 @@ end
 
 ##
 # show methods
+compactshow(io, x) = @static (VERSION < v"0.7.0-DEV.1211") ? showcompact(io, x) : show(IOContext(io, :compact => true), x)
+
 function show_table(io::IO, t; header=nothing, cnames=[n for (n,v) in t], divider=nothing, cstyle=[], full=false, ellipsis=:middle, compact_if_too_wide=true)
     height, width = displaysize(io)
     showrows = height-5 - (header !== nothing)
@@ -61,9 +63,9 @@ function show_table(io::IO, t; header=nothing, cnames=[n for (n,v) in t], divide
         end
     end
     cols = [v for (n,v) in t]
-    reprs  = [ sprint(io->showcompact(io,cols[j][i])) for i in rows, j in 1:nc ]
+    reprs  = [ sprint(io->compactshow(io,cols[j][i])) for i in rows, j in 1:nc ]
     strcnames = map(string, cnames)
-    widths  = [ max(strwidth(get(strcnames, c, "")), isempty(reprs) ? 0 : maximum(map(strwidth, reprs[:,c]))) for c in 1:nc ]
+    widths  = [ max(textwidth(get(strcnames, c, "")), isempty(reprs) ? 0 : maximum(map(textwidth, reprs[:,c]))) for c in 1:nc ]
     if compact_if_too_wide && ((sum(widths) + 2*nc) > width)
         return show_table_meta(io, t, cnames)
     end
@@ -74,7 +76,13 @@ function show_table(io::IO, t; header=nothing, cnames=[n for (n,v) in t], divide
         if style == nothing
             print(io, txt)
         else
-            with_output_format(style, print, io, txt)
+            if isdefined(Compat.Markdown, :with_output_color)
+                Compat.Markdown.with_output_color(style, print, io, txt)
+            elseif isdefined(Compat.Markdown, :with_output_format)
+                Compat.Markdown.with_output_format(style, print, io, txt)
+            else
+                print(io, txt)
+            end
         end
         if c == divider
             print(io, "│")
@@ -118,7 +126,7 @@ end
 
 struct Tabular
     data::Vector{Pair}
-    dispargs::Vector{Any}
+    dispargs::Any
 
     Tabular(data; kwargs...) = new(data, kwargs)
 end

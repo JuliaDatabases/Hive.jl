@@ -1,5 +1,5 @@
 julia 0.6
-Compat 0.69.0
+Compat 0.70.0
 Thrift v0.5.0
 DataFrames
 DataArrays

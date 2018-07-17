@@ -17,7 +17,7 @@ const JTYPES = Dict(
   Int32(12) => String,              # STRUCT
   Int32(13) => String,              # UNIONTYPE
   Int32(15) => BigFloat,            # DECIMAL
-  Int32(16) => Void,                # NULL
+  Int32(16) => Nothing,             # NULL
   Int32(17) => Date,                # DATE
   Int32(18) => String,              # VARCHAR
   Int32(19) => String,              # CHAR                  (TODO: can be optimized for CHAR(1))
@@ -33,7 +33,7 @@ end
 =#
 
 tochar(str::String) = isempty(str) ? Char(0) : first(str)
-tobigfloat(str::String) = BigFloat(strip(str))
+tobigfloat(str::String) = BigFloat(String(strip(str)))
 todate(str::String) = Date(strip(str))
 toint8(val::UInt8) = reinterpret(Int8, val)
 todatetime(ftime) = Dates.unix2datetime(ftime)
@@ -43,7 +43,7 @@ tofloat32(str::String) = parse(Float32, str)
 tofloat64(str::String) = parse(Float64, str)
 function todatetime(str::String)
     str = strip(str)
-    contains(str, "-") ? DateTime(replace(str, " ", "T")) : Dates.unix2datetime(parse(Int, str))
+    occursin('-', str) ? DateTime(replace(str, " "=>"T")) : Dates.unix2datetime(parse(Int, str))
 end
 
 const JCONV = Dict(
@@ -197,7 +197,7 @@ end
 const ColValue = Union{TBoolValue, TByteValue, TI16Value, TI32Value, TI64Value, TDoubleValue, TStringValue}
 const Col = Union{TBoolColumn, TByteColumn, TI16Column, TI32Column, TI64Column, TDoubleColumn, TStringColumn, TBinaryColumn}
 
-julia_type(colval::T, convfn::Void) where T<:ColValue = isfilled(colval, :value) ? getfield(colval, :value) : nothing
+julia_type(colval::T, convfn::Nothing) where T<:ColValue = isfilled(colval, :value) ? getfield(colval, :value) : nothing
 julia_type(colval::T, convfn) where T<:ColValue = isfilled(colval, :value) ? convfn(getfield(colval, :value)) : nothing
 
 function julia_type(colval::TColumnValue, convfn)
@@ -216,7 +216,7 @@ function julia_type(col::T, convfn) where T<:Col
     end
 end
 
-function julia_type(col::T, convfn::Void) where T<:Col
+function julia_type(col::T, convfn::Nothing) where T<:Col
     if (length(col.nulls) < 2) || isempty(col.values)
         col.values
     else

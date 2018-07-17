@@ -16,7 +16,7 @@ const DEFAULT_FETCH_SIZE = 1024 * 1024
 mutable struct PendingResult
     session::HiveSession
     handle::TOperationHandle
-    status::Nullable{TGetOperationStatusResp}
+    status::Union{Nothing,TGetOperationStatusResp}
 end
 
 const RowCount = Float64
@@ -24,14 +24,14 @@ const RowCount = Float64
 mutable struct ResultSet
     session::HiveSession
     handle::TOperationHandle
-    schema::Nullable{TTableSchema}
-    rowset::Nullable{TRowSet}
+    schema::Union{Nothing,TTableSchema}
+    rowset::Union{Nothing,TRowSet}
     position::Int
     fetchsize::Int
     eof::Bool
 
     function ResultSet(session::HiveSession, handle::TOperationHandle)
-        new(session, handle, Nullable{TOperationHandle}(), Nullable{TRowSet}(), 0, DEFAULT_FETCH_SIZE, false)
+        new(session, handle, nothing, nothing, 0, DEFAULT_FETCH_SIZE, false)
     end
 end
 
@@ -44,7 +44,7 @@ const Result = Union{ResultSet, RowCount, PendingResult}
 result(pending::PendingResult) = isready(pending) ? result(pending.session, true, pending.handle) : pending
 result(rs::ResultSet) = rs
 function result(session::HiveSession, ready::Bool, handle::TOperationHandle)
-    ready || (return PendingResult(session, handle, Nullable{TGetOperationStatusReq}()))
+    ready || (return PendingResult(session, handle, nothing))
 
     # hasResultSet == true => a result set (possibly empty) can be fetched, modifiedRowCount is not set.
     # hasResultSet == false => modifiedRowCount is set
@@ -76,18 +76,16 @@ function cancel(session::HiveSession, handle::TOperationHandle)
 end
 
 function status(pending::PendingResult)
-    if !isnull(pending.status)
-        response = get(pending.status)
-    else
+    if pending.status === nothing
         conn = pending.session.conn
         request = thriftbuild(TGetOperationStatusReq, Dict(:operationHandle => pending.handle))
         response = GetOperationStatus(conn.client, request)
         check_status(response.status)
         if response.operationState in READY_STATUS
-            pending.status = Nullable(response)
+            pending.status = response
         end
     end
-    response
+    pending.status
 end
 
 const READY_STATUS = (TOperationState.FINISHED_STATE, TOperationState.CANCELED_STATE, TOperationState.CLOSED_STATE, TOperationState.ERROR_STATE)
@@ -99,7 +97,7 @@ hasresult(pending::PendingResult) = status(pending).operationState in RESULT_STA
 function sqlerror(pending::PendingResult)
     isready(pending) || (return "")
     hasresult(pending) && (return "")
-    response = get(pending.status)
+    response = pending.status
     sqlstate = isfilled(response, :sqlState) ? getfield(response, :sqlState) : ""
     errormessage = isfilled(response, :errorMessage) ? getfield(response, :errorMessage) : ""
     errorcode = isfilled(response, :errorCode) ? getfield(response, :errorCode) : Int32(0)
@@ -108,10 +106,8 @@ end
 
 const SCHEMA_CACHE = Dict{Union{AbstractString,Symbol}, TTableSchema}()
 
-function schema(rs::ResultSet; cached::Union{AbstractString,Symbol,Void}=nothing)
-    if !isnull(rs.schema)
-        sch = get(rs.schema)
-    else
+function schema(rs::ResultSet; cached::Union{AbstractString,Symbol,Nothing}=nothing)
+    if rs.schema === nothing
         if (cached !== nothing) && haskey(SCHEMA_CACHE, cached)
             sch = SCHEMA_CACHE[cached]
         else
@@ -122,9 +118,9 @@ function schema(rs::ResultSet; cached::Union{AbstractString,Symbol,Void}=nothing
             sch = response.schema
             (cached !== nothing) && (SCHEMA_CACHE[cached] = sch)
         end
-        rs.schema = Nullable(sch)
+        rs.schema = sch
     end
-    sch
+    rs.schema
 end
 
 # Fetch rows from the server corresponding to a particular OperationHandle.
@@ -148,7 +144,7 @@ function fetchnext(rs::ResultSet, nrows::Integer=rs.fetchsize)
     check_status(response.status)
 
     rowset = response.results
-    rs.rowset = Nullable(rowset)
+    rs.rowset = rowset
     nfetched = 0
     if isfilled(rowset, :columns)
         onecol = rowset.columns[1]
@@ -209,7 +205,7 @@ function next(iter::ColumnChunksIterator, state)
     rs = iter.rs
     fetchnext(rs)
 
-    rowset = get(rs.rowset)
+    rowset = rs.rowset
     sch = schema(rs)
     ncols = length(sch.columns)
     cconvs = colconvfns(sch)
@@ -237,7 +233,7 @@ end
 
 struct TabularIterator
     cc::ColumnChunksIterator
-    dispargs::Vector{Any}
+    dispargs::Any
 
     function TabularIterator(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE; kwargs...)
         new(ColumnChunksIterator(rs, fetchsz), kwargs)
@@ -263,7 +259,7 @@ end
 mutable struct RecordIterator
     cciter::ColumnChunksIterator
     ccpos::Int
-    cc::Union{Void,Vector{Pair{Symbol,Vector}}}
+    cc::Union{Nothing,Vector{Pair{Symbol,Vector}}}
 
     RecordIterator(rs::ResultSet) = new(ColumnChunksIterator(rs), 1, nothing)
 end

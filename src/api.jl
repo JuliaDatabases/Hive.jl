@@ -1,5 +1,5 @@
 
-function response_to_tabular(session::HiveSession, response, fetchsize::Integer; cached_schema::Union{AbstractString,Symbol,Void}=nothing)
+function response_to_tabular(session::HiveSession, response, fetchsize::Integer; cached_schema::Union{AbstractString,Symbol,Nothing}=nothing)
     rs = response_to_resultset(session, response)::ResultSet
     schema(rs; cached=cached_schema)
     tabular(rs, fetchsize; compact_if_too_wide=false)
