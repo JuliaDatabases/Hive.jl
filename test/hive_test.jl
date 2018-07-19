@@ -1,6 +1,13 @@
 using Hive
-using Base.Test
-using DataFrames
+using Compat
+using Compat.Test
+using Compat.DelimitedFiles
+using Compat.Dates
+using Compat.Random
+
+if VERSION >= v"0.7.0-DEV.4064"
+    using Statistics
+end
 
 function open_database(f::Function)
     session = HiveSession()
@@ -13,40 +20,46 @@ function open_database(f::Function)
     end
 end
 
+nthcol(cc, n) = cc[n][2]
+ncells(cc) = nrows(cc) * ncols(cc)
+ncols(cc) = length(cc)
+nrows(cc) = isempty(cc) ? 0 : length(nthcol(cc,1))
+firstcell(cc) = (nrows(cc) > 0) ? nthcol(cc,1)[1] : nothing
+
 function fetch_server_metadata(session)
     server_name = get_info(session, InfoType.CLI_SERVER_NAME)
     @test length(server_name) > 0
     println("Server name: $server_name")
 
     cats = catalogs(session)
-    @test isa(cats, DataFrame)
+    @test isa(cats, Tabular)
     println("Catalogs:")
     println(cats)
 
     sch = schemas(session)
     # at least the default schema should be present
-    @test prod(size(sch)) > 1
+    @test ncells(sch.data) > 1
     println("Schemas:")
     println(sch)
 
     tbls = tables(session)
-    @test isa(tbls, DataFrame)
+    @test isa(tbls, Tabular)
     println("Tables:")
     println(tbls)
 
     ttypes = tabletypes(session)
-    @test isa(ttypes, DataFrame)
+    @test isa(ttypes, Tabular)
     println("Table types:")
     println(ttypes)
 
     cols = columns(session)
-    @test isa(cols, DataFrame)
+    @test isa(cols, Tabular)
     println("Columns:")
     println(cols)
 
     fns = functions(session, "%")
     # at least the default functions should be present
-    @test prod(size(fns)) > 1
+    @test ncells(fns.data) > 1
     println("Functions:")
     println(fns)
     nothing
@@ -54,18 +67,18 @@ end
 
 function create_table_twitter_small(session)
     rs = execute(session, "show tables like 'twitter_small'")
-    table_exists = prod(size(dataframe(rs))) > 0
+    table_exists = ncells(columnchunk(rs)) > 0
 
     if table_exists
         println("Use existing table: twitter_small")
     else
         println("Create table: twitter_small")
         result = execute(session, "create table twitter_small (fromid int, toid int) row format delimited fields terminated by ',' lines terminated by '\n' stored as textfile")
-        @test round(Int, result) == 0.0
+        @test round(Int, result) == 0
     end
 
     rs = execute(session, "select count(*) from twitter_small")
-    rowcount = dataframe(rs)[1,1]
+    rowcount = firstcell(columnchunk(rs))
     if rowcount > 0
         println("Use existing data: $rowcount rows")
     else
@@ -76,13 +89,13 @@ function create_table_twitter_small(session)
             writedlm(io, convert(Array{Int}, rand(UInt16, rowcount, 2)), ',')
         end
         result = execute(session, "load data local inpath '$filename' into table twitter_small")
-        @test round(Int, result) == 0.0
+        @test round(Int, result) == 0
     end
 end
 
 function create_table_datatype_test(session)
     rs = execute(session, "show tables like 'datatype_test'")
-    table_exists = prod(size(dataframe(rs))) > 0
+    table_exists = nrows(columnchunk(rs)) > 0
     cols = (
             ("tbool"        , "boolean"         , ()->rand(Bool)),
             ("tint8"        , "tinyint"         , ()->rand(Int8)),
@@ -92,7 +105,7 @@ function create_table_datatype_test(session)
             ("tfloat32"     , "float"           , ()->rand(Float32)),
             ("tfloat64"     , "double"          , ()->rand(Float64)),
             ("tstr"         , "string"          , ()->randstring()),
-            ("tdatetime"    , "timestamp"       , ()->replace(string(now() - Dates.Day(rand(UInt8))), "T", " ")),
+            ("tdatetime"    , "timestamp"       , ()->replace(string(now() - Dates.Day(rand(UInt8))), "T"=>" ")),
             ("tdecint32"    , "decimal(9,0)"    , ()->rand(UInt16)),
             ("tdecint64"    , "decimal(18,0)"   , ()->rand(UInt16)),
             ("tdecfloat32"  , "decimal(7,6)"    , ()->rand(Float32)),
@@ -109,11 +122,11 @@ function create_table_datatype_test(session)
         println("Create table: datatype_test")
         ct = join(["$(x[1]) $(x[2])" for x in cols], ", ")
         result = execute(session, "create table datatype_test ($ct) row format delimited fields terminated by ',' lines terminated by '\n' stored as textfile")
-        @test round(Int, result) == 0.0
+        @test round(Int, result) == 0
     end
 
     rs = execute(session, "select count(*) from datatype_test")
-    rowcount = dataframe(rs)[1,1]
+    rowcount = firstcell(columnchunk(rs))
     if rowcount > 0
         println("Use existing data: $rowcount rows")
     else
@@ -125,14 +138,14 @@ function create_table_datatype_test(session)
             writedlm(io, colvals, ',')
         end
         result = execute(session, "load data local inpath '$filename' into table datatype_test")
-        @test round(Int, result) == 0.0
+        @test round(Int, result) == 0
     end
 end
 
 function fetch_records(session)
     rs = execute(session, "select min(fromid), max(fromid) from twitter_small")
-    minmax = dataframe(rs)
-    maxval = ceil(Int, mean([minmax[1,1], minmax[1,2]]))
+    minmax = columnchunk(rs)
+    maxval = ceil(Int, mean([nthcol(minmax,1)[1], nthcol(minmax,2)[1]]))
     lim = 10000
 
     println("Execute, record iterator:")
@@ -148,12 +161,12 @@ function fetch_records(session)
     close(rs)
     @test cnt <= lim
 
-    println("Execute, dataframe iterator:")
+    println("Execute, tabular iterator:")
     rs = execute(session, "select * from twitter_small where fromid <= $maxval limit $lim")
     cnt = 0
-    for frames in dataframes(rs)
-        println(frames)
-        cnt += size(frames, 1)
+    for tab in tabulars(rs)
+        println(tab)
+        cnt += length(nthcol(tab.data,1))
     end
     close(rs)
     @test cnt <= lim
@@ -167,7 +180,7 @@ function fetch_records(session)
             println("values: ", cols[2][1:min(length(cols[2]), 10)])
             @test typeof(cols[2]) == Vector{Int32}
         end
-        cnt += length(colframe[1][2])
+        cnt += length(nthcol(colframe,1))
     end
     close(rs)
     @test cnt <= lim
@@ -179,9 +192,9 @@ function fetch_records(session)
         sleep(10)
     end
     rs = result(rs)
-    df = dataframe(rs)
-    @test size(df, 1) <= lim
-    println(df)
+    cc = columnchunk(rs)
+    @test nrows(cc) <= lim
+    println(Tabular(cc))
 
     rs = execute(session, "select * from twitter_small where fromid <= $maxval limit $lim"; async=true)
     while !isready(rs)
@@ -190,9 +203,9 @@ function fetch_records(session)
     end
     rs = result(rs)
     cc = columnchunk(rs)
-    @test size(cc[1][2], 1) <= lim
-    @test typeof(cc[1][2]) == Vector{Int32}
-    @test typeof(cc[2][2]) == Vector{Int32}
+    @test nrows(cc) <= lim
+    @test typeof(nthcol(cc,1)) == Vector{Int32}
+    @test typeof(nthcol(cc,2)) == Vector{Int32}
     println([(n=>(length(v), typeof(v))) for (n,v) in cc])
 
     println("Execute, datatypes:")

@@ -637,9 +637,10 @@ mutable struct TGetOperationStatusResp <: Thrift.TMsg
   operationCompleted::Int64
   hasResultSet::Bool
   progressUpdateResponse::TProgressUpdateResp
+  numModifiedRows::Int64
   TGetOperationStatusResp() = (o=new(); fillunset(o); o)
 end # mutable struct TGetOperationStatusResp
-meta(t::Type{TGetOperationStatusResp}) = meta(t, Symbol[:operationState,:sqlState,:errorCode,:errorMessage,:taskStatus,:operationStarted,:operationCompleted,:hasResultSet,:progressUpdateResponse], Int[], Dict{Symbol,Any}())
+meta(t::Type{TGetOperationStatusResp}) = meta(t, Symbol[:operationState,:sqlState,:errorCode,:errorMessage,:taskStatus,:operationStarted,:operationCompleted,:hasResultSet,:progressUpdateResponse,:numModifiedRows], Int[], Dict{Symbol,Any}())
 
 mutable struct TCancelOperationReq <: Thrift.TMsg
   operationHandle::TOperationHandle
