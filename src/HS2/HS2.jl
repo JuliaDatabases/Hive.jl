@@ -6,7 +6,6 @@
 
 module HS2
 
-using Compat
 using Thrift
 import Thrift.process, Thrift.meta, Thrift.distribute
 
