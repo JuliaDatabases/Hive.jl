@@ -1,13 +1,9 @@
 using Hive
-using Compat
-using Compat.Test
-using Compat.DelimitedFiles
-using Compat.Dates
-using Compat.Random
-
-if VERSION >= v"0.7.0-DEV.4064"
-    using Statistics
-end
+using Test
+using DelimitedFiles
+using Dates
+using Random
+using Statistics
 
 function open_database(f::Function)
     session = HiveSession()

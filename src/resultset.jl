@@ -188,20 +188,25 @@ end
 columnchunks(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE) = ColumnChunksIterator(rs, fetchsz)
 columnchunk(rs::ResultSet, fetchsz::Integer=DEFAULT_FETCH_SIZE) = columnchunk(ColumnChunksIterator(rs, fetchsz))
 function columnchunk(iter::ColumnChunksIterator)
-    state = start(iter)
-    v0, state = next(iter, state)
-
-    while !done(iter, state)
-        v1, state = next(iter, state)
-        v0 = [v0[idx][1]=>vcat(v0[idx][2], v1[idx][2]) for idx in 1:length(v0)]
+    iter_result = iterate(iter)
+    if iter_result === nothing
+        v0 = iter_result
+    else
+        v0, state = iter_result
+        iter_result = iterate(iter, state)
+        while iter_result !== nothing
+            v1, state = iter_result
+            v0 = [v0[idx][1]=>vcat(v0[idx][2], v1[idx][2]) for idx in 1:length(v0)]
+            iter_result = iterate(iter, state)
+        end
     end
     v0
 end
 
 iteratorsize(::Type{ColumnChunksIterator}) = Base.SizeUnknown()
-start(iter::ColumnChunksIterator) = iter.rs.eof
-done(iter::ColumnChunksIterator, state) = state
-function next(iter::ColumnChunksIterator, state)
+function iterate(iter::ColumnChunksIterator, state_eof=iter.rs.eof)
+    state_eof && (return nothing)
+
     rs = iter.rs
     fetchnext(rs)
 
@@ -249,10 +254,9 @@ function tabular(iter::TabularIterator)
 end
 
 iteratorsize(::Type{TabularIterator}) = Base.SizeUnknown()
-start(iter::TabularIterator) = start(iter.cc)
-done(iter::TabularIterator, state) = state
-function next(iter::TabularIterator, state)
-    cols,eof = next(iter.cc, state)
+function iterate(iter::TabularIterator, state_eof=iter.cc.rs.eof)
+    state_eof && (return nothing)
+    cols,eof = iterate(iter.cc, state_eof)
     Tabular(cols; iter.dispargs...), eof
 end
 
@@ -267,15 +271,12 @@ end
 records(rs::ResultSet) = RecordIterator(rs)
 
 iteratorsize(::Type{RecordIterator}) = Base.SizeUnknown()
-start(iter::RecordIterator) = start(iter.cciter)
-function done(iter::RecordIterator, state)
-    done(iter.cciter, state) || (return false)
-    (nothing === iter.cc) && (return false)
-    iter.ccpos > length(iter.cc[1][2])
-end
-function next(iter::RecordIterator, state)
+function iterate(iter::RecordIterator, state_eof=iter.cciter.rs.eof)
+    state_eof && (return nothing)
+    (nothing !== iter.cc) && (iter.ccpos > length(iter.cc[1][2])) && (return nothing)
+
     if (nothing === iter.cc) || (iter.ccpos > length(iter.cc[1][2]))
-        cc, state = next(iter.cciter, state)
+        cc, state_eof = iterate(iter.cciter, state_eof)
         iter.cc = cc
         iter.ccpos = 1
     else
@@ -283,5 +284,5 @@ function next(iter::RecordIterator, state)
     end
     recs = (iter.ccpos > length(cc[1][2])) ? nothing : tuple([col[2][iter.ccpos] for col in cc]...)
     iter.ccpos += 1
-    recs, state
+    recs, state_eof
 end

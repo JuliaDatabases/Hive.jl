@@ -76,13 +76,7 @@ function show_table(io::IO, t; header=nothing, cnames=[n for (n,v) in t], divide
         if style == nothing
             print(io, txt)
         else
-            if isdefined(Compat.Markdown, :with_output_color)
-                Compat.Markdown.with_output_color(style, print, io, txt)
-            elseif isdefined(Compat.Markdown, :with_output_format)
-                Compat.Markdown.with_output_format(style, print, io, txt)
-            else
-                print(io, txt)
-            end
+            Markdown.with_output_color(style, print, io, txt)
         end
         if c == divider
             print(io, "│")

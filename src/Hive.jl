@@ -1,19 +1,18 @@
 __precompile__(true)
 module Hive
 
-using Compat
 using Thrift
-using Compat.Markdown
-using Compat.Dates
-using Compat.Unicode
+using Markdown
+using Dates
+using Unicode
 
-import Base: close, isready, show, eof, start, next, done, vcat
+import Base: close, isready, show, eof, iterate, vcat
 
 export HiveSession, HiveAuth, HiveAuthSASLPlain, Tabular
 export eof, close, isready, result, cancel, get_info, show
 export catalogs, schemas, tables, tabletypes, functions, columns, execute
 export tabular, tabulars, records, columnchunks, columnchunk
-export start, next, done, iteratorsize
+export iterate, iteratorsize
 
 export InfoType
 
