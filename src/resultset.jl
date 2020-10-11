@@ -52,7 +52,7 @@ function result(session::HiveSession, ready::Bool, handle::TOperationHandle)
 
     # modifiedRowCount >= 0 => number of rows affected is known
     # modifiedRowCount < 0 => operation is capable fo modifying rows, but the count is unknown. e.g. LOAD DATA
-    return handle.modifiedRowCount
+    return isfilled(handle, :modifiedRowCount) ? handle.modifiedRowCount : 0
 end
 
 eof(r::ResultSet) = r.eof
