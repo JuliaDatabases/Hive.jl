@@ -8,324 +8,1819 @@
 # types encapsulating arguments and return values of method OpenSession
 
 mutable struct OpenSession_args <: Thrift.TMsg
-  req::TOpenSessionReq
-  OpenSession_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function OpenSession_args(; kwargs...)
+    obj = new(__meta__OpenSession_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct OpenSession_args
 
-mutable struct OpenSession_result
-  success::TOpenSessionResp
-  OpenSession_result() = (o=new(); fillunset(o); o)
-  OpenSession_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__OpenSession_args = meta(OpenSession_args,
+  Symbol[:req],
+  Type[TOpenSessionReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::OpenSession_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TOpenSessionReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{OpenSession_args}) = __meta__OpenSession_args
+
+
+
+mutable struct OpenSession_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function OpenSession_result(; kwargs...)
+    obj = new(__meta__OpenSession_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct OpenSession_result
-meta(t::Type{OpenSession_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__OpenSession_result = meta(OpenSession_result,
+  Symbol[:success],
+  Type[TOpenSessionResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::OpenSession_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TOpenSessionResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{OpenSession_result}) = __meta__OpenSession_result
+
 
 # types encapsulating arguments and return values of method CloseSession
 
 mutable struct CloseSession_args <: Thrift.TMsg
-  req::TCloseSessionReq
-  CloseSession_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function CloseSession_args(; kwargs...)
+    obj = new(__meta__CloseSession_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct CloseSession_args
 
-mutable struct CloseSession_result
-  success::TCloseSessionResp
-  CloseSession_result() = (o=new(); fillunset(o); o)
-  CloseSession_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__CloseSession_args = meta(CloseSession_args,
+  Symbol[:req],
+  Type[TCloseSessionReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::CloseSession_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TCloseSessionReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{CloseSession_args}) = __meta__CloseSession_args
+
+
+
+mutable struct CloseSession_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function CloseSession_result(; kwargs...)
+    obj = new(__meta__CloseSession_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct CloseSession_result
-meta(t::Type{CloseSession_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__CloseSession_result = meta(CloseSession_result,
+  Symbol[:success],
+  Type[TCloseSessionResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::CloseSession_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TCloseSessionResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{CloseSession_result}) = __meta__CloseSession_result
+
 
 # types encapsulating arguments and return values of method GetInfo
 
 mutable struct GetInfo_args <: Thrift.TMsg
-  req::TGetInfoReq
-  GetInfo_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetInfo_args(; kwargs...)
+    obj = new(__meta__GetInfo_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetInfo_args
 
-mutable struct GetInfo_result
-  success::TGetInfoResp
-  GetInfo_result() = (o=new(); fillunset(o); o)
-  GetInfo_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__GetInfo_args = meta(GetInfo_args,
+  Symbol[:req],
+  Type[TGetInfoReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetInfo_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TGetInfoReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetInfo_args}) = __meta__GetInfo_args
+
+
+
+mutable struct GetInfo_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetInfo_result(; kwargs...)
+    obj = new(__meta__GetInfo_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetInfo_result
-meta(t::Type{GetInfo_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__GetInfo_result = meta(GetInfo_result,
+  Symbol[:success],
+  Type[TGetInfoResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetInfo_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TGetInfoResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetInfo_result}) = __meta__GetInfo_result
+
 
 # types encapsulating arguments and return values of method ExecuteStatement
 
 mutable struct ExecuteStatement_args <: Thrift.TMsg
-  req::TExecuteStatementReq
-  ExecuteStatement_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function ExecuteStatement_args(; kwargs...)
+    obj = new(__meta__ExecuteStatement_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct ExecuteStatement_args
 
-mutable struct ExecuteStatement_result
-  success::TExecuteStatementResp
-  ExecuteStatement_result() = (o=new(); fillunset(o); o)
-  ExecuteStatement_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__ExecuteStatement_args = meta(ExecuteStatement_args,
+  Symbol[:req],
+  Type[TExecuteStatementReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::ExecuteStatement_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TExecuteStatementReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{ExecuteStatement_args}) = __meta__ExecuteStatement_args
+
+
+
+mutable struct ExecuteStatement_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function ExecuteStatement_result(; kwargs...)
+    obj = new(__meta__ExecuteStatement_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct ExecuteStatement_result
-meta(t::Type{ExecuteStatement_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__ExecuteStatement_result = meta(ExecuteStatement_result,
+  Symbol[:success],
+  Type[TExecuteStatementResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::ExecuteStatement_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TExecuteStatementResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{ExecuteStatement_result}) = __meta__ExecuteStatement_result
+
 
 # types encapsulating arguments and return values of method GetTypeInfo
 
 mutable struct GetTypeInfo_args <: Thrift.TMsg
-  req::TGetTypeInfoReq
-  GetTypeInfo_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetTypeInfo_args(; kwargs...)
+    obj = new(__meta__GetTypeInfo_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetTypeInfo_args
 
-mutable struct GetTypeInfo_result
-  success::TGetTypeInfoResp
-  GetTypeInfo_result() = (o=new(); fillunset(o); o)
-  GetTypeInfo_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__GetTypeInfo_args = meta(GetTypeInfo_args,
+  Symbol[:req],
+  Type[TGetTypeInfoReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetTypeInfo_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TGetTypeInfoReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetTypeInfo_args}) = __meta__GetTypeInfo_args
+
+
+
+mutable struct GetTypeInfo_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetTypeInfo_result(; kwargs...)
+    obj = new(__meta__GetTypeInfo_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetTypeInfo_result
-meta(t::Type{GetTypeInfo_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__GetTypeInfo_result = meta(GetTypeInfo_result,
+  Symbol[:success],
+  Type[TGetTypeInfoResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetTypeInfo_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TGetTypeInfoResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetTypeInfo_result}) = __meta__GetTypeInfo_result
+
 
 # types encapsulating arguments and return values of method GetCatalogs
 
 mutable struct GetCatalogs_args <: Thrift.TMsg
-  req::TGetCatalogsReq
-  GetCatalogs_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetCatalogs_args(; kwargs...)
+    obj = new(__meta__GetCatalogs_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetCatalogs_args
 
-mutable struct GetCatalogs_result
-  success::TGetCatalogsResp
-  GetCatalogs_result() = (o=new(); fillunset(o); o)
-  GetCatalogs_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__GetCatalogs_args = meta(GetCatalogs_args,
+  Symbol[:req],
+  Type[TGetCatalogsReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetCatalogs_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TGetCatalogsReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetCatalogs_args}) = __meta__GetCatalogs_args
+
+
+
+mutable struct GetCatalogs_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetCatalogs_result(; kwargs...)
+    obj = new(__meta__GetCatalogs_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetCatalogs_result
-meta(t::Type{GetCatalogs_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__GetCatalogs_result = meta(GetCatalogs_result,
+  Symbol[:success],
+  Type[TGetCatalogsResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetCatalogs_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TGetCatalogsResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetCatalogs_result}) = __meta__GetCatalogs_result
+
 
 # types encapsulating arguments and return values of method GetSchemas
 
 mutable struct GetSchemas_args <: Thrift.TMsg
-  req::TGetSchemasReq
-  GetSchemas_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetSchemas_args(; kwargs...)
+    obj = new(__meta__GetSchemas_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetSchemas_args
 
-mutable struct GetSchemas_result
-  success::TGetSchemasResp
-  GetSchemas_result() = (o=new(); fillunset(o); o)
-  GetSchemas_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__GetSchemas_args = meta(GetSchemas_args,
+  Symbol[:req],
+  Type[TGetSchemasReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetSchemas_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TGetSchemasReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetSchemas_args}) = __meta__GetSchemas_args
+
+
+
+mutable struct GetSchemas_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetSchemas_result(; kwargs...)
+    obj = new(__meta__GetSchemas_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetSchemas_result
-meta(t::Type{GetSchemas_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__GetSchemas_result = meta(GetSchemas_result,
+  Symbol[:success],
+  Type[TGetSchemasResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetSchemas_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TGetSchemasResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetSchemas_result}) = __meta__GetSchemas_result
+
 
 # types encapsulating arguments and return values of method GetTables
 
 mutable struct GetTables_args <: Thrift.TMsg
-  req::TGetTablesReq
-  GetTables_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetTables_args(; kwargs...)
+    obj = new(__meta__GetTables_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetTables_args
 
-mutable struct GetTables_result
-  success::TGetTablesResp
-  GetTables_result() = (o=new(); fillunset(o); o)
-  GetTables_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__GetTables_args = meta(GetTables_args,
+  Symbol[:req],
+  Type[TGetTablesReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetTables_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TGetTablesReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetTables_args}) = __meta__GetTables_args
+
+
+
+mutable struct GetTables_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetTables_result(; kwargs...)
+    obj = new(__meta__GetTables_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetTables_result
-meta(t::Type{GetTables_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__GetTables_result = meta(GetTables_result,
+  Symbol[:success],
+  Type[TGetTablesResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetTables_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TGetTablesResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetTables_result}) = __meta__GetTables_result
+
 
 # types encapsulating arguments and return values of method GetTableTypes
 
 mutable struct GetTableTypes_args <: Thrift.TMsg
-  req::TGetTableTypesReq
-  GetTableTypes_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetTableTypes_args(; kwargs...)
+    obj = new(__meta__GetTableTypes_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetTableTypes_args
 
-mutable struct GetTableTypes_result
-  success::TGetTableTypesResp
-  GetTableTypes_result() = (o=new(); fillunset(o); o)
-  GetTableTypes_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__GetTableTypes_args = meta(GetTableTypes_args,
+  Symbol[:req],
+  Type[TGetTableTypesReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetTableTypes_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TGetTableTypesReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetTableTypes_args}) = __meta__GetTableTypes_args
+
+
+
+mutable struct GetTableTypes_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetTableTypes_result(; kwargs...)
+    obj = new(__meta__GetTableTypes_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetTableTypes_result
-meta(t::Type{GetTableTypes_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__GetTableTypes_result = meta(GetTableTypes_result,
+  Symbol[:success],
+  Type[TGetTableTypesResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetTableTypes_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TGetTableTypesResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetTableTypes_result}) = __meta__GetTableTypes_result
+
 
 # types encapsulating arguments and return values of method GetColumns
 
 mutable struct GetColumns_args <: Thrift.TMsg
-  req::TGetColumnsReq
-  GetColumns_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetColumns_args(; kwargs...)
+    obj = new(__meta__GetColumns_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetColumns_args
 
-mutable struct GetColumns_result
-  success::TGetColumnsResp
-  GetColumns_result() = (o=new(); fillunset(o); o)
-  GetColumns_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__GetColumns_args = meta(GetColumns_args,
+  Symbol[:req],
+  Type[TGetColumnsReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetColumns_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TGetColumnsReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetColumns_args}) = __meta__GetColumns_args
+
+
+
+mutable struct GetColumns_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetColumns_result(; kwargs...)
+    obj = new(__meta__GetColumns_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetColumns_result
-meta(t::Type{GetColumns_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__GetColumns_result = meta(GetColumns_result,
+  Symbol[:success],
+  Type[TGetColumnsResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetColumns_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TGetColumnsResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetColumns_result}) = __meta__GetColumns_result
+
 
 # types encapsulating arguments and return values of method GetFunctions
 
 mutable struct GetFunctions_args <: Thrift.TMsg
-  req::TGetFunctionsReq
-  GetFunctions_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetFunctions_args(; kwargs...)
+    obj = new(__meta__GetFunctions_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetFunctions_args
 
-mutable struct GetFunctions_result
-  success::TGetFunctionsResp
-  GetFunctions_result() = (o=new(); fillunset(o); o)
-  GetFunctions_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__GetFunctions_args = meta(GetFunctions_args,
+  Symbol[:req],
+  Type[TGetFunctionsReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetFunctions_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TGetFunctionsReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetFunctions_args}) = __meta__GetFunctions_args
+
+
+
+mutable struct GetFunctions_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetFunctions_result(; kwargs...)
+    obj = new(__meta__GetFunctions_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetFunctions_result
-meta(t::Type{GetFunctions_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__GetFunctions_result = meta(GetFunctions_result,
+  Symbol[:success],
+  Type[TGetFunctionsResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetFunctions_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TGetFunctionsResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetFunctions_result}) = __meta__GetFunctions_result
+
 
 # types encapsulating arguments and return values of method GetPrimaryKeys
 
 mutable struct GetPrimaryKeys_args <: Thrift.TMsg
-  req::TGetPrimaryKeysReq
-  GetPrimaryKeys_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetPrimaryKeys_args(; kwargs...)
+    obj = new(__meta__GetPrimaryKeys_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetPrimaryKeys_args
 
-mutable struct GetPrimaryKeys_result
-  success::TGetPrimaryKeysResp
-  GetPrimaryKeys_result() = (o=new(); fillunset(o); o)
-  GetPrimaryKeys_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__GetPrimaryKeys_args = meta(GetPrimaryKeys_args,
+  Symbol[:req],
+  Type[TGetPrimaryKeysReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetPrimaryKeys_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TGetPrimaryKeysReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetPrimaryKeys_args}) = __meta__GetPrimaryKeys_args
+
+
+
+mutable struct GetPrimaryKeys_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetPrimaryKeys_result(; kwargs...)
+    obj = new(__meta__GetPrimaryKeys_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetPrimaryKeys_result
-meta(t::Type{GetPrimaryKeys_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__GetPrimaryKeys_result = meta(GetPrimaryKeys_result,
+  Symbol[:success],
+  Type[TGetPrimaryKeysResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetPrimaryKeys_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TGetPrimaryKeysResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetPrimaryKeys_result}) = __meta__GetPrimaryKeys_result
+
 
 # types encapsulating arguments and return values of method GetCrossReference
 
 mutable struct GetCrossReference_args <: Thrift.TMsg
-  req::TGetCrossReferenceReq
-  GetCrossReference_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetCrossReference_args(; kwargs...)
+    obj = new(__meta__GetCrossReference_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetCrossReference_args
 
-mutable struct GetCrossReference_result
-  success::TGetCrossReferenceResp
-  GetCrossReference_result() = (o=new(); fillunset(o); o)
-  GetCrossReference_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__GetCrossReference_args = meta(GetCrossReference_args,
+  Symbol[:req],
+  Type[TGetCrossReferenceReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetCrossReference_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TGetCrossReferenceReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetCrossReference_args}) = __meta__GetCrossReference_args
+
+
+
+mutable struct GetCrossReference_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetCrossReference_result(; kwargs...)
+    obj = new(__meta__GetCrossReference_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetCrossReference_result
-meta(t::Type{GetCrossReference_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__GetCrossReference_result = meta(GetCrossReference_result,
+  Symbol[:success],
+  Type[TGetCrossReferenceResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetCrossReference_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TGetCrossReferenceResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetCrossReference_result}) = __meta__GetCrossReference_result
+
 
 # types encapsulating arguments and return values of method GetOperationStatus
 
 mutable struct GetOperationStatus_args <: Thrift.TMsg
-  req::TGetOperationStatusReq
-  GetOperationStatus_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetOperationStatus_args(; kwargs...)
+    obj = new(__meta__GetOperationStatus_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetOperationStatus_args
 
-mutable struct GetOperationStatus_result
-  success::TGetOperationStatusResp
-  GetOperationStatus_result() = (o=new(); fillunset(o); o)
-  GetOperationStatus_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__GetOperationStatus_args = meta(GetOperationStatus_args,
+  Symbol[:req],
+  Type[TGetOperationStatusReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetOperationStatus_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TGetOperationStatusReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetOperationStatus_args}) = __meta__GetOperationStatus_args
+
+
+
+mutable struct GetOperationStatus_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetOperationStatus_result(; kwargs...)
+    obj = new(__meta__GetOperationStatus_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetOperationStatus_result
-meta(t::Type{GetOperationStatus_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__GetOperationStatus_result = meta(GetOperationStatus_result,
+  Symbol[:success],
+  Type[TGetOperationStatusResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetOperationStatus_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TGetOperationStatusResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetOperationStatus_result}) = __meta__GetOperationStatus_result
+
 
 # types encapsulating arguments and return values of method CancelOperation
 
 mutable struct CancelOperation_args <: Thrift.TMsg
-  req::TCancelOperationReq
-  CancelOperation_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function CancelOperation_args(; kwargs...)
+    obj = new(__meta__CancelOperation_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct CancelOperation_args
 
-mutable struct CancelOperation_result
-  success::TCancelOperationResp
-  CancelOperation_result() = (o=new(); fillunset(o); o)
-  CancelOperation_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__CancelOperation_args = meta(CancelOperation_args,
+  Symbol[:req],
+  Type[TCancelOperationReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::CancelOperation_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TCancelOperationReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{CancelOperation_args}) = __meta__CancelOperation_args
+
+
+
+mutable struct CancelOperation_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function CancelOperation_result(; kwargs...)
+    obj = new(__meta__CancelOperation_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct CancelOperation_result
-meta(t::Type{CancelOperation_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__CancelOperation_result = meta(CancelOperation_result,
+  Symbol[:success],
+  Type[TCancelOperationResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::CancelOperation_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TCancelOperationResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{CancelOperation_result}) = __meta__CancelOperation_result
+
 
 # types encapsulating arguments and return values of method CloseOperation
 
 mutable struct CloseOperation_args <: Thrift.TMsg
-  req::TCloseOperationReq
-  CloseOperation_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function CloseOperation_args(; kwargs...)
+    obj = new(__meta__CloseOperation_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct CloseOperation_args
 
-mutable struct CloseOperation_result
-  success::TCloseOperationResp
-  CloseOperation_result() = (o=new(); fillunset(o); o)
-  CloseOperation_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__CloseOperation_args = meta(CloseOperation_args,
+  Symbol[:req],
+  Type[TCloseOperationReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::CloseOperation_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TCloseOperationReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{CloseOperation_args}) = __meta__CloseOperation_args
+
+
+
+mutable struct CloseOperation_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function CloseOperation_result(; kwargs...)
+    obj = new(__meta__CloseOperation_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct CloseOperation_result
-meta(t::Type{CloseOperation_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__CloseOperation_result = meta(CloseOperation_result,
+  Symbol[:success],
+  Type[TCloseOperationResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::CloseOperation_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TCloseOperationResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{CloseOperation_result}) = __meta__CloseOperation_result
+
 
 # types encapsulating arguments and return values of method GetResultSetMetadata
 
 mutable struct GetResultSetMetadata_args <: Thrift.TMsg
-  req::TGetResultSetMetadataReq
-  GetResultSetMetadata_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetResultSetMetadata_args(; kwargs...)
+    obj = new(__meta__GetResultSetMetadata_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetResultSetMetadata_args
 
-mutable struct GetResultSetMetadata_result
-  success::TGetResultSetMetadataResp
-  GetResultSetMetadata_result() = (o=new(); fillunset(o); o)
-  GetResultSetMetadata_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__GetResultSetMetadata_args = meta(GetResultSetMetadata_args,
+  Symbol[:req],
+  Type[TGetResultSetMetadataReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetResultSetMetadata_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TGetResultSetMetadataReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetResultSetMetadata_args}) = __meta__GetResultSetMetadata_args
+
+
+
+mutable struct GetResultSetMetadata_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetResultSetMetadata_result(; kwargs...)
+    obj = new(__meta__GetResultSetMetadata_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetResultSetMetadata_result
-meta(t::Type{GetResultSetMetadata_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__GetResultSetMetadata_result = meta(GetResultSetMetadata_result,
+  Symbol[:success],
+  Type[TGetResultSetMetadataResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetResultSetMetadata_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TGetResultSetMetadataResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetResultSetMetadata_result}) = __meta__GetResultSetMetadata_result
+
 
 # types encapsulating arguments and return values of method FetchResults
 
 mutable struct FetchResults_args <: Thrift.TMsg
-  req::TFetchResultsReq
-  FetchResults_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function FetchResults_args(; kwargs...)
+    obj = new(__meta__FetchResults_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct FetchResults_args
 
-mutable struct FetchResults_result
-  success::TFetchResultsResp
-  FetchResults_result() = (o=new(); fillunset(o); o)
-  FetchResults_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__FetchResults_args = meta(FetchResults_args,
+  Symbol[:req],
+  Type[TFetchResultsReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::FetchResults_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TFetchResultsReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{FetchResults_args}) = __meta__FetchResults_args
+
+
+
+mutable struct FetchResults_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function FetchResults_result(; kwargs...)
+    obj = new(__meta__FetchResults_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct FetchResults_result
-meta(t::Type{FetchResults_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__FetchResults_result = meta(FetchResults_result,
+  Symbol[:success],
+  Type[TFetchResultsResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::FetchResults_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TFetchResultsResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{FetchResults_result}) = __meta__FetchResults_result
+
 
 # types encapsulating arguments and return values of method GetDelegationToken
 
 mutable struct GetDelegationToken_args <: Thrift.TMsg
-  req::TGetDelegationTokenReq
-  GetDelegationToken_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetDelegationToken_args(; kwargs...)
+    obj = new(__meta__GetDelegationToken_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetDelegationToken_args
 
-mutable struct GetDelegationToken_result
-  success::TGetDelegationTokenResp
-  GetDelegationToken_result() = (o=new(); fillunset(o); o)
-  GetDelegationToken_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__GetDelegationToken_args = meta(GetDelegationToken_args,
+  Symbol[:req],
+  Type[TGetDelegationTokenReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetDelegationToken_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TGetDelegationTokenReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetDelegationToken_args}) = __meta__GetDelegationToken_args
+
+
+
+mutable struct GetDelegationToken_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetDelegationToken_result(; kwargs...)
+    obj = new(__meta__GetDelegationToken_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetDelegationToken_result
-meta(t::Type{GetDelegationToken_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__GetDelegationToken_result = meta(GetDelegationToken_result,
+  Symbol[:success],
+  Type[TGetDelegationTokenResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetDelegationToken_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TGetDelegationTokenResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetDelegationToken_result}) = __meta__GetDelegationToken_result
+
 
 # types encapsulating arguments and return values of method CancelDelegationToken
 
 mutable struct CancelDelegationToken_args <: Thrift.TMsg
-  req::TCancelDelegationTokenReq
-  CancelDelegationToken_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function CancelDelegationToken_args(; kwargs...)
+    obj = new(__meta__CancelDelegationToken_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct CancelDelegationToken_args
 
-mutable struct CancelDelegationToken_result
-  success::TCancelDelegationTokenResp
-  CancelDelegationToken_result() = (o=new(); fillunset(o); o)
-  CancelDelegationToken_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__CancelDelegationToken_args = meta(CancelDelegationToken_args,
+  Symbol[:req],
+  Type[TCancelDelegationTokenReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::CancelDelegationToken_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TCancelDelegationTokenReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{CancelDelegationToken_args}) = __meta__CancelDelegationToken_args
+
+
+
+mutable struct CancelDelegationToken_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function CancelDelegationToken_result(; kwargs...)
+    obj = new(__meta__CancelDelegationToken_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct CancelDelegationToken_result
-meta(t::Type{CancelDelegationToken_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__CancelDelegationToken_result = meta(CancelDelegationToken_result,
+  Symbol[:success],
+  Type[TCancelDelegationTokenResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::CancelDelegationToken_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TCancelDelegationTokenResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{CancelDelegationToken_result}) = __meta__CancelDelegationToken_result
+
 
 # types encapsulating arguments and return values of method RenewDelegationToken
 
 mutable struct RenewDelegationToken_args <: Thrift.TMsg
-  req::TRenewDelegationTokenReq
-  RenewDelegationToken_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function RenewDelegationToken_args(; kwargs...)
+    obj = new(__meta__RenewDelegationToken_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct RenewDelegationToken_args
 
-mutable struct RenewDelegationToken_result
-  success::TRenewDelegationTokenResp
-  RenewDelegationToken_result() = (o=new(); fillunset(o); o)
-  RenewDelegationToken_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__RenewDelegationToken_args = meta(RenewDelegationToken_args,
+  Symbol[:req],
+  Type[TRenewDelegationTokenReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::RenewDelegationToken_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TRenewDelegationTokenReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{RenewDelegationToken_args}) = __meta__RenewDelegationToken_args
+
+
+
+mutable struct RenewDelegationToken_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function RenewDelegationToken_result(; kwargs...)
+    obj = new(__meta__RenewDelegationToken_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct RenewDelegationToken_result
-meta(t::Type{RenewDelegationToken_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__RenewDelegationToken_result = meta(RenewDelegationToken_result,
+  Symbol[:success],
+  Type[TRenewDelegationTokenResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::RenewDelegationToken_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TRenewDelegationTokenResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{RenewDelegationToken_result}) = __meta__RenewDelegationToken_result
+
 
 # types encapsulating arguments and return values of method GetQueryId
 
 mutable struct GetQueryId_args <: Thrift.TMsg
-  req::TGetQueryIdReq
-  GetQueryId_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetQueryId_args(; kwargs...)
+    obj = new(__meta__GetQueryId_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetQueryId_args
 
-mutable struct GetQueryId_result
-  success::TGetQueryIdResp
-  GetQueryId_result() = (o=new(); fillunset(o); o)
-  GetQueryId_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__GetQueryId_args = meta(GetQueryId_args,
+  Symbol[:req],
+  Type[TGetQueryIdReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetQueryId_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TGetQueryIdReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetQueryId_args}) = __meta__GetQueryId_args
+
+
+
+mutable struct GetQueryId_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function GetQueryId_result(; kwargs...)
+    obj = new(__meta__GetQueryId_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct GetQueryId_result
-meta(t::Type{GetQueryId_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__GetQueryId_result = meta(GetQueryId_result,
+  Symbol[:success],
+  Type[TGetQueryIdResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::GetQueryId_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TGetQueryIdResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{GetQueryId_result}) = __meta__GetQueryId_result
+
 
 # types encapsulating arguments and return values of method SetClientInfo
 
 mutable struct SetClientInfo_args <: Thrift.TMsg
-  req::TSetClientInfoReq
-  SetClientInfo_args() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function SetClientInfo_args(; kwargs...)
+    obj = new(__meta__SetClientInfo_args, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct SetClientInfo_args
 
-mutable struct SetClientInfo_result
-  success::TSetClientInfoResp
-  SetClientInfo_result() = (o=new(); fillunset(o); o)
-  SetClientInfo_result(success) = (o=new(); fillset(o, :success); o.success=success; o)
+const __meta__SetClientInfo_args = meta(SetClientInfo_args,
+  Symbol[:req],
+  Type[TSetClientInfoReq],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::SetClientInfo_args, name::Symbol)
+  if name === :req
+    return (obj.values[name])::TSetClientInfoReq
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{SetClientInfo_args}) = __meta__SetClientInfo_args
+
+
+
+mutable struct SetClientInfo_result <: Thrift.TMsg
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function SetClientInfo_result(; kwargs...)
+    obj = new(__meta__SetClientInfo_result, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct SetClientInfo_result
-meta(t::Type{SetClientInfo_result}) = meta(t, Symbol[:success], Int[0], Dict{Symbol,Any}())
+
+const __meta__SetClientInfo_result = meta(SetClientInfo_result,
+  Symbol[:success],
+  Type[TSetClientInfoResp],
+  Symbol[],
+  Int[0],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::SetClientInfo_result, name::Symbol)
+  if name === :success
+    return (obj.values[name])::TSetClientInfoResp
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{SetClientInfo_result}) = __meta__SetClientInfo_result
+
 
 
 
@@ -360,29 +1855,29 @@ mutable struct TCLIServiceProcessor <: TProcessor
     p
   end
 end # mutable struct TCLIServiceProcessor
-_OpenSession(inp::OpenSession_args) = OpenSession_result(OpenSession(inp.req))
-_CloseSession(inp::CloseSession_args) = CloseSession_result(CloseSession(inp.req))
-_GetInfo(inp::GetInfo_args) = GetInfo_result(GetInfo(inp.req))
-_ExecuteStatement(inp::ExecuteStatement_args) = ExecuteStatement_result(ExecuteStatement(inp.req))
-_GetTypeInfo(inp::GetTypeInfo_args) = GetTypeInfo_result(GetTypeInfo(inp.req))
-_GetCatalogs(inp::GetCatalogs_args) = GetCatalogs_result(GetCatalogs(inp.req))
-_GetSchemas(inp::GetSchemas_args) = GetSchemas_result(GetSchemas(inp.req))
-_GetTables(inp::GetTables_args) = GetTables_result(GetTables(inp.req))
-_GetTableTypes(inp::GetTableTypes_args) = GetTableTypes_result(GetTableTypes(inp.req))
-_GetColumns(inp::GetColumns_args) = GetColumns_result(GetColumns(inp.req))
-_GetFunctions(inp::GetFunctions_args) = GetFunctions_result(GetFunctions(inp.req))
-_GetPrimaryKeys(inp::GetPrimaryKeys_args) = GetPrimaryKeys_result(GetPrimaryKeys(inp.req))
-_GetCrossReference(inp::GetCrossReference_args) = GetCrossReference_result(GetCrossReference(inp.req))
-_GetOperationStatus(inp::GetOperationStatus_args) = GetOperationStatus_result(GetOperationStatus(inp.req))
-_CancelOperation(inp::CancelOperation_args) = CancelOperation_result(CancelOperation(inp.req))
-_CloseOperation(inp::CloseOperation_args) = CloseOperation_result(CloseOperation(inp.req))
-_GetResultSetMetadata(inp::GetResultSetMetadata_args) = GetResultSetMetadata_result(GetResultSetMetadata(inp.req))
-_FetchResults(inp::FetchResults_args) = FetchResults_result(FetchResults(inp.req))
-_GetDelegationToken(inp::GetDelegationToken_args) = GetDelegationToken_result(GetDelegationToken(inp.req))
-_CancelDelegationToken(inp::CancelDelegationToken_args) = CancelDelegationToken_result(CancelDelegationToken(inp.req))
-_RenewDelegationToken(inp::RenewDelegationToken_args) = RenewDelegationToken_result(RenewDelegationToken(inp.req))
-_GetQueryId(inp::GetQueryId_args) = GetQueryId_result(GetQueryId(inp.req))
-_SetClientInfo(inp::SetClientInfo_args) = SetClientInfo_result(SetClientInfo(inp.req))
+_OpenSession(inp::OpenSession_args) = OpenSession_result(; success=OpenSession(inp.req))
+_CloseSession(inp::CloseSession_args) = CloseSession_result(; success=CloseSession(inp.req))
+_GetInfo(inp::GetInfo_args) = GetInfo_result(; success=GetInfo(inp.req))
+_ExecuteStatement(inp::ExecuteStatement_args) = ExecuteStatement_result(; success=ExecuteStatement(inp.req))
+_GetTypeInfo(inp::GetTypeInfo_args) = GetTypeInfo_result(; success=GetTypeInfo(inp.req))
+_GetCatalogs(inp::GetCatalogs_args) = GetCatalogs_result(; success=GetCatalogs(inp.req))
+_GetSchemas(inp::GetSchemas_args) = GetSchemas_result(; success=GetSchemas(inp.req))
+_GetTables(inp::GetTables_args) = GetTables_result(; success=GetTables(inp.req))
+_GetTableTypes(inp::GetTableTypes_args) = GetTableTypes_result(; success=GetTableTypes(inp.req))
+_GetColumns(inp::GetColumns_args) = GetColumns_result(; success=GetColumns(inp.req))
+_GetFunctions(inp::GetFunctions_args) = GetFunctions_result(; success=GetFunctions(inp.req))
+_GetPrimaryKeys(inp::GetPrimaryKeys_args) = GetPrimaryKeys_result(; success=GetPrimaryKeys(inp.req))
+_GetCrossReference(inp::GetCrossReference_args) = GetCrossReference_result(; success=GetCrossReference(inp.req))
+_GetOperationStatus(inp::GetOperationStatus_args) = GetOperationStatus_result(; success=GetOperationStatus(inp.req))
+_CancelOperation(inp::CancelOperation_args) = CancelOperation_result(; success=CancelOperation(inp.req))
+_CloseOperation(inp::CloseOperation_args) = CloseOperation_result(; success=CloseOperation(inp.req))
+_GetResultSetMetadata(inp::GetResultSetMetadata_args) = GetResultSetMetadata_result(; success=GetResultSetMetadata(inp.req))
+_FetchResults(inp::FetchResults_args) = FetchResults_result(; success=FetchResults(inp.req))
+_GetDelegationToken(inp::GetDelegationToken_args) = GetDelegationToken_result(; success=GetDelegationToken(inp.req))
+_CancelDelegationToken(inp::CancelDelegationToken_args) = CancelDelegationToken_result(; success=CancelDelegationToken(inp.req))
+_RenewDelegationToken(inp::RenewDelegationToken_args) = RenewDelegationToken_result(; success=RenewDelegationToken(inp.req))
+_GetQueryId(inp::GetQueryId_args) = GetQueryId_result(; success=GetQueryId(inp.req))
+_SetClientInfo(inp::SetClientInfo_args) = SetClientInfo_result(; success=SetClientInfo(inp.req))
 process(p::TCLIServiceProcessor, inp::TProtocol, outp::TProtocol) = process(p.tp, inp, outp)
 distribute(p::TCLIServiceProcessor) = distribute(p.tp)
 
@@ -449,7 +1944,7 @@ function OpenSession(c::TCLIServiceClientBase, req::TOpenSessionReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "OpenSession", Thrift.MessageType.CALL, c.seqid)
   inp = OpenSession_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -458,9 +1953,9 @@ function OpenSession(c::TCLIServiceClientBase, req::TOpenSessionReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, OpenSession_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function OpenSession
 
 # Client callable method for CloseSession
@@ -469,7 +1964,7 @@ function CloseSession(c::TCLIServiceClientBase, req::TCloseSessionReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "CloseSession", Thrift.MessageType.CALL, c.seqid)
   inp = CloseSession_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -478,9 +1973,9 @@ function CloseSession(c::TCLIServiceClientBase, req::TCloseSessionReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, CloseSession_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function CloseSession
 
 # Client callable method for GetInfo
@@ -489,7 +1984,7 @@ function GetInfo(c::TCLIServiceClientBase, req::TGetInfoReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "GetInfo", Thrift.MessageType.CALL, c.seqid)
   inp = GetInfo_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -498,9 +1993,9 @@ function GetInfo(c::TCLIServiceClientBase, req::TGetInfoReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, GetInfo_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function GetInfo
 
 # Client callable method for ExecuteStatement
@@ -509,7 +2004,7 @@ function ExecuteStatement(c::TCLIServiceClientBase, req::TExecuteStatementReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "ExecuteStatement", Thrift.MessageType.CALL, c.seqid)
   inp = ExecuteStatement_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -518,9 +2013,9 @@ function ExecuteStatement(c::TCLIServiceClientBase, req::TExecuteStatementReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, ExecuteStatement_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function ExecuteStatement
 
 # Client callable method for GetTypeInfo
@@ -529,7 +2024,7 @@ function GetTypeInfo(c::TCLIServiceClientBase, req::TGetTypeInfoReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "GetTypeInfo", Thrift.MessageType.CALL, c.seqid)
   inp = GetTypeInfo_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -538,9 +2033,9 @@ function GetTypeInfo(c::TCLIServiceClientBase, req::TGetTypeInfoReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, GetTypeInfo_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function GetTypeInfo
 
 # Client callable method for GetCatalogs
@@ -549,7 +2044,7 @@ function GetCatalogs(c::TCLIServiceClientBase, req::TGetCatalogsReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "GetCatalogs", Thrift.MessageType.CALL, c.seqid)
   inp = GetCatalogs_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -558,9 +2053,9 @@ function GetCatalogs(c::TCLIServiceClientBase, req::TGetCatalogsReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, GetCatalogs_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function GetCatalogs
 
 # Client callable method for GetSchemas
@@ -569,7 +2064,7 @@ function GetSchemas(c::TCLIServiceClientBase, req::TGetSchemasReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "GetSchemas", Thrift.MessageType.CALL, c.seqid)
   inp = GetSchemas_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -578,9 +2073,9 @@ function GetSchemas(c::TCLIServiceClientBase, req::TGetSchemasReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, GetSchemas_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function GetSchemas
 
 # Client callable method for GetTables
@@ -589,7 +2084,7 @@ function GetTables(c::TCLIServiceClientBase, req::TGetTablesReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "GetTables", Thrift.MessageType.CALL, c.seqid)
   inp = GetTables_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -598,9 +2093,9 @@ function GetTables(c::TCLIServiceClientBase, req::TGetTablesReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, GetTables_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function GetTables
 
 # Client callable method for GetTableTypes
@@ -609,7 +2104,7 @@ function GetTableTypes(c::TCLIServiceClientBase, req::TGetTableTypesReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "GetTableTypes", Thrift.MessageType.CALL, c.seqid)
   inp = GetTableTypes_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -618,9 +2113,9 @@ function GetTableTypes(c::TCLIServiceClientBase, req::TGetTableTypesReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, GetTableTypes_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function GetTableTypes
 
 # Client callable method for GetColumns
@@ -629,7 +2124,7 @@ function GetColumns(c::TCLIServiceClientBase, req::TGetColumnsReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "GetColumns", Thrift.MessageType.CALL, c.seqid)
   inp = GetColumns_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -638,9 +2133,9 @@ function GetColumns(c::TCLIServiceClientBase, req::TGetColumnsReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, GetColumns_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function GetColumns
 
 # Client callable method for GetFunctions
@@ -649,7 +2144,7 @@ function GetFunctions(c::TCLIServiceClientBase, req::TGetFunctionsReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "GetFunctions", Thrift.MessageType.CALL, c.seqid)
   inp = GetFunctions_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -658,9 +2153,9 @@ function GetFunctions(c::TCLIServiceClientBase, req::TGetFunctionsReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, GetFunctions_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function GetFunctions
 
 # Client callable method for GetPrimaryKeys
@@ -669,7 +2164,7 @@ function GetPrimaryKeys(c::TCLIServiceClientBase, req::TGetPrimaryKeysReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "GetPrimaryKeys", Thrift.MessageType.CALL, c.seqid)
   inp = GetPrimaryKeys_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -678,9 +2173,9 @@ function GetPrimaryKeys(c::TCLIServiceClientBase, req::TGetPrimaryKeysReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, GetPrimaryKeys_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function GetPrimaryKeys
 
 # Client callable method for GetCrossReference
@@ -689,7 +2184,7 @@ function GetCrossReference(c::TCLIServiceClientBase, req::TGetCrossReferenceReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "GetCrossReference", Thrift.MessageType.CALL, c.seqid)
   inp = GetCrossReference_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -698,9 +2193,9 @@ function GetCrossReference(c::TCLIServiceClientBase, req::TGetCrossReferenceReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, GetCrossReference_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function GetCrossReference
 
 # Client callable method for GetOperationStatus
@@ -709,7 +2204,7 @@ function GetOperationStatus(c::TCLIServiceClientBase, req::TGetOperationStatusRe
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "GetOperationStatus", Thrift.MessageType.CALL, c.seqid)
   inp = GetOperationStatus_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -718,9 +2213,9 @@ function GetOperationStatus(c::TCLIServiceClientBase, req::TGetOperationStatusRe
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, GetOperationStatus_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function GetOperationStatus
 
 # Client callable method for CancelOperation
@@ -729,7 +2224,7 @@ function CancelOperation(c::TCLIServiceClientBase, req::TCancelOperationReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "CancelOperation", Thrift.MessageType.CALL, c.seqid)
   inp = CancelOperation_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -738,9 +2233,9 @@ function CancelOperation(c::TCLIServiceClientBase, req::TCancelOperationReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, CancelOperation_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function CancelOperation
 
 # Client callable method for CloseOperation
@@ -749,7 +2244,7 @@ function CloseOperation(c::TCLIServiceClientBase, req::TCloseOperationReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "CloseOperation", Thrift.MessageType.CALL, c.seqid)
   inp = CloseOperation_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -758,9 +2253,9 @@ function CloseOperation(c::TCLIServiceClientBase, req::TCloseOperationReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, CloseOperation_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function CloseOperation
 
 # Client callable method for GetResultSetMetadata
@@ -769,7 +2264,7 @@ function GetResultSetMetadata(c::TCLIServiceClientBase, req::TGetResultSetMetada
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "GetResultSetMetadata", Thrift.MessageType.CALL, c.seqid)
   inp = GetResultSetMetadata_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -778,9 +2273,9 @@ function GetResultSetMetadata(c::TCLIServiceClientBase, req::TGetResultSetMetada
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, GetResultSetMetadata_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function GetResultSetMetadata
 
 # Client callable method for FetchResults
@@ -789,7 +2284,7 @@ function FetchResults(c::TCLIServiceClientBase, req::TFetchResultsReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "FetchResults", Thrift.MessageType.CALL, c.seqid)
   inp = FetchResults_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -798,9 +2293,9 @@ function FetchResults(c::TCLIServiceClientBase, req::TFetchResultsReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, FetchResults_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function FetchResults
 
 # Client callable method for GetDelegationToken
@@ -809,7 +2304,7 @@ function GetDelegationToken(c::TCLIServiceClientBase, req::TGetDelegationTokenRe
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "GetDelegationToken", Thrift.MessageType.CALL, c.seqid)
   inp = GetDelegationToken_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -818,9 +2313,9 @@ function GetDelegationToken(c::TCLIServiceClientBase, req::TGetDelegationTokenRe
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, GetDelegationToken_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function GetDelegationToken
 
 # Client callable method for CancelDelegationToken
@@ -829,7 +2324,7 @@ function CancelDelegationToken(c::TCLIServiceClientBase, req::TCancelDelegationT
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "CancelDelegationToken", Thrift.MessageType.CALL, c.seqid)
   inp = CancelDelegationToken_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -838,9 +2333,9 @@ function CancelDelegationToken(c::TCLIServiceClientBase, req::TCancelDelegationT
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, CancelDelegationToken_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function CancelDelegationToken
 
 # Client callable method for RenewDelegationToken
@@ -849,7 +2344,7 @@ function RenewDelegationToken(c::TCLIServiceClientBase, req::TRenewDelegationTok
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "RenewDelegationToken", Thrift.MessageType.CALL, c.seqid)
   inp = RenewDelegationToken_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -858,9 +2353,9 @@ function RenewDelegationToken(c::TCLIServiceClientBase, req::TRenewDelegationTok
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, RenewDelegationToken_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function RenewDelegationToken
 
 # Client callable method for GetQueryId
@@ -869,7 +2364,7 @@ function GetQueryId(c::TCLIServiceClientBase, req::TGetQueryIdReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "GetQueryId", Thrift.MessageType.CALL, c.seqid)
   inp = GetQueryId_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -878,9 +2373,9 @@ function GetQueryId(c::TCLIServiceClientBase, req::TGetQueryIdReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, GetQueryId_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function GetQueryId
 
 # Client callable method for SetClientInfo
@@ -889,7 +2384,7 @@ function SetClientInfo(c::TCLIServiceClientBase, req::TSetClientInfoReq)
   c.seqid = (c.seqid < (2^31-1)) ? (c.seqid+1) : 0
   Thrift.writeMessageBegin(p, "SetClientInfo", Thrift.MessageType.CALL, c.seqid)
   inp = SetClientInfo_args()
-  Thrift.set_field!(inp, :req, req)
+  inp.req = req
   Thrift.write(p, inp)
   Thrift.writeMessageEnd(p)
   Thrift.flush(p.t)
@@ -898,8 +2393,8 @@ function SetClientInfo(c::TCLIServiceClientBase, req::TSetClientInfoReq)
   (mtype == Thrift.MessageType.EXCEPTION) && throw(Thrift.read(p, Thrift.TApplicationException()))
   outp = Thrift.read(p, SetClientInfo_result())
   Thrift.readMessageEnd(p)
-  (rseqid != c.seqid) && throw(Thrift.TApplicationException(ApplicationExceptionType.BAD_SEQUENCE_ID, "response sequence id $rseqid did not match request ($(c.seqid))"))
-  Thrift.has_field(outp, :success) && (return Thrift.get_field(outp, :success))
-  throw(Thrift.TApplicationException(Thrift.ApplicationExceptionType.MISSING_RESULT, "retrieve failed: unknown result"))
+  (rseqid != c.seqid) && throw(Thrift.TApplicationException(; typ=ApplicationExceptionType.BAD_SEQUENCE_ID, message="response sequence id $rseqid did not match request ($(c.seqid))"))
+  hasproperty(outp, :success) && (return outp.success)
+  throw(Thrift.TApplicationException(; typ=Thrift.ApplicationExceptionType.MISSING_RESULT, message="retrieve failed: unknown result"))
 end # function SetClientInfo
 

@@ -56,7 +56,7 @@ mutable struct HiveConn
 
     function connect(transport::TTransport, client::TCLIServiceClient)
         open(transport)
-        request = thriftbuild(TOpenSessionReq, Dict(:client_protocol => TProtocolVersion.HIVE_CLI_SERVICE_PROTOCOL_V8))
+        request = TOpenSessionReq(; client_protocol=TProtocolVersion.HIVE_CLI_SERVICE_PROTOCOL_V8)
         response = OpenSession(client, request)
         check_status(response.status)
         response
@@ -69,7 +69,7 @@ function show(io::IO, conn::HiveConn)
 end
 
 function close(conn::HiveConn)
-    request = thriftbuild(TCloseSessionReq, Dict(:sessionHandle => conn.handle.sessionHandle))
+    request = TCloseSessionReq(; sessionHandle=conn.handle.sessionHandle)
     response = CloseSession(conn.client, request)
     check_status(response.status)
 end
@@ -97,13 +97,13 @@ Info Type
 const InfoType = TGetInfoType
 function get_info(session::HiveSession, info_type::Int32)
     conn = session.conn
-    request = thriftbuild(TGetInfoReq, Dict(:sessionHandle => conn.handle.sessionHandle, :infoType => info_type))
+    request = TGetInfoReq(; sessionHandle=conn.handle.sessionHandle, infoType=info_type)
     response = GetInfo(conn.client, request)
     check_status(response.status)
 
     val = response.infoValue
-    for fldname in fieldnames(TGetInfoValue)
-        isfilled(val, fldname) && (return getfield(val, fldname))
+    for fldname in propertynames(val)
+        hasproperty(val, fldname) && (return getproperty(val, fldname))
     end
     nothing
 end

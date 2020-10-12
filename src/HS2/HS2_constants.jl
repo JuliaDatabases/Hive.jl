@@ -3,36 +3,10 @@
 #
 # DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
 
-const PRIMITIVE_TYPES = union!(Set{Int32}(), Int32[  Int32(0),   Int32(1),   Int32(2),   Int32(3),   Int32(4),   Int32(5),   Int32(6),   Int32(7),   Int32(8),   Int32(9),   Int32(15),   Int32(16),   Int32(17),   Int32(18),   Int32(19),   Int32(20),   Int32(21),   Int32(22)
-])
-const COMPLEX_TYPES = union!(Set{Int32}(), Int32[  Int32(10),   Int32(11),   Int32(12),   Int32(13),   Int32(14)
-])
-const COLLECTION_TYPES = union!(Set{Int32}(), Int32[  Int32(10),   Int32(11)
-])
-const TYPE_NAMES = Dict(
-  Int32(0) => "BOOLEAN",
-  Int32(1) => "TINYINT",
-  Int32(2) => "SMALLINT",
-  Int32(3) => "INT",
-  Int32(4) => "BIGINT",
-  Int32(5) => "FLOAT",
-  Int32(6) => "DOUBLE",
-  Int32(7) => "STRING",
-  Int32(8) => "TIMESTAMP",
-  Int32(9) => "BINARY",
-  Int32(10) => "ARRAY",
-  Int32(11) => "MAP",
-  Int32(12) => "STRUCT",
-  Int32(13) => "UNIONTYPE",
-  Int32(15) => "DECIMAL",
-  Int32(16) => "NULL",
-  Int32(17) => "DATE",
-  Int32(18) => "VARCHAR",
-  Int32(19) => "CHAR",
-  Int32(20) => "INTERVAL_YEAR_MONTH",
-  Int32(21) => "INTERVAL_DAY_TIME",
-  Int32(22) => "TIMESTAMP WITH LOCAL TIME ZONE"
-)
+const PRIMITIVE_TYPES = union!(Set{Int32}(), Int32[Int32(0), Int32(1), Int32(2), Int32(3), Int32(4), Int32(5), Int32(6), Int32(7), Int32(8), Int32(9), Int32(15), Int32(16), Int32(17), Int32(18), Int32(19), Int32(20), Int32(21), Int32(22)])
+const COMPLEX_TYPES = union!(Set{Int32}(), Int32[Int32(10), Int32(11), Int32(12), Int32(13), Int32(14)])
+const COLLECTION_TYPES = union!(Set{Int32}(), Int32[Int32(10), Int32(11)])
+const TYPE_NAMES = Dict(Int32(0) => "BOOLEAN", Int32(1) => "TINYINT", Int32(2) => "SMALLINT", Int32(3) => "INT", Int32(4) => "BIGINT", Int32(5) => "FLOAT", Int32(6) => "DOUBLE", Int32(7) => "STRING", Int32(8) => "TIMESTAMP", Int32(9) => "BINARY", Int32(10) => "ARRAY", Int32(11) => "MAP", Int32(12) => "STRUCT", Int32(13) => "UNIONTYPE", Int32(15) => "DECIMAL", Int32(16) => "NULL", Int32(17) => "DATE", Int32(18) => "VARCHAR", Int32(19) => "CHAR", Int32(20) => "INTERVAL_YEAR_MONTH", Int32(21) => "INTERVAL_DAY_TIME", Int32(22) => "TIMESTAMP WITH LOCAL TIME ZONE")
 const CHARACTER_MAXIMUM_LENGTH = "characterMaximumLength"
 const PRECISION = "precision"
 const SCALE = "scale"

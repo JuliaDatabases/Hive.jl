@@ -73,10 +73,10 @@ const JCONV = Dict(
 ##
 # map column types to Julia types
 function julia_type(hs2type::TTypeDesc, typeentry::TPrimitiveTypeEntry)
-    if (typeentry._type == 19) && isfilled(typeentry, :typeQualifiers) && isfilled(typeentry.typeQualifiers, :qualifiers)
+    if (typeentry._type == 19) && hasproperty(typeentry, :typeQualifiers) && hasproperty(typeentry.typeQualifiers, :qualifiers)
         qual = typeentry.typeQualifiers.qualifiers
         ("characterMaximumLength" in keys(qual)) && (qual["characterMaximumLength"].i32Value == 1) && (return Char)
-    elseif typeentry._type == 15 && isfilled(typeentry, :typeQualifiers) && isfilled(typeentry.typeQualifiers, :qualifiers)
+    elseif typeentry._type == 15 && hasproperty(typeentry, :typeQualifiers) && hasproperty(typeentry.typeQualifiers, :qualifiers)
         qual = typeentry.typeQualifiers.qualifiers
         precision = ("precision" in keys(qual)) ? qual["precision"].i32Value : Int32(10)
         scale = ("scale" in keys(qual)) ? qual["scale"].i32Value : Int32(0)
@@ -92,9 +92,9 @@ function julia_type(hs2type::TTypeDesc, typeentry::TPrimitiveTypeEntry)
 end
 
 function julia_conv(hs2type::TTypeDesc, typeentry::TPrimitiveTypeEntry)
-    if (typeentry._type == 19) && isfilled(typeentry, :typeQualifiers) && isfilled(typeentry.typeQualifiers, :qualifiers)
+    if (typeentry._type == 19) && hasproperty(typeentry, :typeQualifiers) && hasproperty(typeentry.typeQualifiers, :qualifiers)
         ("characterMaximumLength" in keys(typeentry.typeQualifiers.qualifiers)) && (typeentry.typeQualifiers.qualifiers["characterMaximumLength"].i32Value == 1) && (return tochar)
-    elseif typeentry._type == 15 && isfilled(typeentry, :typeQualifiers) && isfilled(typeentry.typeQualifiers, :qualifiers)
+    elseif typeentry._type == 15 && hasproperty(typeentry, :typeQualifiers) && hasproperty(typeentry.typeQualifiers, :qualifiers)
         qual = typeentry.typeQualifiers.qualifiers
         precision = ("precision" in keys(qual)) ? qual["precision"].i32Value : Int32(10)
         scale = ("scale" in keys(qual)) ? qual["scale"].i32Value : Int32(0)
@@ -128,14 +128,14 @@ julia_type(hs2type::TTypeDesc, typeentry::TUnionTypeEntry) = Any
 julia_type(hs2type::TTypeDesc, typeentry::TUserDefinedTypeEntry) = Any
 
 function julia_type(hs2type::TTypeDesc, typeentry::TTypeEntry)
-    for fld in fieldnames(TTypeEntry)
-        isfilled(typeentry, fld) && (return julia_type(hs2type, getfield(typeentry, fld)))
+    for fld in propertynames(hs2type)
+        hasproperty(typeentry, fld) && (return julia_type(hs2type, getproperty(typeentry, fld)))
     end
 end
 
 function julia_conv(hs2type::TTypeDesc, typeentry::TTypeEntry)
-    for fld in fieldnames(TTypeEntry)
-        isfilled(typeentry, fld) && (return julia_conv(hs2type, getfield(typeentry, fld)))
+    for fld in propertynames(hs2type)
+        hasproperty(typeentry, fld) && (return julia_conv(hs2type, getproperty(typeentry, fld)))
     end
 end
 
@@ -177,9 +177,9 @@ julia_type_name(hs2type::TTypeDesc, typeentry::TUnionTypeEntry) = "Union"
 julia_type_name(hs2type::TTypeDesc, typeentry::TUserDefinedTypeEntry) = "UserDefined"
 
 function julia_type_name(hs2type::TTypeDesc, typeentry::TTypeEntry)
-    for fld in fieldnames(TTypeEntry)
-        isfilled(typeentry, fld) || continue
-        return julia_type_name(hs2type, getfield(typeentry, fld))
+    for fld in propertynames(hs2type)
+        hasproperty(typeentry, fld) || continue
+        return julia_type_name(hs2type, getproperty(typeentry, fld))
     end
 end
 
@@ -197,12 +197,12 @@ end
 const ColValue = Union{TBoolValue, TByteValue, TI16Value, TI32Value, TI64Value, TDoubleValue, TStringValue}
 const Col = Union{TBoolColumn, TByteColumn, TI16Column, TI32Column, TI64Column, TDoubleColumn, TStringColumn, TBinaryColumn}
 
-julia_type(colval::T, convfn::Nothing) where T<:ColValue = isfilled(colval, :value) ? getfield(colval, :value) : nothing
-julia_type(colval::T, convfn) where T<:ColValue = isfilled(colval, :value) ? convfn(getfield(colval, :value)) : nothing
+julia_type(colval::T, convfn::Nothing) where T<:ColValue = hasproperty(colval, :value) ? getproperty(colval, :value) : nothing
+julia_type(colval::T, convfn) where T<:ColValue = hasproperty(colval, :value) ? convfn(getproperty(colval, :value)) : nothing
 
 function julia_type(colval::TColumnValue, convfn)
-    for fld in fieldnames(TColumnValue)
-        isfilled(colval, fld) && (return julia_type(getfield(colval, fld), convfn))
+    for fld in propertynames(colval)
+        hasproperty(colval, fld) && (return julia_type(getproperty(colval, fld), convfn))
     end
     nothing
 end
@@ -226,8 +226,8 @@ function julia_type(col::T, convfn::Nothing) where T<:Col
 end
 
 function julia_type(col::TColumn, convfn)
-    for fld in fieldnames(TColumn)
-        isfilled(col, fld) && (return julia_type(getfield(col, fld), convfn))
+    for fld in propertynames(col)
+        hasproperty(col, fld) && (return julia_type(getproperty(col, fld), convfn))
     end
     nothing
 end

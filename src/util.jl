@@ -1,6 +1,6 @@
 function check_status(status::TStatus)
-    errormsg = isfilled(status, :errorMessage) ? getfield(status, :errorMessage) : String("")
-    infomsgs = isfilled(status, :infoMessages) ? getfield(status, :infoMessages) : String[]
+    errormsg = hasproperty(status, :errorMessage) ? status.errorMessage : ""
+    infomsgs = hasproperty(status, :infoMessages) ? status.infoMessages : String[]
     check_status(status.statusCode, errormsg, infomsgs)
 end
 function check_status(status::Int32, errormsg::AbstractString="", infomsgs::Array=[])
@@ -38,7 +38,7 @@ end
 
 ##
 # show methods
-compactshow(io, x) = @static (VERSION < v"0.7.0-DEV.1211") ? showcompact(io, x) : show(IOContext(io, :compact => true), x)
+compactshow(io, x) = show(IOContext(io, :compact => true), x)
 
 function show_table(io::IO, t; header=nothing, cnames=[n for (n,v) in t], divider=nothing, cstyle=[], full=false, ellipsis=:middle, compact_if_too_wide=true)
     height, width = displaysize(io)
@@ -73,7 +73,7 @@ function show_table(io::IO, t; header=nothing, cnames=[n for (n,v) in t], divide
         nm = get(strcnames, c, "")
         style = get(cstyle, c, nothing)
         txt = c==nc ? nm : rpad(nm, widths[c]+(c==divider ? 1 : 2), " ")
-        if style == nothing
+        if style === nothing
             print(io, txt)
         else
             Markdown.with_output_color(style, print, io, txt)
@@ -146,7 +146,7 @@ function tabular(sch::TTableSchema)
     types = Vector{Type}()
     comments = Vector{Union{String,Nothing}}()
     for col in sch.columns
-        push!(comments, isfilled(col, :comment) ? getfield(col, :comment) : nothing)
+        push!(comments, hasproperty(col, :comment) ? col.comment : nothing)
         push!(types, julia_type(col.typeDesc))
         push!(names, col.columnName)
         push!(positions, col.position)

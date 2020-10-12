@@ -159,582 +159,3399 @@ const TPatternOrIdentifier = String
 
 
 mutable struct TTypeQualifierValue <: Thrift.TMsg
-  i32Value::Int32
-  stringValue::String
-  TTypeQualifierValue() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TTypeQualifierValue(; kwargs...)
+    obj = new(__meta__TTypeQualifierValue, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TTypeQualifierValue
-meta(t::Type{TTypeQualifierValue}) = meta(t, Symbol[:i32Value,:stringValue], Int[], Dict{Symbol,Any}())
+
+const __meta__TTypeQualifierValue = meta(TTypeQualifierValue,
+  Symbol[:i32Value,:stringValue],
+  Type[Int32,String],
+  Symbol[:i32Value,:stringValue],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TTypeQualifierValue, name::Symbol)
+  if name === :i32Value
+    return (obj.values[name])::Int32
+  elseif name === :stringValue
+    return (obj.values[name])::String
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TTypeQualifierValue}) = __meta__TTypeQualifierValue
+
 
 mutable struct TTypeQualifiers <: Thrift.TMsg
-  qualifiers::Dict{String,TTypeQualifierValue}
-  TTypeQualifiers() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TTypeQualifiers(; kwargs...)
+    obj = new(__meta__TTypeQualifiers, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TTypeQualifiers
 
+const __meta__TTypeQualifiers = meta(TTypeQualifiers,
+  Symbol[:qualifiers],
+  Type[Dict{String,TTypeQualifierValue}],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TTypeQualifiers, name::Symbol)
+  if name === :qualifiers
+    return (obj.values[name])::Dict{String,TTypeQualifierValue}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TTypeQualifiers}) = __meta__TTypeQualifiers
+
+
 mutable struct TPrimitiveTypeEntry <: Thrift.TMsg
-  _type::Int32
-  typeQualifiers::TTypeQualifiers
-  TPrimitiveTypeEntry() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TPrimitiveTypeEntry(; kwargs...)
+    obj = new(__meta__TPrimitiveTypeEntry, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TPrimitiveTypeEntry
-meta(t::Type{TPrimitiveTypeEntry}) = meta(t, Symbol[:typeQualifiers], Int[], Dict{Symbol,Any}())
+
+const __meta__TPrimitiveTypeEntry = meta(TPrimitiveTypeEntry,
+  Symbol[:_type,:typeQualifiers],
+  Type[Int32,TTypeQualifiers],
+  Symbol[:typeQualifiers],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TPrimitiveTypeEntry, name::Symbol)
+  if name === :_type
+    return (obj.values[name])::Int32
+  elseif name === :typeQualifiers
+    return (obj.values[name])::TTypeQualifiers
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TPrimitiveTypeEntry}) = __meta__TPrimitiveTypeEntry
+
 
 mutable struct TArrayTypeEntry <: Thrift.TMsg
-  objectTypePtr::TTypeEntryPtr
-  TArrayTypeEntry() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TArrayTypeEntry(; kwargs...)
+    obj = new(__meta__TArrayTypeEntry, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TArrayTypeEntry
 
+const __meta__TArrayTypeEntry = meta(TArrayTypeEntry,
+  Symbol[:objectTypePtr],
+  Type[TTypeEntryPtr],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TArrayTypeEntry, name::Symbol)
+  if name === :objectTypePtr
+    return (obj.values[name])::TTypeEntryPtr
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TArrayTypeEntry}) = __meta__TArrayTypeEntry
+
+
 mutable struct TMapTypeEntry <: Thrift.TMsg
-  keyTypePtr::TTypeEntryPtr
-  valueTypePtr::TTypeEntryPtr
-  TMapTypeEntry() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TMapTypeEntry(; kwargs...)
+    obj = new(__meta__TMapTypeEntry, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TMapTypeEntry
 
+const __meta__TMapTypeEntry = meta(TMapTypeEntry,
+  Symbol[:keyTypePtr,:valueTypePtr],
+  Type[TTypeEntryPtr,TTypeEntryPtr],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TMapTypeEntry, name::Symbol)
+  if name === :keyTypePtr
+    return (obj.values[name])::TTypeEntryPtr
+  elseif name === :valueTypePtr
+    return (obj.values[name])::TTypeEntryPtr
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TMapTypeEntry}) = __meta__TMapTypeEntry
+
+
 mutable struct TStructTypeEntry <: Thrift.TMsg
-  nameToTypePtr::Dict{String,TTypeEntryPtr}
-  TStructTypeEntry() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TStructTypeEntry(; kwargs...)
+    obj = new(__meta__TStructTypeEntry, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TStructTypeEntry
 
+const __meta__TStructTypeEntry = meta(TStructTypeEntry,
+  Symbol[:nameToTypePtr],
+  Type[Dict{String,TTypeEntryPtr}],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TStructTypeEntry, name::Symbol)
+  if name === :nameToTypePtr
+    return (obj.values[name])::Dict{String,TTypeEntryPtr}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TStructTypeEntry}) = __meta__TStructTypeEntry
+
+
 mutable struct TUnionTypeEntry <: Thrift.TMsg
-  nameToTypePtr::Dict{String,TTypeEntryPtr}
-  TUnionTypeEntry() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TUnionTypeEntry(; kwargs...)
+    obj = new(__meta__TUnionTypeEntry, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TUnionTypeEntry
 
+const __meta__TUnionTypeEntry = meta(TUnionTypeEntry,
+  Symbol[:nameToTypePtr],
+  Type[Dict{String,TTypeEntryPtr}],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TUnionTypeEntry, name::Symbol)
+  if name === :nameToTypePtr
+    return (obj.values[name])::Dict{String,TTypeEntryPtr}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TUnionTypeEntry}) = __meta__TUnionTypeEntry
+
+
 mutable struct TUserDefinedTypeEntry <: Thrift.TMsg
-  typeClassName::String
-  TUserDefinedTypeEntry() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TUserDefinedTypeEntry(; kwargs...)
+    obj = new(__meta__TUserDefinedTypeEntry, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TUserDefinedTypeEntry
 
+const __meta__TUserDefinedTypeEntry = meta(TUserDefinedTypeEntry,
+  Symbol[:typeClassName],
+  Type[String],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TUserDefinedTypeEntry, name::Symbol)
+  if name === :typeClassName
+    return (obj.values[name])::String
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TUserDefinedTypeEntry}) = __meta__TUserDefinedTypeEntry
+
+
 mutable struct TTypeEntry <: Thrift.TMsg
-  primitiveEntry::TPrimitiveTypeEntry
-  arrayEntry::TArrayTypeEntry
-  mapEntry::TMapTypeEntry
-  structEntry::TStructTypeEntry
-  unionEntry::TUnionTypeEntry
-  userDefinedTypeEntry::TUserDefinedTypeEntry
-  TTypeEntry() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TTypeEntry(; kwargs...)
+    obj = new(__meta__TTypeEntry, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TTypeEntry
-meta(t::Type{TTypeEntry}) = meta(t, Symbol[:primitiveEntry,:arrayEntry,:mapEntry,:structEntry,:unionEntry,:userDefinedTypeEntry], Int[], Dict{Symbol,Any}())
+
+const __meta__TTypeEntry = meta(TTypeEntry,
+  Symbol[:primitiveEntry,:arrayEntry,:mapEntry,:structEntry,:unionEntry,:userDefinedTypeEntry],
+  Type[TPrimitiveTypeEntry,TArrayTypeEntry,TMapTypeEntry,TStructTypeEntry,TUnionTypeEntry,TUserDefinedTypeEntry],
+  Symbol[:primitiveEntry,:arrayEntry,:mapEntry,:structEntry,:unionEntry,:userDefinedTypeEntry],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TTypeEntry, name::Symbol)
+  if name === :primitiveEntry
+    return (obj.values[name])::TPrimitiveTypeEntry
+  elseif name === :arrayEntry
+    return (obj.values[name])::TArrayTypeEntry
+  elseif name === :mapEntry
+    return (obj.values[name])::TMapTypeEntry
+  elseif name === :structEntry
+    return (obj.values[name])::TStructTypeEntry
+  elseif name === :unionEntry
+    return (obj.values[name])::TUnionTypeEntry
+  elseif name === :userDefinedTypeEntry
+    return (obj.values[name])::TUserDefinedTypeEntry
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TTypeEntry}) = __meta__TTypeEntry
+
 
 mutable struct TTypeDesc <: Thrift.TMsg
-  types::Vector{TTypeEntry}
-  TTypeDesc() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TTypeDesc(; kwargs...)
+    obj = new(__meta__TTypeDesc, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TTypeDesc
 
+const __meta__TTypeDesc = meta(TTypeDesc,
+  Symbol[:types],
+  Type[Vector{TTypeEntry}],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TTypeDesc, name::Symbol)
+  if name === :types
+    return (obj.values[name])::Vector{TTypeEntry}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TTypeDesc}) = __meta__TTypeDesc
+
+
 mutable struct TColumnDesc <: Thrift.TMsg
-  columnName::String
-  typeDesc::TTypeDesc
-  position::Int32
-  comment::String
-  TColumnDesc() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TColumnDesc(; kwargs...)
+    obj = new(__meta__TColumnDesc, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TColumnDesc
-meta(t::Type{TColumnDesc}) = meta(t, Symbol[:comment], Int[], Dict{Symbol,Any}())
+
+const __meta__TColumnDesc = meta(TColumnDesc,
+  Symbol[:columnName,:typeDesc,:position,:comment],
+  Type[String,TTypeDesc,Int32,String],
+  Symbol[:comment],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TColumnDesc, name::Symbol)
+  if name === :columnName
+    return (obj.values[name])::String
+  elseif name === :typeDesc
+    return (obj.values[name])::TTypeDesc
+  elseif name === :position
+    return (obj.values[name])::Int32
+  elseif name === :comment
+    return (obj.values[name])::String
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TColumnDesc}) = __meta__TColumnDesc
+
 
 mutable struct TTableSchema <: Thrift.TMsg
-  columns::Vector{TColumnDesc}
-  TTableSchema() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TTableSchema(; kwargs...)
+    obj = new(__meta__TTableSchema, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TTableSchema
 
+const __meta__TTableSchema = meta(TTableSchema,
+  Symbol[:columns],
+  Type[Vector{TColumnDesc}],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TTableSchema, name::Symbol)
+  if name === :columns
+    return (obj.values[name])::Vector{TColumnDesc}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TTableSchema}) = __meta__TTableSchema
+
+
 mutable struct TBoolValue <: Thrift.TMsg
-  value::Bool
-  TBoolValue() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TBoolValue(; kwargs...)
+    obj = new(__meta__TBoolValue, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TBoolValue
-meta(t::Type{TBoolValue}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
+
+const __meta__TBoolValue = meta(TBoolValue,
+  Symbol[:value],
+  Type[Bool],
+  Symbol[:value],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TBoolValue, name::Symbol)
+  if name === :value
+    return (obj.values[name])::Bool
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TBoolValue}) = __meta__TBoolValue
+
 
 mutable struct TByteValue <: Thrift.TMsg
-  value::UInt8
-  TByteValue() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TByteValue(; kwargs...)
+    obj = new(__meta__TByteValue, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TByteValue
-meta(t::Type{TByteValue}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
+
+const __meta__TByteValue = meta(TByteValue,
+  Symbol[:value],
+  Type[UInt8],
+  Symbol[:value],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TByteValue, name::Symbol)
+  if name === :value
+    return (obj.values[name])::UInt8
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TByteValue}) = __meta__TByteValue
+
 
 mutable struct TI16Value <: Thrift.TMsg
-  value::Int16
-  TI16Value() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TI16Value(; kwargs...)
+    obj = new(__meta__TI16Value, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TI16Value
-meta(t::Type{TI16Value}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
+
+const __meta__TI16Value = meta(TI16Value,
+  Symbol[:value],
+  Type[Int16],
+  Symbol[:value],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TI16Value, name::Symbol)
+  if name === :value
+    return (obj.values[name])::Int16
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TI16Value}) = __meta__TI16Value
+
 
 mutable struct TI32Value <: Thrift.TMsg
-  value::Int32
-  TI32Value() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TI32Value(; kwargs...)
+    obj = new(__meta__TI32Value, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TI32Value
-meta(t::Type{TI32Value}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
+
+const __meta__TI32Value = meta(TI32Value,
+  Symbol[:value],
+  Type[Int32],
+  Symbol[:value],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TI32Value, name::Symbol)
+  if name === :value
+    return (obj.values[name])::Int32
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TI32Value}) = __meta__TI32Value
+
 
 mutable struct TI64Value <: Thrift.TMsg
-  value::Int64
-  TI64Value() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TI64Value(; kwargs...)
+    obj = new(__meta__TI64Value, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TI64Value
-meta(t::Type{TI64Value}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
+
+const __meta__TI64Value = meta(TI64Value,
+  Symbol[:value],
+  Type[Int64],
+  Symbol[:value],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TI64Value, name::Symbol)
+  if name === :value
+    return (obj.values[name])::Int64
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TI64Value}) = __meta__TI64Value
+
 
 mutable struct TDoubleValue <: Thrift.TMsg
-  value::Float64
-  TDoubleValue() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TDoubleValue(; kwargs...)
+    obj = new(__meta__TDoubleValue, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TDoubleValue
-meta(t::Type{TDoubleValue}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
+
+const __meta__TDoubleValue = meta(TDoubleValue,
+  Symbol[:value],
+  Type[Float64],
+  Symbol[:value],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TDoubleValue, name::Symbol)
+  if name === :value
+    return (obj.values[name])::Float64
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TDoubleValue}) = __meta__TDoubleValue
+
 
 mutable struct TStringValue <: Thrift.TMsg
-  value::String
-  TStringValue() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TStringValue(; kwargs...)
+    obj = new(__meta__TStringValue, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TStringValue
-meta(t::Type{TStringValue}) = meta(t, Symbol[:value], Int[], Dict{Symbol,Any}())
+
+const __meta__TStringValue = meta(TStringValue,
+  Symbol[:value],
+  Type[String],
+  Symbol[:value],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TStringValue, name::Symbol)
+  if name === :value
+    return (obj.values[name])::String
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TStringValue}) = __meta__TStringValue
+
 
 mutable struct TColumnValue <: Thrift.TMsg
-  boolVal::TBoolValue
-  byteVal::TByteValue
-  i16Val::TI16Value
-  i32Val::TI32Value
-  i64Val::TI64Value
-  doubleVal::TDoubleValue
-  stringVal::TStringValue
-  TColumnValue() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TColumnValue(; kwargs...)
+    obj = new(__meta__TColumnValue, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TColumnValue
-meta(t::Type{TColumnValue}) = meta(t, Symbol[:boolVal,:byteVal,:i16Val,:i32Val,:i64Val,:doubleVal,:stringVal], Int[], Dict{Symbol,Any}())
+
+const __meta__TColumnValue = meta(TColumnValue,
+  Symbol[:boolVal,:byteVal,:i16Val,:i32Val,:i64Val,:doubleVal,:stringVal],
+  Type[TBoolValue,TByteValue,TI16Value,TI32Value,TI64Value,TDoubleValue,TStringValue],
+  Symbol[:boolVal,:byteVal,:i16Val,:i32Val,:i64Val,:doubleVal,:stringVal],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TColumnValue, name::Symbol)
+  if name === :boolVal
+    return (obj.values[name])::TBoolValue
+  elseif name === :byteVal
+    return (obj.values[name])::TByteValue
+  elseif name === :i16Val
+    return (obj.values[name])::TI16Value
+  elseif name === :i32Val
+    return (obj.values[name])::TI32Value
+  elseif name === :i64Val
+    return (obj.values[name])::TI64Value
+  elseif name === :doubleVal
+    return (obj.values[name])::TDoubleValue
+  elseif name === :stringVal
+    return (obj.values[name])::TStringValue
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TColumnValue}) = __meta__TColumnValue
+
 
 mutable struct TRow <: Thrift.TMsg
-  colVals::Vector{TColumnValue}
-  TRow() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TRow(; kwargs...)
+    obj = new(__meta__TRow, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TRow
 
+const __meta__TRow = meta(TRow,
+  Symbol[:colVals],
+  Type[Vector{TColumnValue}],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TRow, name::Symbol)
+  if name === :colVals
+    return (obj.values[name])::Vector{TColumnValue}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TRow}) = __meta__TRow
+
+
 mutable struct TBoolColumn <: Thrift.TMsg
-  values::Vector{Bool}
-  nulls::Vector{UInt8}
-  TBoolColumn() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TBoolColumn(; kwargs...)
+    obj = new(__meta__TBoolColumn, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TBoolColumn
 
+const __meta__TBoolColumn = meta(TBoolColumn,
+  Symbol[:values,:nulls],
+  Type[Vector{Bool},Vector{UInt8}],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TBoolColumn, name::Symbol)
+  if name === :values
+    return (obj.values[name])::Vector{Bool}
+  elseif name === :nulls
+    return (obj.values[name])::Vector{UInt8}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TBoolColumn}) = __meta__TBoolColumn
+
+
 mutable struct TByteColumn <: Thrift.TMsg
-  values::Vector{UInt8}
-  nulls::Vector{UInt8}
-  TByteColumn() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TByteColumn(; kwargs...)
+    obj = new(__meta__TByteColumn, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TByteColumn
 
+const __meta__TByteColumn = meta(TByteColumn,
+  Symbol[:values,:nulls],
+  Type[Vector{UInt8},Vector{UInt8}],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TByteColumn, name::Symbol)
+  if name === :values
+    return (obj.values[name])::Vector{UInt8}
+  elseif name === :nulls
+    return (obj.values[name])::Vector{UInt8}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TByteColumn}) = __meta__TByteColumn
+
+
 mutable struct TI16Column <: Thrift.TMsg
-  values::Vector{Int16}
-  nulls::Vector{UInt8}
-  TI16Column() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TI16Column(; kwargs...)
+    obj = new(__meta__TI16Column, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TI16Column
 
+const __meta__TI16Column = meta(TI16Column,
+  Symbol[:values,:nulls],
+  Type[Vector{Int16},Vector{UInt8}],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TI16Column, name::Symbol)
+  if name === :values
+    return (obj.values[name])::Vector{Int16}
+  elseif name === :nulls
+    return (obj.values[name])::Vector{UInt8}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TI16Column}) = __meta__TI16Column
+
+
 mutable struct TI32Column <: Thrift.TMsg
-  values::Vector{Int32}
-  nulls::Vector{UInt8}
-  TI32Column() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TI32Column(; kwargs...)
+    obj = new(__meta__TI32Column, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TI32Column
 
+const __meta__TI32Column = meta(TI32Column,
+  Symbol[:values,:nulls],
+  Type[Vector{Int32},Vector{UInt8}],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TI32Column, name::Symbol)
+  if name === :values
+    return (obj.values[name])::Vector{Int32}
+  elseif name === :nulls
+    return (obj.values[name])::Vector{UInt8}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TI32Column}) = __meta__TI32Column
+
+
 mutable struct TI64Column <: Thrift.TMsg
-  values::Vector{Int64}
-  nulls::Vector{UInt8}
-  TI64Column() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TI64Column(; kwargs...)
+    obj = new(__meta__TI64Column, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TI64Column
 
+const __meta__TI64Column = meta(TI64Column,
+  Symbol[:values,:nulls],
+  Type[Vector{Int64},Vector{UInt8}],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TI64Column, name::Symbol)
+  if name === :values
+    return (obj.values[name])::Vector{Int64}
+  elseif name === :nulls
+    return (obj.values[name])::Vector{UInt8}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TI64Column}) = __meta__TI64Column
+
+
 mutable struct TDoubleColumn <: Thrift.TMsg
-  values::Vector{Float64}
-  nulls::Vector{UInt8}
-  TDoubleColumn() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TDoubleColumn(; kwargs...)
+    obj = new(__meta__TDoubleColumn, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TDoubleColumn
 
+const __meta__TDoubleColumn = meta(TDoubleColumn,
+  Symbol[:values,:nulls],
+  Type[Vector{Float64},Vector{UInt8}],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TDoubleColumn, name::Symbol)
+  if name === :values
+    return (obj.values[name])::Vector{Float64}
+  elseif name === :nulls
+    return (obj.values[name])::Vector{UInt8}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TDoubleColumn}) = __meta__TDoubleColumn
+
+
 mutable struct TStringColumn <: Thrift.TMsg
-  values::Vector{String}
-  nulls::Vector{UInt8}
-  TStringColumn() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TStringColumn(; kwargs...)
+    obj = new(__meta__TStringColumn, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TStringColumn
 
+const __meta__TStringColumn = meta(TStringColumn,
+  Symbol[:values,:nulls],
+  Type[Vector{String},Vector{UInt8}],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TStringColumn, name::Symbol)
+  if name === :values
+    return (obj.values[name])::Vector{String}
+  elseif name === :nulls
+    return (obj.values[name])::Vector{UInt8}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TStringColumn}) = __meta__TStringColumn
+
+
 mutable struct TBinaryColumn <: Thrift.TMsg
-  values::Vector{Vector{UInt8}}
-  nulls::Vector{UInt8}
-  TBinaryColumn() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TBinaryColumn(; kwargs...)
+    obj = new(__meta__TBinaryColumn, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TBinaryColumn
 
+const __meta__TBinaryColumn = meta(TBinaryColumn,
+  Symbol[:values,:nulls],
+  Type[Vector{Vector{UInt8}},Vector{UInt8}],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TBinaryColumn, name::Symbol)
+  if name === :values
+    return (obj.values[name])::Vector{Vector{UInt8}}
+  elseif name === :nulls
+    return (obj.values[name])::Vector{UInt8}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TBinaryColumn}) = __meta__TBinaryColumn
+
+
 mutable struct TColumn <: Thrift.TMsg
-  boolVal::TBoolColumn
-  byteVal::TByteColumn
-  i16Val::TI16Column
-  i32Val::TI32Column
-  i64Val::TI64Column
-  doubleVal::TDoubleColumn
-  stringVal::TStringColumn
-  binaryVal::TBinaryColumn
-  TColumn() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TColumn(; kwargs...)
+    obj = new(__meta__TColumn, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TColumn
-meta(t::Type{TColumn}) = meta(t, Symbol[:boolVal,:byteVal,:i16Val,:i32Val,:i64Val,:doubleVal,:stringVal,:binaryVal], Int[], Dict{Symbol,Any}())
+
+const __meta__TColumn = meta(TColumn,
+  Symbol[:boolVal,:byteVal,:i16Val,:i32Val,:i64Val,:doubleVal,:stringVal,:binaryVal],
+  Type[TBoolColumn,TByteColumn,TI16Column,TI32Column,TI64Column,TDoubleColumn,TStringColumn,TBinaryColumn],
+  Symbol[:boolVal,:byteVal,:i16Val,:i32Val,:i64Val,:doubleVal,:stringVal,:binaryVal],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TColumn, name::Symbol)
+  if name === :boolVal
+    return (obj.values[name])::TBoolColumn
+  elseif name === :byteVal
+    return (obj.values[name])::TByteColumn
+  elseif name === :i16Val
+    return (obj.values[name])::TI16Column
+  elseif name === :i32Val
+    return (obj.values[name])::TI32Column
+  elseif name === :i64Val
+    return (obj.values[name])::TI64Column
+  elseif name === :doubleVal
+    return (obj.values[name])::TDoubleColumn
+  elseif name === :stringVal
+    return (obj.values[name])::TStringColumn
+  elseif name === :binaryVal
+    return (obj.values[name])::TBinaryColumn
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TColumn}) = __meta__TColumn
+
 
 mutable struct TRowSet <: Thrift.TMsg
-  startRowOffset::Int64
-  rows::Vector{TRow}
-  columns::Vector{TColumn}
-  binaryColumns::Vector{UInt8}
-  columnCount::Int32
-  TRowSet() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TRowSet(; kwargs...)
+    obj = new(__meta__TRowSet, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TRowSet
-meta(t::Type{TRowSet}) = meta(t, Symbol[:columns,:binaryColumns,:columnCount], Int[], Dict{Symbol,Any}())
+
+const __meta__TRowSet = meta(TRowSet,
+  Symbol[:startRowOffset,:rows,:columns,:binaryColumns,:columnCount],
+  Type[Int64,Vector{TRow},Vector{TColumn},Vector{UInt8},Int32],
+  Symbol[:columns,:binaryColumns,:columnCount],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TRowSet, name::Symbol)
+  if name === :startRowOffset
+    return (obj.values[name])::Int64
+  elseif name === :rows
+    return (obj.values[name])::Vector{TRow}
+  elseif name === :columns
+    return (obj.values[name])::Vector{TColumn}
+  elseif name === :binaryColumns
+    return (obj.values[name])::Vector{UInt8}
+  elseif name === :columnCount
+    return (obj.values[name])::Int32
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TRowSet}) = __meta__TRowSet
+
 
 mutable struct TStatus <: Thrift.TMsg
-  statusCode::Int32
-  infoMessages::Vector{String}
-  sqlState::String
-  errorCode::Int32
-  errorMessage::String
-  TStatus() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TStatus(; kwargs...)
+    obj = new(__meta__TStatus, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TStatus
-meta(t::Type{TStatus}) = meta(t, Symbol[:infoMessages,:sqlState,:errorCode,:errorMessage], Int[], Dict{Symbol,Any}())
+
+const __meta__TStatus = meta(TStatus,
+  Symbol[:statusCode,:infoMessages,:sqlState,:errorCode,:errorMessage],
+  Type[Int32,Vector{String},String,Int32,String],
+  Symbol[:infoMessages,:sqlState,:errorCode,:errorMessage],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TStatus, name::Symbol)
+  if name === :statusCode
+    return (obj.values[name])::Int32
+  elseif name === :infoMessages
+    return (obj.values[name])::Vector{String}
+  elseif name === :sqlState
+    return (obj.values[name])::String
+  elseif name === :errorCode
+    return (obj.values[name])::Int32
+  elseif name === :errorMessage
+    return (obj.values[name])::String
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TStatus}) = __meta__TStatus
+
 
 mutable struct THandleIdentifier <: Thrift.TMsg
-  guid::Vector{UInt8}
-  secret::Vector{UInt8}
-  THandleIdentifier() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function THandleIdentifier(; kwargs...)
+    obj = new(__meta__THandleIdentifier, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct THandleIdentifier
 
+const __meta__THandleIdentifier = meta(THandleIdentifier,
+  Symbol[:guid,:secret],
+  Type[Vector{UInt8},Vector{UInt8}],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::THandleIdentifier, name::Symbol)
+  if name === :guid
+    return (obj.values[name])::Vector{UInt8}
+  elseif name === :secret
+    return (obj.values[name])::Vector{UInt8}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{THandleIdentifier}) = __meta__THandleIdentifier
+
+
 mutable struct TSessionHandle <: Thrift.TMsg
-  sessionId::THandleIdentifier
-  TSessionHandle() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TSessionHandle(; kwargs...)
+    obj = new(__meta__TSessionHandle, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TSessionHandle
 
+const __meta__TSessionHandle = meta(TSessionHandle,
+  Symbol[:sessionId],
+  Type[THandleIdentifier],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TSessionHandle, name::Symbol)
+  if name === :sessionId
+    return (obj.values[name])::THandleIdentifier
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TSessionHandle}) = __meta__TSessionHandle
+
+
 mutable struct TOperationHandle <: Thrift.TMsg
-  operationId::THandleIdentifier
-  operationType::Int32
-  hasResultSet::Bool
-  modifiedRowCount::Float64
-  TOperationHandle() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TOperationHandle(; kwargs...)
+    obj = new(__meta__TOperationHandle, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TOperationHandle
-meta(t::Type{TOperationHandle}) = meta(t, Symbol[:modifiedRowCount], Int[], Dict{Symbol,Any}())
+
+const __meta__TOperationHandle = meta(TOperationHandle,
+  Symbol[:operationId,:operationType,:hasResultSet,:modifiedRowCount],
+  Type[THandleIdentifier,Int32,Bool,Float64],
+  Symbol[:modifiedRowCount],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TOperationHandle, name::Symbol)
+  if name === :operationId
+    return (obj.values[name])::THandleIdentifier
+  elseif name === :operationType
+    return (obj.values[name])::Int32
+  elseif name === :hasResultSet
+    return (obj.values[name])::Bool
+  elseif name === :modifiedRowCount
+    return (obj.values[name])::Float64
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TOperationHandle}) = __meta__TOperationHandle
+
 
 mutable struct TOpenSessionReq <: Thrift.TMsg
-  client_protocol::Int32
-  username::String
-  password::String
-  configuration::Dict{String,String}
-  TOpenSessionReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TOpenSessionReq(; kwargs...)
+    obj = new(__meta__TOpenSessionReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TOpenSessionReq
-meta(t::Type{TOpenSessionReq}) = meta(t, Symbol[:username,:password,:configuration], Int[], Dict{Symbol,Any}(:client_protocol => Int32(9)))
+
+const __meta__TOpenSessionReq = meta(TOpenSessionReq,
+  Symbol[:client_protocol,:username,:password,:configuration],
+  Type[Int32,String,String,Dict{String,String}],
+  Symbol[:username,:password,:configuration],
+  Int[],
+  Dict{Symbol,Any}(:client_protocol => Int32(9))
+)
+
+function Base.getproperty(obj::TOpenSessionReq, name::Symbol)
+  if name === :client_protocol
+    return (obj.values[name])::Int32
+  elseif name === :username
+    return (obj.values[name])::String
+  elseif name === :password
+    return (obj.values[name])::String
+  elseif name === :configuration
+    return (obj.values[name])::Dict{String,String}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TOpenSessionReq}) = __meta__TOpenSessionReq
+
 
 mutable struct TOpenSessionResp <: Thrift.TMsg
-  status::TStatus
-  serverProtocolVersion::Int32
-  sessionHandle::TSessionHandle
-  configuration::Dict{String,String}
-  TOpenSessionResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TOpenSessionResp(; kwargs...)
+    obj = new(__meta__TOpenSessionResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TOpenSessionResp
-meta(t::Type{TOpenSessionResp}) = meta(t, Symbol[:sessionHandle,:configuration], Int[], Dict{Symbol,Any}(:serverProtocolVersion => Int32(9)))
+
+const __meta__TOpenSessionResp = meta(TOpenSessionResp,
+  Symbol[:status,:serverProtocolVersion,:sessionHandle,:configuration],
+  Type[TStatus,Int32,TSessionHandle,Dict{String,String}],
+  Symbol[:sessionHandle,:configuration],
+  Int[],
+  Dict{Symbol,Any}(:serverProtocolVersion => Int32(9))
+)
+
+function Base.getproperty(obj::TOpenSessionResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :serverProtocolVersion
+    return (obj.values[name])::Int32
+  elseif name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  elseif name === :configuration
+    return (obj.values[name])::Dict{String,String}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TOpenSessionResp}) = __meta__TOpenSessionResp
+
 
 mutable struct TSetClientInfoReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  configuration::Dict{String,String}
-  TSetClientInfoReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TSetClientInfoReq(; kwargs...)
+    obj = new(__meta__TSetClientInfoReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TSetClientInfoReq
-meta(t::Type{TSetClientInfoReq}) = meta(t, Symbol[:configuration], Int[], Dict{Symbol,Any}())
+
+const __meta__TSetClientInfoReq = meta(TSetClientInfoReq,
+  Symbol[:sessionHandle,:configuration],
+  Type[TSessionHandle,Dict{String,String}],
+  Symbol[:configuration],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TSetClientInfoReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  elseif name === :configuration
+    return (obj.values[name])::Dict{String,String}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TSetClientInfoReq}) = __meta__TSetClientInfoReq
+
 
 mutable struct TSetClientInfoResp <: Thrift.TMsg
-  status::TStatus
-  TSetClientInfoResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TSetClientInfoResp(; kwargs...)
+    obj = new(__meta__TSetClientInfoResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TSetClientInfoResp
 
+const __meta__TSetClientInfoResp = meta(TSetClientInfoResp,
+  Symbol[:status],
+  Type[TStatus],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TSetClientInfoResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TSetClientInfoResp}) = __meta__TSetClientInfoResp
+
+
 mutable struct TCloseSessionReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  TCloseSessionReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TCloseSessionReq(; kwargs...)
+    obj = new(__meta__TCloseSessionReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TCloseSessionReq
 
+const __meta__TCloseSessionReq = meta(TCloseSessionReq,
+  Symbol[:sessionHandle],
+  Type[TSessionHandle],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TCloseSessionReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TCloseSessionReq}) = __meta__TCloseSessionReq
+
+
 mutable struct TCloseSessionResp <: Thrift.TMsg
-  status::TStatus
-  TCloseSessionResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TCloseSessionResp(; kwargs...)
+    obj = new(__meta__TCloseSessionResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TCloseSessionResp
 
+const __meta__TCloseSessionResp = meta(TCloseSessionResp,
+  Symbol[:status],
+  Type[TStatus],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TCloseSessionResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TCloseSessionResp}) = __meta__TCloseSessionResp
+
+
 mutable struct TGetInfoValue <: Thrift.TMsg
-  stringValue::String
-  smallIntValue::Int16
-  integerBitmask::Int32
-  integerFlag::Int32
-  binaryValue::Int32
-  lenValue::Int64
-  TGetInfoValue() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetInfoValue(; kwargs...)
+    obj = new(__meta__TGetInfoValue, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetInfoValue
-meta(t::Type{TGetInfoValue}) = meta(t, Symbol[:stringValue,:smallIntValue,:integerBitmask,:integerFlag,:binaryValue,:lenValue], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetInfoValue = meta(TGetInfoValue,
+  Symbol[:stringValue,:smallIntValue,:integerBitmask,:integerFlag,:binaryValue,:lenValue],
+  Type[String,Int16,Int32,Int32,Int32,Int64],
+  Symbol[:stringValue,:smallIntValue,:integerBitmask,:integerFlag,:binaryValue,:lenValue],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetInfoValue, name::Symbol)
+  if name === :stringValue
+    return (obj.values[name])::String
+  elseif name === :smallIntValue
+    return (obj.values[name])::Int16
+  elseif name === :integerBitmask
+    return (obj.values[name])::Int32
+  elseif name === :integerFlag
+    return (obj.values[name])::Int32
+  elseif name === :binaryValue
+    return (obj.values[name])::Int32
+  elseif name === :lenValue
+    return (obj.values[name])::Int64
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetInfoValue}) = __meta__TGetInfoValue
+
 
 mutable struct TGetInfoReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  infoType::Int32
-  TGetInfoReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetInfoReq(; kwargs...)
+    obj = new(__meta__TGetInfoReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetInfoReq
 
+const __meta__TGetInfoReq = meta(TGetInfoReq,
+  Symbol[:sessionHandle,:infoType],
+  Type[TSessionHandle,Int32],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetInfoReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  elseif name === :infoType
+    return (obj.values[name])::Int32
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetInfoReq}) = __meta__TGetInfoReq
+
+
 mutable struct TGetInfoResp <: Thrift.TMsg
-  status::TStatus
-  infoValue::TGetInfoValue
-  TGetInfoResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetInfoResp(; kwargs...)
+    obj = new(__meta__TGetInfoResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetInfoResp
 
+const __meta__TGetInfoResp = meta(TGetInfoResp,
+  Symbol[:status,:infoValue],
+  Type[TStatus,TGetInfoValue],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetInfoResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :infoValue
+    return (obj.values[name])::TGetInfoValue
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetInfoResp}) = __meta__TGetInfoResp
+
+
 mutable struct TExecuteStatementReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  statement::String
-  confOverlay::Dict{String,String}
-  runAsync::Bool
-  queryTimeout::Int64
-  TExecuteStatementReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TExecuteStatementReq(; kwargs...)
+    obj = new(__meta__TExecuteStatementReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TExecuteStatementReq
-meta(t::Type{TExecuteStatementReq}) = meta(t, Symbol[:confOverlay,:runAsync,:queryTimeout], Int[], Dict{Symbol,Any}(:runAsync => false, :queryTimeout => Int64(0)))
+
+const __meta__TExecuteStatementReq = meta(TExecuteStatementReq,
+  Symbol[:sessionHandle,:statement,:confOverlay,:runAsync,:queryTimeout],
+  Type[TSessionHandle,String,Dict{String,String},Bool,Int64],
+  Symbol[:confOverlay,:runAsync,:queryTimeout],
+  Int[],
+  Dict{Symbol,Any}(:runAsync => false, :queryTimeout => Int64(0))
+)
+
+function Base.getproperty(obj::TExecuteStatementReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  elseif name === :statement
+    return (obj.values[name])::String
+  elseif name === :confOverlay
+    return (obj.values[name])::Dict{String,String}
+  elseif name === :runAsync
+    return (obj.values[name])::Bool
+  elseif name === :queryTimeout
+    return (obj.values[name])::Int64
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TExecuteStatementReq}) = __meta__TExecuteStatementReq
+
 
 mutable struct TExecuteStatementResp <: Thrift.TMsg
-  status::TStatus
-  operationHandle::TOperationHandle
-  TExecuteStatementResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TExecuteStatementResp(; kwargs...)
+    obj = new(__meta__TExecuteStatementResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TExecuteStatementResp
-meta(t::Type{TExecuteStatementResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
+
+const __meta__TExecuteStatementResp = meta(TExecuteStatementResp,
+  Symbol[:status,:operationHandle],
+  Type[TStatus,TOperationHandle],
+  Symbol[:operationHandle],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TExecuteStatementResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TExecuteStatementResp}) = __meta__TExecuteStatementResp
+
 
 mutable struct TGetTypeInfoReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  TGetTypeInfoReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetTypeInfoReq(; kwargs...)
+    obj = new(__meta__TGetTypeInfoReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetTypeInfoReq
 
+const __meta__TGetTypeInfoReq = meta(TGetTypeInfoReq,
+  Symbol[:sessionHandle],
+  Type[TSessionHandle],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetTypeInfoReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetTypeInfoReq}) = __meta__TGetTypeInfoReq
+
+
 mutable struct TGetTypeInfoResp <: Thrift.TMsg
-  status::TStatus
-  operationHandle::TOperationHandle
-  TGetTypeInfoResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetTypeInfoResp(; kwargs...)
+    obj = new(__meta__TGetTypeInfoResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetTypeInfoResp
-meta(t::Type{TGetTypeInfoResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetTypeInfoResp = meta(TGetTypeInfoResp,
+  Symbol[:status,:operationHandle],
+  Type[TStatus,TOperationHandle],
+  Symbol[:operationHandle],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetTypeInfoResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetTypeInfoResp}) = __meta__TGetTypeInfoResp
+
 
 mutable struct TGetCatalogsReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  TGetCatalogsReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetCatalogsReq(; kwargs...)
+    obj = new(__meta__TGetCatalogsReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetCatalogsReq
 
+const __meta__TGetCatalogsReq = meta(TGetCatalogsReq,
+  Symbol[:sessionHandle],
+  Type[TSessionHandle],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetCatalogsReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetCatalogsReq}) = __meta__TGetCatalogsReq
+
+
 mutable struct TGetCatalogsResp <: Thrift.TMsg
-  status::TStatus
-  operationHandle::TOperationHandle
-  TGetCatalogsResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetCatalogsResp(; kwargs...)
+    obj = new(__meta__TGetCatalogsResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetCatalogsResp
-meta(t::Type{TGetCatalogsResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetCatalogsResp = meta(TGetCatalogsResp,
+  Symbol[:status,:operationHandle],
+  Type[TStatus,TOperationHandle],
+  Symbol[:operationHandle],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetCatalogsResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetCatalogsResp}) = __meta__TGetCatalogsResp
+
 
 mutable struct TGetSchemasReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  catalogName::TIdentifier
-  schemaName::TPatternOrIdentifier
-  TGetSchemasReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetSchemasReq(; kwargs...)
+    obj = new(__meta__TGetSchemasReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetSchemasReq
-meta(t::Type{TGetSchemasReq}) = meta(t, Symbol[:catalogName,:schemaName], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetSchemasReq = meta(TGetSchemasReq,
+  Symbol[:sessionHandle,:catalogName,:schemaName],
+  Type[TSessionHandle,TIdentifier,TPatternOrIdentifier],
+  Symbol[:catalogName,:schemaName],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetSchemasReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  elseif name === :catalogName
+    return (obj.values[name])::TIdentifier
+  elseif name === :schemaName
+    return (obj.values[name])::TPatternOrIdentifier
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetSchemasReq}) = __meta__TGetSchemasReq
+
 
 mutable struct TGetSchemasResp <: Thrift.TMsg
-  status::TStatus
-  operationHandle::TOperationHandle
-  TGetSchemasResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetSchemasResp(; kwargs...)
+    obj = new(__meta__TGetSchemasResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetSchemasResp
-meta(t::Type{TGetSchemasResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetSchemasResp = meta(TGetSchemasResp,
+  Symbol[:status,:operationHandle],
+  Type[TStatus,TOperationHandle],
+  Symbol[:operationHandle],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetSchemasResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetSchemasResp}) = __meta__TGetSchemasResp
+
 
 mutable struct TGetTablesReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  catalogName::TPatternOrIdentifier
-  schemaName::TPatternOrIdentifier
-  tableName::TPatternOrIdentifier
-  tableTypes::Vector{String}
-  TGetTablesReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetTablesReq(; kwargs...)
+    obj = new(__meta__TGetTablesReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetTablesReq
-meta(t::Type{TGetTablesReq}) = meta(t, Symbol[:catalogName,:schemaName,:tableName,:tableTypes], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetTablesReq = meta(TGetTablesReq,
+  Symbol[:sessionHandle,:catalogName,:schemaName,:tableName,:tableTypes],
+  Type[TSessionHandle,TPatternOrIdentifier,TPatternOrIdentifier,TPatternOrIdentifier,Vector{String}],
+  Symbol[:catalogName,:schemaName,:tableName,:tableTypes],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetTablesReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  elseif name === :catalogName
+    return (obj.values[name])::TPatternOrIdentifier
+  elseif name === :schemaName
+    return (obj.values[name])::TPatternOrIdentifier
+  elseif name === :tableName
+    return (obj.values[name])::TPatternOrIdentifier
+  elseif name === :tableTypes
+    return (obj.values[name])::Vector{String}
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetTablesReq}) = __meta__TGetTablesReq
+
 
 mutable struct TGetTablesResp <: Thrift.TMsg
-  status::TStatus
-  operationHandle::TOperationHandle
-  TGetTablesResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetTablesResp(; kwargs...)
+    obj = new(__meta__TGetTablesResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetTablesResp
-meta(t::Type{TGetTablesResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetTablesResp = meta(TGetTablesResp,
+  Symbol[:status,:operationHandle],
+  Type[TStatus,TOperationHandle],
+  Symbol[:operationHandle],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetTablesResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetTablesResp}) = __meta__TGetTablesResp
+
 
 mutable struct TGetTableTypesReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  TGetTableTypesReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetTableTypesReq(; kwargs...)
+    obj = new(__meta__TGetTableTypesReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetTableTypesReq
 
+const __meta__TGetTableTypesReq = meta(TGetTableTypesReq,
+  Symbol[:sessionHandle],
+  Type[TSessionHandle],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetTableTypesReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetTableTypesReq}) = __meta__TGetTableTypesReq
+
+
 mutable struct TGetTableTypesResp <: Thrift.TMsg
-  status::TStatus
-  operationHandle::TOperationHandle
-  TGetTableTypesResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetTableTypesResp(; kwargs...)
+    obj = new(__meta__TGetTableTypesResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetTableTypesResp
-meta(t::Type{TGetTableTypesResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetTableTypesResp = meta(TGetTableTypesResp,
+  Symbol[:status,:operationHandle],
+  Type[TStatus,TOperationHandle],
+  Symbol[:operationHandle],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetTableTypesResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetTableTypesResp}) = __meta__TGetTableTypesResp
+
 
 mutable struct TGetColumnsReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  catalogName::TIdentifier
-  schemaName::TPatternOrIdentifier
-  tableName::TPatternOrIdentifier
-  columnName::TPatternOrIdentifier
-  TGetColumnsReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetColumnsReq(; kwargs...)
+    obj = new(__meta__TGetColumnsReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetColumnsReq
-meta(t::Type{TGetColumnsReq}) = meta(t, Symbol[:catalogName,:schemaName,:tableName,:columnName], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetColumnsReq = meta(TGetColumnsReq,
+  Symbol[:sessionHandle,:catalogName,:schemaName,:tableName,:columnName],
+  Type[TSessionHandle,TIdentifier,TPatternOrIdentifier,TPatternOrIdentifier,TPatternOrIdentifier],
+  Symbol[:catalogName,:schemaName,:tableName,:columnName],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetColumnsReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  elseif name === :catalogName
+    return (obj.values[name])::TIdentifier
+  elseif name === :schemaName
+    return (obj.values[name])::TPatternOrIdentifier
+  elseif name === :tableName
+    return (obj.values[name])::TPatternOrIdentifier
+  elseif name === :columnName
+    return (obj.values[name])::TPatternOrIdentifier
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetColumnsReq}) = __meta__TGetColumnsReq
+
 
 mutable struct TGetColumnsResp <: Thrift.TMsg
-  status::TStatus
-  operationHandle::TOperationHandle
-  TGetColumnsResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetColumnsResp(; kwargs...)
+    obj = new(__meta__TGetColumnsResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetColumnsResp
-meta(t::Type{TGetColumnsResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetColumnsResp = meta(TGetColumnsResp,
+  Symbol[:status,:operationHandle],
+  Type[TStatus,TOperationHandle],
+  Symbol[:operationHandle],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetColumnsResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetColumnsResp}) = __meta__TGetColumnsResp
+
 
 mutable struct TGetFunctionsReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  catalogName::TIdentifier
-  schemaName::TPatternOrIdentifier
-  functionName::TPatternOrIdentifier
-  TGetFunctionsReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetFunctionsReq(; kwargs...)
+    obj = new(__meta__TGetFunctionsReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetFunctionsReq
-meta(t::Type{TGetFunctionsReq}) = meta(t, Symbol[:catalogName,:schemaName], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetFunctionsReq = meta(TGetFunctionsReq,
+  Symbol[:sessionHandle,:catalogName,:schemaName,:functionName],
+  Type[TSessionHandle,TIdentifier,TPatternOrIdentifier,TPatternOrIdentifier],
+  Symbol[:catalogName,:schemaName],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetFunctionsReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  elseif name === :catalogName
+    return (obj.values[name])::TIdentifier
+  elseif name === :schemaName
+    return (obj.values[name])::TPatternOrIdentifier
+  elseif name === :functionName
+    return (obj.values[name])::TPatternOrIdentifier
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetFunctionsReq}) = __meta__TGetFunctionsReq
+
 
 mutable struct TGetFunctionsResp <: Thrift.TMsg
-  status::TStatus
-  operationHandle::TOperationHandle
-  TGetFunctionsResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetFunctionsResp(; kwargs...)
+    obj = new(__meta__TGetFunctionsResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetFunctionsResp
-meta(t::Type{TGetFunctionsResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetFunctionsResp = meta(TGetFunctionsResp,
+  Symbol[:status,:operationHandle],
+  Type[TStatus,TOperationHandle],
+  Symbol[:operationHandle],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetFunctionsResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetFunctionsResp}) = __meta__TGetFunctionsResp
+
 
 mutable struct TGetPrimaryKeysReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  catalogName::TIdentifier
-  schemaName::TIdentifier
-  tableName::TIdentifier
-  TGetPrimaryKeysReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetPrimaryKeysReq(; kwargs...)
+    obj = new(__meta__TGetPrimaryKeysReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetPrimaryKeysReq
-meta(t::Type{TGetPrimaryKeysReq}) = meta(t, Symbol[:catalogName,:schemaName,:tableName], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetPrimaryKeysReq = meta(TGetPrimaryKeysReq,
+  Symbol[:sessionHandle,:catalogName,:schemaName,:tableName],
+  Type[TSessionHandle,TIdentifier,TIdentifier,TIdentifier],
+  Symbol[:catalogName,:schemaName,:tableName],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetPrimaryKeysReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  elseif name === :catalogName
+    return (obj.values[name])::TIdentifier
+  elseif name === :schemaName
+    return (obj.values[name])::TIdentifier
+  elseif name === :tableName
+    return (obj.values[name])::TIdentifier
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetPrimaryKeysReq}) = __meta__TGetPrimaryKeysReq
+
 
 mutable struct TGetPrimaryKeysResp <: Thrift.TMsg
-  status::TStatus
-  operationHandle::TOperationHandle
-  TGetPrimaryKeysResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetPrimaryKeysResp(; kwargs...)
+    obj = new(__meta__TGetPrimaryKeysResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetPrimaryKeysResp
-meta(t::Type{TGetPrimaryKeysResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetPrimaryKeysResp = meta(TGetPrimaryKeysResp,
+  Symbol[:status,:operationHandle],
+  Type[TStatus,TOperationHandle],
+  Symbol[:operationHandle],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetPrimaryKeysResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetPrimaryKeysResp}) = __meta__TGetPrimaryKeysResp
+
 
 mutable struct TGetCrossReferenceReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  parentCatalogName::TIdentifier
-  parentSchemaName::TIdentifier
-  parentTableName::TIdentifier
-  foreignCatalogName::TIdentifier
-  foreignSchemaName::TIdentifier
-  foreignTableName::TIdentifier
-  TGetCrossReferenceReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetCrossReferenceReq(; kwargs...)
+    obj = new(__meta__TGetCrossReferenceReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetCrossReferenceReq
-meta(t::Type{TGetCrossReferenceReq}) = meta(t, Symbol[:parentCatalogName,:parentSchemaName,:parentTableName,:foreignCatalogName,:foreignSchemaName,:foreignTableName], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetCrossReferenceReq = meta(TGetCrossReferenceReq,
+  Symbol[:sessionHandle,:parentCatalogName,:parentSchemaName,:parentTableName,:foreignCatalogName,:foreignSchemaName,:foreignTableName],
+  Type[TSessionHandle,TIdentifier,TIdentifier,TIdentifier,TIdentifier,TIdentifier,TIdentifier],
+  Symbol[:parentCatalogName,:parentSchemaName,:parentTableName,:foreignCatalogName,:foreignSchemaName,:foreignTableName],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetCrossReferenceReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  elseif name === :parentCatalogName
+    return (obj.values[name])::TIdentifier
+  elseif name === :parentSchemaName
+    return (obj.values[name])::TIdentifier
+  elseif name === :parentTableName
+    return (obj.values[name])::TIdentifier
+  elseif name === :foreignCatalogName
+    return (obj.values[name])::TIdentifier
+  elseif name === :foreignSchemaName
+    return (obj.values[name])::TIdentifier
+  elseif name === :foreignTableName
+    return (obj.values[name])::TIdentifier
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetCrossReferenceReq}) = __meta__TGetCrossReferenceReq
+
 
 mutable struct TGetCrossReferenceResp <: Thrift.TMsg
-  status::TStatus
-  operationHandle::TOperationHandle
-  TGetCrossReferenceResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetCrossReferenceResp(; kwargs...)
+    obj = new(__meta__TGetCrossReferenceResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetCrossReferenceResp
-meta(t::Type{TGetCrossReferenceResp}) = meta(t, Symbol[:operationHandle], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetCrossReferenceResp = meta(TGetCrossReferenceResp,
+  Symbol[:status,:operationHandle],
+  Type[TStatus,TOperationHandle],
+  Symbol[:operationHandle],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetCrossReferenceResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetCrossReferenceResp}) = __meta__TGetCrossReferenceResp
+
 
 mutable struct TGetOperationStatusReq <: Thrift.TMsg
-  operationHandle::TOperationHandle
-  getProgressUpdate::Bool
-  TGetOperationStatusReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetOperationStatusReq(; kwargs...)
+    obj = new(__meta__TGetOperationStatusReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetOperationStatusReq
-meta(t::Type{TGetOperationStatusReq}) = meta(t, Symbol[:getProgressUpdate], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetOperationStatusReq = meta(TGetOperationStatusReq,
+  Symbol[:operationHandle,:getProgressUpdate],
+  Type[TOperationHandle,Bool],
+  Symbol[:getProgressUpdate],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetOperationStatusReq, name::Symbol)
+  if name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  elseif name === :getProgressUpdate
+    return (obj.values[name])::Bool
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetOperationStatusReq}) = __meta__TGetOperationStatusReq
+
 
 mutable struct TProgressUpdateResp <: Thrift.TMsg
-  headerNames::Vector{String}
-  rows::Vector{Vector{String}}
-  progressedPercentage::Float64
-  status::Int32
-  footerSummary::String
-  startTime::Int64
-  TProgressUpdateResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TProgressUpdateResp(; kwargs...)
+    obj = new(__meta__TProgressUpdateResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TProgressUpdateResp
 
+const __meta__TProgressUpdateResp = meta(TProgressUpdateResp,
+  Symbol[:headerNames,:rows,:progressedPercentage,:status,:footerSummary,:startTime],
+  Type[Vector{String},Vector{Vector{String}},Float64,Int32,String,Int64],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TProgressUpdateResp, name::Symbol)
+  if name === :headerNames
+    return (obj.values[name])::Vector{String}
+  elseif name === :rows
+    return (obj.values[name])::Vector{Vector{String}}
+  elseif name === :progressedPercentage
+    return (obj.values[name])::Float64
+  elseif name === :status
+    return (obj.values[name])::Int32
+  elseif name === :footerSummary
+    return (obj.values[name])::String
+  elseif name === :startTime
+    return (obj.values[name])::Int64
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TProgressUpdateResp}) = __meta__TProgressUpdateResp
+
+
 mutable struct TGetOperationStatusResp <: Thrift.TMsg
-  status::TStatus
-  operationState::Int32
-  sqlState::String
-  errorCode::Int32
-  errorMessage::String
-  taskStatus::String
-  operationStarted::Int64
-  operationCompleted::Int64
-  hasResultSet::Bool
-  progressUpdateResponse::TProgressUpdateResp
-  numModifiedRows::Int64
-  TGetOperationStatusResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetOperationStatusResp(; kwargs...)
+    obj = new(__meta__TGetOperationStatusResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetOperationStatusResp
-meta(t::Type{TGetOperationStatusResp}) = meta(t, Symbol[:operationState,:sqlState,:errorCode,:errorMessage,:taskStatus,:operationStarted,:operationCompleted,:hasResultSet,:progressUpdateResponse,:numModifiedRows], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetOperationStatusResp = meta(TGetOperationStatusResp,
+  Symbol[:status,:operationState,:sqlState,:errorCode,:errorMessage,:taskStatus,:operationStarted,:operationCompleted,:hasResultSet,:progressUpdateResponse,:numModifiedRows],
+  Type[TStatus,Int32,String,Int32,String,String,Int64,Int64,Bool,TProgressUpdateResp,Int64],
+  Symbol[:operationState,:sqlState,:errorCode,:errorMessage,:taskStatus,:operationStarted,:operationCompleted,:hasResultSet,:progressUpdateResponse,:numModifiedRows],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetOperationStatusResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :operationState
+    return (obj.values[name])::Int32
+  elseif name === :sqlState
+    return (obj.values[name])::String
+  elseif name === :errorCode
+    return (obj.values[name])::Int32
+  elseif name === :errorMessage
+    return (obj.values[name])::String
+  elseif name === :taskStatus
+    return (obj.values[name])::String
+  elseif name === :operationStarted
+    return (obj.values[name])::Int64
+  elseif name === :operationCompleted
+    return (obj.values[name])::Int64
+  elseif name === :hasResultSet
+    return (obj.values[name])::Bool
+  elseif name === :progressUpdateResponse
+    return (obj.values[name])::TProgressUpdateResp
+  elseif name === :numModifiedRows
+    return (obj.values[name])::Int64
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetOperationStatusResp}) = __meta__TGetOperationStatusResp
+
 
 mutable struct TCancelOperationReq <: Thrift.TMsg
-  operationHandle::TOperationHandle
-  TCancelOperationReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TCancelOperationReq(; kwargs...)
+    obj = new(__meta__TCancelOperationReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TCancelOperationReq
 
+const __meta__TCancelOperationReq = meta(TCancelOperationReq,
+  Symbol[:operationHandle],
+  Type[TOperationHandle],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TCancelOperationReq, name::Symbol)
+  if name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TCancelOperationReq}) = __meta__TCancelOperationReq
+
+
 mutable struct TCancelOperationResp <: Thrift.TMsg
-  status::TStatus
-  TCancelOperationResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TCancelOperationResp(; kwargs...)
+    obj = new(__meta__TCancelOperationResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TCancelOperationResp
 
+const __meta__TCancelOperationResp = meta(TCancelOperationResp,
+  Symbol[:status],
+  Type[TStatus],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TCancelOperationResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TCancelOperationResp}) = __meta__TCancelOperationResp
+
+
 mutable struct TCloseOperationReq <: Thrift.TMsg
-  operationHandle::TOperationHandle
-  TCloseOperationReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TCloseOperationReq(; kwargs...)
+    obj = new(__meta__TCloseOperationReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TCloseOperationReq
 
+const __meta__TCloseOperationReq = meta(TCloseOperationReq,
+  Symbol[:operationHandle],
+  Type[TOperationHandle],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TCloseOperationReq, name::Symbol)
+  if name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TCloseOperationReq}) = __meta__TCloseOperationReq
+
+
 mutable struct TCloseOperationResp <: Thrift.TMsg
-  status::TStatus
-  TCloseOperationResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TCloseOperationResp(; kwargs...)
+    obj = new(__meta__TCloseOperationResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TCloseOperationResp
 
+const __meta__TCloseOperationResp = meta(TCloseOperationResp,
+  Symbol[:status],
+  Type[TStatus],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TCloseOperationResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TCloseOperationResp}) = __meta__TCloseOperationResp
+
+
 mutable struct TGetResultSetMetadataReq <: Thrift.TMsg
-  operationHandle::TOperationHandle
-  TGetResultSetMetadataReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetResultSetMetadataReq(; kwargs...)
+    obj = new(__meta__TGetResultSetMetadataReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetResultSetMetadataReq
 
+const __meta__TGetResultSetMetadataReq = meta(TGetResultSetMetadataReq,
+  Symbol[:operationHandle],
+  Type[TOperationHandle],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetResultSetMetadataReq, name::Symbol)
+  if name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetResultSetMetadataReq}) = __meta__TGetResultSetMetadataReq
+
+
 mutable struct TGetResultSetMetadataResp <: Thrift.TMsg
-  status::TStatus
-  schema::TTableSchema
-  TGetResultSetMetadataResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetResultSetMetadataResp(; kwargs...)
+    obj = new(__meta__TGetResultSetMetadataResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetResultSetMetadataResp
-meta(t::Type{TGetResultSetMetadataResp}) = meta(t, Symbol[:schema], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetResultSetMetadataResp = meta(TGetResultSetMetadataResp,
+  Symbol[:status,:schema],
+  Type[TStatus,TTableSchema],
+  Symbol[:schema],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetResultSetMetadataResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :schema
+    return (obj.values[name])::TTableSchema
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetResultSetMetadataResp}) = __meta__TGetResultSetMetadataResp
+
 
 mutable struct TFetchResultsReq <: Thrift.TMsg
-  operationHandle::TOperationHandle
-  orientation::Int32
-  maxRows::Int64
-  fetchType::Int16
-  TFetchResultsReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TFetchResultsReq(; kwargs...)
+    obj = new(__meta__TFetchResultsReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TFetchResultsReq
-meta(t::Type{TFetchResultsReq}) = meta(t, Symbol[:fetchType], Int[], Dict{Symbol,Any}(:orientation => Int32(0), :fetchType => Int16(0)))
+
+const __meta__TFetchResultsReq = meta(TFetchResultsReq,
+  Symbol[:operationHandle,:orientation,:maxRows,:fetchType],
+  Type[TOperationHandle,Int32,Int64,Int16],
+  Symbol[:fetchType],
+  Int[],
+  Dict{Symbol,Any}(:orientation => Int32(0), :fetchType => Int16(0))
+)
+
+function Base.getproperty(obj::TFetchResultsReq, name::Symbol)
+  if name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  elseif name === :orientation
+    return (obj.values[name])::Int32
+  elseif name === :maxRows
+    return (obj.values[name])::Int64
+  elseif name === :fetchType
+    return (obj.values[name])::Int16
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TFetchResultsReq}) = __meta__TFetchResultsReq
+
 
 mutable struct TFetchResultsResp <: Thrift.TMsg
-  status::TStatus
-  hasMoreRows::Bool
-  results::TRowSet
-  TFetchResultsResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TFetchResultsResp(; kwargs...)
+    obj = new(__meta__TFetchResultsResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TFetchResultsResp
-meta(t::Type{TFetchResultsResp}) = meta(t, Symbol[:hasMoreRows,:results], Int[], Dict{Symbol,Any}())
+
+const __meta__TFetchResultsResp = meta(TFetchResultsResp,
+  Symbol[:status,:hasMoreRows,:results],
+  Type[TStatus,Bool,TRowSet],
+  Symbol[:hasMoreRows,:results],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TFetchResultsResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :hasMoreRows
+    return (obj.values[name])::Bool
+  elseif name === :results
+    return (obj.values[name])::TRowSet
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TFetchResultsResp}) = __meta__TFetchResultsResp
+
 
 mutable struct TGetDelegationTokenReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  owner::String
-  renewer::String
-  TGetDelegationTokenReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetDelegationTokenReq(; kwargs...)
+    obj = new(__meta__TGetDelegationTokenReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetDelegationTokenReq
 
+const __meta__TGetDelegationTokenReq = meta(TGetDelegationTokenReq,
+  Symbol[:sessionHandle,:owner,:renewer],
+  Type[TSessionHandle,String,String],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetDelegationTokenReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  elseif name === :owner
+    return (obj.values[name])::String
+  elseif name === :renewer
+    return (obj.values[name])::String
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetDelegationTokenReq}) = __meta__TGetDelegationTokenReq
+
+
 mutable struct TGetDelegationTokenResp <: Thrift.TMsg
-  status::TStatus
-  delegationToken::String
-  TGetDelegationTokenResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetDelegationTokenResp(; kwargs...)
+    obj = new(__meta__TGetDelegationTokenResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetDelegationTokenResp
-meta(t::Type{TGetDelegationTokenResp}) = meta(t, Symbol[:delegationToken], Int[], Dict{Symbol,Any}())
+
+const __meta__TGetDelegationTokenResp = meta(TGetDelegationTokenResp,
+  Symbol[:status,:delegationToken],
+  Type[TStatus,String],
+  Symbol[:delegationToken],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetDelegationTokenResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  elseif name === :delegationToken
+    return (obj.values[name])::String
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetDelegationTokenResp}) = __meta__TGetDelegationTokenResp
+
 
 mutable struct TCancelDelegationTokenReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  delegationToken::String
-  TCancelDelegationTokenReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TCancelDelegationTokenReq(; kwargs...)
+    obj = new(__meta__TCancelDelegationTokenReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TCancelDelegationTokenReq
 
+const __meta__TCancelDelegationTokenReq = meta(TCancelDelegationTokenReq,
+  Symbol[:sessionHandle,:delegationToken],
+  Type[TSessionHandle,String],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TCancelDelegationTokenReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  elseif name === :delegationToken
+    return (obj.values[name])::String
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TCancelDelegationTokenReq}) = __meta__TCancelDelegationTokenReq
+
+
 mutable struct TCancelDelegationTokenResp <: Thrift.TMsg
-  status::TStatus
-  TCancelDelegationTokenResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TCancelDelegationTokenResp(; kwargs...)
+    obj = new(__meta__TCancelDelegationTokenResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TCancelDelegationTokenResp
 
+const __meta__TCancelDelegationTokenResp = meta(TCancelDelegationTokenResp,
+  Symbol[:status],
+  Type[TStatus],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TCancelDelegationTokenResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TCancelDelegationTokenResp}) = __meta__TCancelDelegationTokenResp
+
+
 mutable struct TRenewDelegationTokenReq <: Thrift.TMsg
-  sessionHandle::TSessionHandle
-  delegationToken::String
-  TRenewDelegationTokenReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TRenewDelegationTokenReq(; kwargs...)
+    obj = new(__meta__TRenewDelegationTokenReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TRenewDelegationTokenReq
 
+const __meta__TRenewDelegationTokenReq = meta(TRenewDelegationTokenReq,
+  Symbol[:sessionHandle,:delegationToken],
+  Type[TSessionHandle,String],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TRenewDelegationTokenReq, name::Symbol)
+  if name === :sessionHandle
+    return (obj.values[name])::TSessionHandle
+  elseif name === :delegationToken
+    return (obj.values[name])::String
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TRenewDelegationTokenReq}) = __meta__TRenewDelegationTokenReq
+
+
 mutable struct TRenewDelegationTokenResp <: Thrift.TMsg
-  status::TStatus
-  TRenewDelegationTokenResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TRenewDelegationTokenResp(; kwargs...)
+    obj = new(__meta__TRenewDelegationTokenResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TRenewDelegationTokenResp
 
+const __meta__TRenewDelegationTokenResp = meta(TRenewDelegationTokenResp,
+  Symbol[:status],
+  Type[TStatus],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TRenewDelegationTokenResp, name::Symbol)
+  if name === :status
+    return (obj.values[name])::TStatus
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TRenewDelegationTokenResp}) = __meta__TRenewDelegationTokenResp
+
+
 mutable struct TGetQueryIdReq <: Thrift.TMsg
-  operationHandle::TOperationHandle
-  TGetQueryIdReq() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetQueryIdReq(; kwargs...)
+    obj = new(__meta__TGetQueryIdReq, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetQueryIdReq
 
+const __meta__TGetQueryIdReq = meta(TGetQueryIdReq,
+  Symbol[:operationHandle],
+  Type[TOperationHandle],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetQueryIdReq, name::Symbol)
+  if name === :operationHandle
+    return (obj.values[name])::TOperationHandle
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetQueryIdReq}) = __meta__TGetQueryIdReq
+
+
 mutable struct TGetQueryIdResp <: Thrift.TMsg
-  queryId::String
-  TGetQueryIdResp() = (o=new(); fillunset(o); o)
+  meta::ThriftMeta
+  values::Dict{Symbol,Any}
+  
+  function TGetQueryIdResp(; kwargs...)
+    obj = new(__meta__TGetQueryIdResp, Dict{Symbol,Any}())
+    values = obj.values
+    symdict = obj.meta.symdict
+    for nv in kwargs
+      fldname, fldval = nv
+      fldtype = symdict[fldname].jtype
+      (fldname in keys(symdict)) || error(string(typeof(obj), " has no field with name ", fldname))
+      values[fldname] = isa(fldval, fldtype) ? fldval : convert(fldtype, fldval)
+    end
+    Thrift.setdefaultproperties!(obj)
+    obj
+  end
 end # mutable struct TGetQueryIdResp
+
+const __meta__TGetQueryIdResp = meta(TGetQueryIdResp,
+  Symbol[:queryId],
+  Type[String],
+  Symbol[],
+  Int[],
+  Dict{Symbol,Any}()
+)
+
+function Base.getproperty(obj::TGetQueryIdResp, name::Symbol)
+  if name === :queryId
+    return (obj.values[name])::String
+  else
+    getfield(obj, name)
+  end
+end
+
+meta(::Type{TGetQueryIdResp}) = __meta__TGetQueryIdResp
+
 
 abstract type TCLIServiceClientBase end

@@ -1,4 +1,3 @@
-__precompile__(true)
 module Hive
 
 using Thrift
@@ -15,18 +14,6 @@ export tabular, tabulars, records, columnchunks, columnchunk
 export iterate, iteratorsize
 
 export InfoType
-
-# enable logging only during debugging
-#using Logging
-#const logger = Logging.configure(level=DEBUG)
-##const logger = Logging.configure(filename="/tmp/hive$(getpid()).log", level=DEBUG)
-#macro logmsg(s)
-#    quote
-#        debug($(esc(s)))
-#    end
-#end
-macro logmsg(s)
-end
 
 # package code goes here
 include("HS2/HS2.jl")

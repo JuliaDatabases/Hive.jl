@@ -27,7 +27,7 @@ Results are ordered by TABLE_CATALOG.
 """
 function catalogs(session::HiveSession; fetchsize::Integer=DEFAULT_FETCH_SIZE)
     conn = session.conn
-    request = thriftbuild(TGetCatalogsReq, Dict(:sessionHandle => conn.handle.sessionHandle))
+    request = TGetCatalogsReq(; sessionHandle=conn.handle.sessionHandle)
     response = GetCatalogs(conn.client, request)
     response_to_tabular(session, response, fetchsize; cached_schema=:catalogs)
 end
@@ -39,9 +39,9 @@ The results are ordered by TABLE_CATALOG and TABLE_SCHEM.
 function schemas(session::HiveSession; catalog_pattern::Pattern="", schema_pattern::Pattern="", fetchsize::Integer=DEFAULT_FETCH_SIZE)
     conn = session.conn
 
-    request = thriftbuild(TGetSchemasReq, Dict(:sessionHandle => conn.handle.sessionHandle))
-    isempty(catalog_pattern) || set_field!(request, :catalogName, catalog_pattern)
-    isempty(schema_pattern) || set_field!(request, :schemaName, schema_pattern)
+    request = TGetSchemasReq(; sessionHandle=conn.handle.sessionHandle)
+    isempty(catalog_pattern) || (request.catalogName = catalog_pattern)
+    isempty(schema_pattern) || (request.schemaName = schema_pattern)
 
     response = GetSchemas(conn.client, request)
     response_to_tabular(session, response, fetchsize; cached_schema=:schemas)
@@ -54,11 +54,11 @@ Results are ordered by TABLE_TYPE, TABLE_CAT, TABLE_SCHEM, and TABLE_NAME
 function tables(session::HiveSession; catalog_pattern::Pattern="", schema_pattern::Pattern="", table_pattern::Pattern="", table_types::Array=[], fetchsize::Integer=DEFAULT_FETCH_SIZE)
     conn = session.conn
 
-    request = thriftbuild(TGetTablesReq, Dict(:sessionHandle => conn.handle.sessionHandle))
-    isempty(catalog_pattern) || set_field!(request, :catalogName, catalog_pattern)
-    isempty(schema_pattern) || set_field!(request, :schemaName, schema_pattern)
-    isempty(table_pattern) || set_field!(request, :tableName, table_pattern)
-    isempty(table_types) || set_field!(request, :tableTypes, convert(Array{String,1}, table_types))
+    request = TGetTablesReq(; sessionHandle=conn.handle.sessionHandle)
+    isempty(catalog_pattern) || (request.catalogName = catalog_pattern)
+    isempty(schema_pattern) || (request.schemaName = schema_pattern)
+    isempty(table_pattern) || (request.tableName = table_pattern)
+    isempty(table_types) || (request.tableTypes = convert(Array{String,1}, table_types))
 
     response = GetTables(conn.client, request)
     response_to_tabular(session, response, fetchsize; cached_schema=:tables)
@@ -70,7 +70,7 @@ The results are ordered by table type.
 """
 function tabletypes(session::HiveSession; fetchsize::Integer=DEFAULT_FETCH_SIZE)
     conn = session.conn
-    request = thriftbuild(TGetTableTypesReq, Dict(:sessionHandle => conn.handle.sessionHandle))
+    request = TGetTableTypesReq(; sessionHandle=conn.handle.sessionHandle)
     response = GetTableTypes(conn.client, request)
     response_to_tabular(session, response, fetchsize; cached_schema=:tabletypes)
 end
@@ -84,11 +84,11 @@ Result Set Columns are the same as those for the ODBC CLIColumns function.
 function columns(session::HiveSession; catalog::AbstractString="", schema_pattern::Pattern="", table_pattern::Pattern="", column_pattern::Pattern="", fetchsize::Integer=DEFAULT_FETCH_SIZE)
     conn = session.conn
 
-    request = thriftbuild(TGetColumnsReq, Dict(:sessionHandle => conn.handle.sessionHandle))
-    isempty(catalog) || set_field!(request, :catalogName, catalog)
-    isempty(schema_pattern) || set_field!(request, :schemaName, schema_pattern)
-    isempty(table_pattern) || set_field!(request, :tableName, table_pattern)
-    isempty(column_pattern) || set_field!(request, :columnName, column_pattern)
+    request = TGetColumnsReq(; sessionHandle=conn.handle.sessionHandle)
+    isempty(catalog) || (request.catalogName = catalog)
+    isempty(schema_pattern) || (request.schemaName = schema_pattern)
+    isempty(table_pattern) || (request.tableName = table_pattern)
+    isempty(column_pattern) || (request.columnName = column_pattern)
 
     response = GetColumns(conn.client, request)
     response_to_tabular(session, response, fetchsize; cached_schema=:columns)
@@ -104,9 +104,9 @@ The behavior of this function matches `java.sql.DatabaseMetaData.getFunctions()`
 function functions(session::HiveSession, function_pattern::Pattern; catalog::AbstractString="", schema_pattern::Pattern="", fetchsize::Integer=DEFAULT_FETCH_SIZE)
     conn = session.conn
 
-    request = thriftbuild(TGetFunctionsReq, Dict(:sessionHandle => conn.handle.sessionHandle, :functionName => function_pattern))
-    isempty(catalog) || set_field!(request, :catalogName, catalog)
-    isempty(schema_pattern) || set_field!(request, :schemaName, schema_pattern)
+    request = TGetFunctionsReq(;sessionHandle=conn.handle.sessionHandle, functionName=function_pattern)
+    isempty(catalog) || (request.catalogName = catalog)
+    isempty(schema_pattern) || (request.schemaName = schema_pattern)
 
     response = GetFunctions(conn.client, request)
     response_to_tabular(session, response, fetchsize; cached_schema=:functions)
@@ -126,13 +126,13 @@ If the returned value is a PendingResult:
 function execute(session::HiveSession, statement::AbstractString; async::Bool=false, config::Dict=Dict())
     conn = session.conn
 
-    request = thriftbuild(TExecuteStatementReq, Dict(:sessionHandle => conn.handle.sessionHandle, :statement => statement, :runAsync => async))
+    request = TExecuteStatementReq(; sessionHandle=conn.handle.sessionHandle, statement=statement, runAsync=async)
     if !isempty(config)
         cfg = Dict{String,String}()
         for (k,v) in config
             cfg[string(k)] = string(v)
         end
-        set_field!(request, :confOverlay, cfg)
+        request.confOverlay = cfg
     end
 
     response = ExecuteStatement(conn.client, request)

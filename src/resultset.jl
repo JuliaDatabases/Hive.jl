@@ -52,7 +52,7 @@ function result(session::HiveSession, ready::Bool, handle::TOperationHandle)
 
     # modifiedRowCount >= 0 => number of rows affected is known
     # modifiedRowCount < 0 => operation is capable fo modifying rows, but the count is unknown. e.g. LOAD DATA
-    return isfilled(handle, :modifiedRowCount) ? handle.modifiedRowCount : 0
+    return hasproperty(handle, :modifiedRowCount) ? handle.modifiedRowCount : 0.0
 end
 
 eof(r::ResultSet) = r.eof
@@ -61,7 +61,7 @@ close(pending::PendingResult) = close(pending.session, pending.handle)
 close(resultset::ResultSet) = close(resultset.session, resultset.handle)
 function close(session::HiveSession, handle::TOperationHandle)
     conn = session.conn
-    request = thriftbuild(TCloseOperationReq, Dict(:operationHandle => handle))
+    request = TCloseOperationReq(; operationHandle=handle)
     response = CloseOperation(conn.client, request)
     check_status(response.status)
 end
@@ -70,7 +70,7 @@ cancel(pending::PendingResult) = cancel(pending.session, pending.handle)
 cancel(resultset::ResultSet) = cancel(resultset.session, resultset.handle)
 function cancel(session::HiveSession, handle::TOperationHandle)
     conn = session.conn
-    request = thriftbuild(TCancelOperationReq, Dict(:operationHandle => handle))
+    request = TCancelOperationReq(; operationHandle=handle)
     response = CancelOperation(conn.client, request)
     check_status(response.status)
 end
@@ -78,7 +78,7 @@ end
 function status(pending::PendingResult)
     if pending.status === nothing
         conn = pending.session.conn
-        request = thriftbuild(TGetOperationStatusReq, Dict(:operationHandle => pending.handle))
+        request = TGetOperationStatusReq(; operationHandle=pending.handle)
         response = GetOperationStatus(conn.client, request)
         check_status(response.status)
         if response.operationState in READY_STATUS
@@ -98,9 +98,9 @@ function sqlerror(pending::PendingResult)
     isready(pending) || (return "")
     hasresult(pending) && (return "")
     response = pending.status
-    sqlstate = isfilled(response, :sqlState) ? getfield(response, :sqlState) : ""
-    errormessage = isfilled(response, :errorMessage) ? getfield(response, :errorMessage) : ""
-    errorcode = isfilled(response, :errorCode) ? getfield(response, :errorCode) : Int32(0)
+    sqlstate = hasproperty(response, :sqlState) ? response.sqlState : ""
+    errormessage = hasproperty(response, :errorMessage) ? response.errorMessage : ""
+    errorcode = hasproperty(response, :errorCode) ? response.errorCode : Int32(0)
     "Error. $errormessage ($sqlstate, $errorcode)"
 end
 
@@ -112,7 +112,7 @@ function schema(rs::ResultSet; cached::Union{AbstractString,Symbol,Nothing}=noth
             sch = SCHEMA_CACHE[cached]
         else
             conn = rs.session.conn
-            request = thriftbuild(TGetResultSetMetadataReq, Dict(:operationHandle => rs.handle))
+            request = TGetResultSetMetadataReq(; operationHandle=rs.handle)
             response = GetResultSetMetadata(conn.client, request)
             check_status(response.status)
             sch = response.schema
@@ -136,21 +136,18 @@ function fetchnext(rs::ResultSet, nrows::Integer=rs.fetchsize)
     rs.eof && return nothing
     conn = rs.session.conn
     orientation = rs.position > 0 ? TFetchOrientation.FETCH_NEXT : TFetchOrientation.FETCH_FIRST
-    request = thriftbuild(TFetchResultsReq, Dict(
-        :operationHandle => rs.handle,
-        :orientation => orientation,
-        :maxRows => nrows))
+    request = TFetchResultsReq(; operationHandle=rs.handle, orientation=orientation, maxRows=nrows)
     response = FetchResults(conn.client, request)
     check_status(response.status)
 
     rowset = response.results
     rs.rowset = rowset
     nfetched = 0
-    if isfilled(rowset, :columns)
+    if hasproperty(rowset, :columns)
         onecol = rowset.columns[1]
-        for fld in fieldnames(TColumn)
-            if isfilled(onecol, fld)
-                val = getfield(onecol, fld)
+        for fld in propertynames(onecol)
+            if hasproperty(onecol, fld)
+                val = getproperty(onecol, fld)
                 nfetched = length(val.values)
             end
         end
@@ -215,14 +212,14 @@ function iterate(iter::ColumnChunksIterator, state_eof=iter.rs.eof)
     ncols = length(sch.columns)
     cconvs = colconvfns(sch)
 
-    if isfilled(rowset, :columns)
-        @logmsg("reading columns")
+    if hasproperty(rowset, :columns)
+        @debug("reading columns")
         # ref: https://issues.apache.org/jira/browse/HIVE-3746
         colvecs = [julia_type(col, colconv) for (col,colconv) in zip(rowset.columns,cconvs)]
     else
         ctypes = coltypes(sch)
         colvecs = [data_with_missings(T[]) for T in ctypes]
-        @logmsg("reading rows for coltypes: $(coltypes(sch))")
+        @debug("reading rows for coltypes: $(coltypes(sch))")
         for row in rowset.rows
             colidx = 1
             for col in row.colVals
